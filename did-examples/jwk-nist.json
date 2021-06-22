@@ -1,0 +1,54 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/did/v1",
+    "https://w3id.org/security/suites/jws-2020/v1"
+  ],
+  "id": "did:web:example.com",
+  "verificationMethod": [
+    {
+      "id": "did:web:example.com#key-0",
+      "type": "JsonWebKey2020",
+      "controller": "did:web:example.com",
+      "publicKeyJwk": {
+        "kty": "EC",
+        "crv": "P-256",
+        "x": "8a42OinFJqhRUpykae_P_VhkXGAJPGHucT2RJT_cRU8",
+        "y": "V9sdHXkCgnlxgMqZNB-n5MMCNVPX_3YGAaEb3wZjjQI"
+      }
+    },
+    {
+      "id": "did:web:example.com#key-g1",
+      "controller": "did:web:example.com",
+      "type": "JsonWebKey2020",
+      "publicKeyJwk": {
+        "kty": "EC",
+        "crv": "BLS12381_G1",
+        "x": "go_q7BgIP_fA-e55KEw8FSEdHGEBkzDGoDQhLZpE3im2MafjAp2aoQ649YkLbUUg"
+      }
+    },
+    {
+      "id": "did:web:example.com#key-g2",
+      "controller": "did:web:example.com",
+      "type": "JsonWebKey2020",
+      "publicKeyJwk": {
+        "kty": "EC",
+        "crv": "BLS12381_G2",
+        "x": "qovzgTVQFGdVgUVBCV8cuhinO4tMVSUpvh8kh7m_z6DJ4NfzJ5ffBFGbp-VVgHksEEdgOMh2hUjplsMFV0FYVsiQqQLjCmrfr_pRDZ60Q1vURzptp3dQbcAE_wvXGKLe"
+      }
+    }
+  ],
+  "assertionMethod": [
+    "did:web:example.com#key-0",
+    "did:web:example.com#key-g2"
+  ],
+  "authentication": ["did:web:example.com#key-0"],
+  "keyAgreement": ["did:web:example.com#key-0"],
+  "service": [
+    {
+      "id": "did:web:example.com#agent-0",
+      "type": "DIDCommMessaging",
+      "serviceEndpoint": "https://agent-0.example.com/endpoint",
+      "routingKeys": ["did:web:example.com#key-0"]
+    }
+  ]
+}
