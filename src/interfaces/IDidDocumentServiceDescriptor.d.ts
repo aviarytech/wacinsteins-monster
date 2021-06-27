@@ -1,7 +1,7 @@
 /**
  * Defines a service descriptor entry present in a DID Document.
  */
-export default interface IDidDocumentServiceDescriptor {
+export default interface IDIDDocumentServiceDescriptor {
   /** The fully-qualified ID of this service, e.g. `did:example:me.id;agent`. */
   id: string;
   /** The type of this service. */

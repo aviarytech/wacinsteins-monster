@@ -1,21 +1,21 @@
-import IDidDocumentServiceDescriptor from './IDidDocumentServiceDescriptor';
-import IDidDocumentVerificationMethod from './IDidDocumentVerificationMethod';
+import IDIDDocumentServiceDescriptor from './IDIDDocumentServiceDescriptor';
+import IDIDDocumentVerificationMethod from './IDIDDocumentVerificationMethod';
 /**
  * Interface describing the expected shape of a Decentralized Identity Document.
  */
-export default interface IDidDocument {
+export default interface IDIDDocument {
   /** The standard context for DID Documents. */
   '@context': string[];
   /** The DID to which this DID Document pertains. */
   id: string;
   /** Array of verification methods associated with the DID. */
-  verificationMethod?: IDidDocumentVerificationMethod[];
+  verificationMethod?: IDIDDocumentVerificationMethod[];
   /** Array of services associated with the DID. */
-  service?: IDidDocumentServiceDescriptor[];
+  service?: IDIDDocumentServiceDescriptor[];
   /** Array of authentication methods. */
-  authentication?: (string | IDidDocumentVerificationMethod)[];
+  authentication?: (string | IDIDDocumentVerificationMethod)[];
   /** Array of assertion methods. */
-  assertionMethod?: (string | IDidDocumentVerificationMethod)[];
+  assertionMethod?: (string | IDIDDocumentVerificationMethod)[];
   /** Array of key agreement methods */
-  keyAgreement?: (string | IDidDocumentVerificationMethod)[];
+  keyAgreement?: (string | IDIDDocumentVerificationMethod)[];
 }

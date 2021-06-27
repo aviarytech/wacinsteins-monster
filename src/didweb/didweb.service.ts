@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DBService } from 'src/db/db.service';
 import { JSONWebKeyEntity } from 'src/db/entities/key';
-import IDidDocument from 'src/interfaces/IDidDocument';
+import IDIDDocument from 'src/interfaces/IDIDDocument';
 import { generateEd25519 } from 'src/kms/ed25519';
 import { generateX25519 } from 'src/kms/x25519';
 import { generateBls12381G1, generateBls12381G2 } from 'src/kms/bls12381';
@@ -83,7 +83,7 @@ export class DIDWebService {
     return keyg2;
   }
 
-  getWebDIDDoc(): IDidDocument {
+  getWebDIDDoc(): IDIDDocument {
     const keys = this.dbService.getAllKeys();
     return {
       '@context': [
@@ -111,7 +111,7 @@ export class DIDWebService {
           id: `${this.did}#didcomm`,
           type: 'DIDCommMessaging',
           serviceEndpoint: `https://${this.configService.get('HOST')}/didcomm`,
-          routingKeys: [this.keys[0].id],
+          routingKeys: [this.keys[1].id],
         },
       ],
     };
