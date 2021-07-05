@@ -11,35 +11,34 @@ import {
   IDIDCommPlaintextMessage,
   IDIDCommPlaintextPayload,
 } from 'src/interfaces/IDIDCommPlaintextMessage';
-import { FlattenedEncrypt } from 'jose/jwe/flattened/encrypt';
+import { FlattenedEncrypt, FlattenedJWE } from 'jose/jwe/flattened/encrypt';
 import { JWK, parseJwk } from 'jose/jwk/parse';
 import { flattenedDecrypt } from 'jose/jwe/flattened/decrypt';
 import { DBService } from 'src/db/db.service';
+import IDIDDocument from 'src/interfaces/IDIDDocument';
+import axios from 'axios';
 
 @Injectable()
 export class DIDCommService {
   constructor(private didResolver: DIDResolverService, private db: DBService) {}
 
-  async createMessage(msg: IDIDCommPlaintextPayload) {
+  async createMessage(
+    didDoc: IDIDDocument,
+    msg: IDIDCommPlaintextPayload,
+  ): Promise<FlattenedJWE> {
     try {
-      const didDoc = await this.didResolver.resolve(msg.to);
-
-      const didCommService = didDoc.service.find(
-        (s) => s.type === 'DIDCommMessaging',
+      const service = DIDResolverService.getServiceOfType(
+        didDoc,
+        'DIDCommMessaging',
       );
-      if (!didCommService) {
-        throw Error(
-          `Incompatible DID '${msg.to}', no DIDCommMessaging service`,
-        );
-      }
-      if (didCommService.routingKeys.length > 1) {
+      if (service.routingKeys.length > 1) {
         throw Error(`Multiple DIDComm routing keys not yet supported`);
       }
-      if (didCommService.routingKeys.length === 0) {
+      if (service.routingKeys.length === 0) {
         throw Error(`No DIDComm routing key entry found in service block`);
       }
       const key = didDoc.verificationMethod.find(
-        (v) => v.id === didCommService.routingKeys[0],
+        (v) => v.id === service.routingKeys[0],
       );
       if (!key) {
         throw Error(`DIDComm routing key not found in verification methods`);
@@ -60,6 +59,19 @@ export class DIDCommService {
     } catch (e) {
       throw e;
     }
+  }
+
+  async sendMessage(didDoc: IDIDDocument, msg: FlattenedJWE): Promise<boolean> {
+    const service = DIDResolverService.getServiceOfType(
+      didDoc,
+      'DIDCommMessaging',
+    );
+    if (typeof service.serviceEndpoint !== 'string') {
+      // TODO log actual thing here so we can see what an obj looks like in practice
+      throw Error('Only service endpoints that are strings are supported');
+    }
+    const resp = await axios.post(service.serviceEndpoint, msg);
+    return resp.status === 200 || resp.status === 201;
   }
 
   async decryptMessage(
