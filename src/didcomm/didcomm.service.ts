@@ -45,6 +45,7 @@ export class DIDCommService {
       }
 
       const encoder = new TextEncoder();
+      const jwk = await parseJwk(key.publicKeyJwk, 'ECDH-ES+A256KW');
       const jwe = await new FlattenedEncrypt(
         encoder.encode(JSON.stringify(msg)),
       )
@@ -54,7 +55,8 @@ export class DIDCommService {
           typ: DIDCommMessageMediaType.ENCRYPTED,
           enc: 'A256GCM',
         })
-        .encrypt(await parseJwk(key.publicKeyJwk, 'ECDH-ES+A256KW'));
+        .encrypt(jwk);
+      console.log(jwe);
       return jwe;
     } catch (e) {
       throw e;
@@ -70,8 +72,18 @@ export class DIDCommService {
       // TODO log actual thing here so we can see what an obj looks like in practice
       throw Error('Only service endpoints that are strings are supported');
     }
-    const resp = await axios.post(service.serviceEndpoint, msg);
-    return resp.status === 200 || resp.status === 201;
+    try {
+      const resp = await axios.post(service.serviceEndpoint, msg, {
+        headers: { 'Content-Type': DIDCommMessageMediaType.ENCRYPTED },
+      });
+      return resp.status === 200 || resp.status === 201;
+    } catch (e) {
+      console.log(
+        `error sending didcomm message to ${service.serviceEndpoint}`,
+      );
+      console.log(e.response);
+      return false;
+    }
   }
 
   async decryptMessage(
