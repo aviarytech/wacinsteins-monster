@@ -111,7 +111,7 @@ export class DIDWebService {
           id: `${this.did}#didcomm`,
           type: 'DIDCommMessaging',
           serviceEndpoint: `https://${this.configService.get('HOST')}/didcomm`,
-          routingKeys: [this.keys[0].id],
+          routingKeys: [this.keys[1].id],
         },
       ],
     };
