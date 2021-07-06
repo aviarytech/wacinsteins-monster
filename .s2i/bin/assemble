@@ -1,8 +1,0 @@
-#!/bin/bash
-yum install openssl
-
-cp -Rf /tmp/src/. /opt/app-root/src
-cd /opt/app-root/src
-npm install
-
-npm run build
