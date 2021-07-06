@@ -20,3 +20,4 @@ TODO:
 DONE:
 
 - Use did:web to create a did with a service block that will work for DIDComm
+- 
