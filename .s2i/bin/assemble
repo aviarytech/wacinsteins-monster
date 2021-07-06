@@ -1,4 +1,5 @@
 #!/bin/bash
+sudo yum install openssl
 
 cp -Rf /tmp/src/. /opt/app-root/src
 cd /opt/app-root/src

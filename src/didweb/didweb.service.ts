@@ -23,6 +23,12 @@ export class DIDWebService {
     this.did = `did:web:${this.configService.get('HOST')}`;
   }
 
+  get serviceProtocol(): string {
+    return this.configService.get('HOST').indexOf('localhost') >= 0
+      ? 'http'
+      : 'https';
+  }
+
   async getKeys() {
     const key0 = await this.getKey0();
     const key1 = await this.getKey1();
@@ -110,7 +116,9 @@ export class DIDWebService {
         {
           id: `${this.did}#didcomm`,
           type: 'DIDCommMessaging',
-          serviceEndpoint: `https://${this.configService.get('HOST')}/didcomm`,
+          serviceEndpoint: `${this.serviceProtocol}://${this.configService.get(
+            'HOST',
+          )}/didcomm`,
           routingKeys: [this.keys[1].id],
         },
       ],
