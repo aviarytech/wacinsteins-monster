@@ -5,6 +5,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import fastify from 'fastify';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const server = fastify();
@@ -26,6 +27,7 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(server),
   );
-  await app.listen(process.env.SERVER_PORT ?? 3000, '0.0.0.0');
+  app.useGlobalPipes(new ValidationPipe());
+  await app.listen(process.env.SERVER_PORT ?? 3100, '0.0.0.0');
 }
 bootstrap();

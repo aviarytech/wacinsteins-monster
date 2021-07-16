@@ -1,4 +1,6 @@
+import { IDIDCommEncryptedMessage } from '@aviarytech/didcomm-core/dist/interfaces';
 import {
+  Body,
   Controller,
   Get,
   HttpException,
@@ -6,17 +8,16 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
 import { decodeJWT, JWE, verifyJWT } from 'did-jwt';
 import { FastifyRequest } from 'fastify';
 import { AppService } from './app.service';
+import { ReceiveMessageCommand } from './didcomm/commands/receive-message.command';
 import { DIDCommService } from './didcomm/didcomm.service';
+
 import { DIDResolverService } from './dids/didresolver.service';
 import { DIDWebService } from './didweb/didweb.service';
-import { IDIDCommEncryptedMessage } from './interfaces/IDIDCommEncryptedMessage';
-import {
-  IDIDCommPlaintextMessage,
-  IDIDCommPlaintextPayload,
-} from './interfaces/IDIDCommPlaintextMessage';
+import { SendDIDCommMessageSchema } from './requestSchemas/SendDIDCommMessageSchema';
 
 @Controller()
 export class AppController {
@@ -25,31 +26,31 @@ export class AppController {
     private readonly didWebService: DIDWebService,
     private readonly DIDComm: DIDCommService,
     private readonly didResolver: DIDResolverService,
+    private readonly commandBus: CommandBus,
   ) {}
 
   @Get('.well-known/did.json')
-  getWebDIDs(): string {
-    return JSON.stringify(this.didWebService.getWebDIDDoc());
+  async getWebDIDs(): Promise<string> {
+    return JSON.stringify(await this.didWebService.getWebDIDDoc());
   }
 
   @Post('didcomm')
   async ReceiveDIDCommMessage(
     @Req() req: FastifyRequest<{ Body: IDIDCommEncryptedMessage }>,
-  ): Promise<IDIDCommPlaintextMessage> {
-    const message = await this.DIDComm.unpackMessage({
-      mediaType: req.headers['content-type'],
-      ...req.body,
-    });
-    return message;
+  ): Promise<string> {
+    this.commandBus.execute(
+      new ReceiveMessageCommand(req.headers['content-type'], req.body),
+    );
+    return 'OK';
   }
 
   @Post('didcomm/send')
   async SendDIDCommMessage(
-    @Req() req: FastifyRequest<{ Body: IDIDCommPlaintextPayload }>,
+    @Body() body: SendDIDCommMessageSchema,
   ): Promise<string> {
     try {
-      const didDoc = await this.didResolver.resolve(req.body.to);
-      const res = await this.DIDComm.createMessage(didDoc, req.body);
+      const didDoc = await this.didResolver.resolve(body.to);
+      const res = await this.DIDComm.createMessage(didDoc, body);
       const sent = await this.DIDComm.sendMessage(didDoc, res);
       if (sent) {
         return 'Message successfully sent';

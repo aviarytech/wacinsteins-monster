@@ -1,23 +1,21 @@
 import { InMemoryDBService } from '@nestjs-addons/in-memory-db';
 import { Injectable } from '@nestjs/common';
 
-import { JSONWebKeyEntity } from './entities/key';
+import { KeyEntity } from './entities/key';
 
 @Injectable()
 export class DBService {
-  constructor(
-    private readonly keyService: InMemoryDBService<JSONWebKeyEntity>,
-  ) {}
+  constructor(private readonly keyService: InMemoryDBService<KeyEntity>) {}
 
-  createKey(key: JSONWebKeyEntity) {
+  createKey(key: KeyEntity) {
     return this.keyService.create(key);
   }
 
-  getKey(id: string): JSONWebKeyEntity {
+  getKey(id: string): KeyEntity {
     return this.keyService.get(id);
   }
 
-  getAllKeys(): JSONWebKeyEntity[] {
+  getAllKeys(): KeyEntity[] {
     return this.keyService.getAll();
   }
 }

@@ -1,11 +1,5 @@
+import { IDIDDocument } from '@aviarytech/did-core';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { DBService } from 'src/db/db.service';
-import { JSONWebKeyEntity } from 'src/db/entities/key';
-import IDIDDocument from 'src/interfaces/IDIDDocument';
-import { generateEd25519 } from 'src/kms/ed25519';
-import { generateX25519 } from 'src/kms/x25519';
-import { generateBls12381G1, generateBls12381G2 } from 'src/kms/bls12381';
 import { documentLoaderFactory } from '@transmute/jsonld-document-loader';
 import axios from 'axios';
 
@@ -36,9 +30,7 @@ export class DocumentLoaderService {
       .buildDocumentLoader();
   }
 
-  async load(
-    did: string,
-  ): Promise<{
+  async load(did: string): Promise<{
     contextUrl: string;
     documentUrl: string;
     document: IDIDDocument;
