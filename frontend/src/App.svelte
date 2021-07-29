@@ -1,7 +1,14 @@
 <script lang="ts">
-  // import logo from './assets/svelte.png'
-  // import Counter from './lib/Counter.svelte'
+  //components
   import Sidebar from './lib/Sidebar.svelte'
+  //routes
+  import Home from "./routes/Home.svelte"
+  import Connections from "./routes/Connections.svelte"
+  import Credentials from "./routes/Credentials.svelte"
+  import Messages from "./routes/Messages.svelte"
+  import Presentations from "./routes/Presentations.svelte"
+  //js imports
+  import { Router, Route} from "svelte-navigator";
 </script>
 
 <main class="bg-gray-900">
@@ -171,7 +178,29 @@
     <main class="flex-1 relative overflow-y-auto focus:outline-none">
       <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-          <h1 class="text-2xl font-semibold text-gray-900">Credentials</h1>
+            <Router>
+                <Route path="">
+                  <Home />
+                </Route>
+
+                <Route path="credentials">
+                  <Credentials />
+                </Route>
+
+                <Route path="presentations">
+                  <Presentations />
+                </Route>
+
+                <Route path="messages">
+                  <Messages />
+                </Route>
+
+                <Route path="connections">
+                  <Connections />
+                </Route>
+
+            </Router>
+          <!-- <h1 class="text-2xl font-semibold text-gray-900">Credentials</h1> -->
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <!-- Replace with your content -->
@@ -183,7 +212,7 @@
       </div>
     </main>
   </div>
-</div>0
+</div>
 </main>
 
 <style>
