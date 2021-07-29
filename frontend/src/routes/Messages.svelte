@@ -3,7 +3,7 @@
 </script>
 
 <template>
-
+messages
 </template>
 
 <style lang="postcss">

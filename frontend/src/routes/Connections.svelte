@@ -3,7 +3,7 @@
 </script>
 
 <template>
-
+connections
 </template>
 
 <style lang="postcss">
