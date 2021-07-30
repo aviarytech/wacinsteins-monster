@@ -1,10 +1,14 @@
 <script lang="ts">
+  // js imports
   import { Router, Link } from "svelte-navigator";
   import { Routes } from "../stores/routes"
+  // stores
+  import { mobileSidebarClose} from '../stores/ui'
 </script>
 
 <template>
 <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
+<!-- HACK: some reactivity present in mobile but its wacky-->
   <div class="fixed inset-0 flex z-40 md:hidden" role="dialog" aria-modal="true">
     <!--
       Off-canvas menu overlay, show/hide based on off-canvas menu state.
@@ -16,7 +20,7 @@
         From: "opacity-100"
         To: "opacity-0"
     -->
-    <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true"></div>
+    <div class="fixed inset-0 bg-gray-600 bg-opacity-75 -translate-x-full" class:open2={$mobileSidebarClose} aria-hidden="true"></div>
 
     <!--
       Off-canvas menu, show/hide based on off-canvas menu state.
@@ -28,7 +32,7 @@
         From: "translate-x-0"
         To: "-translate-x-full"
     -->
-    <div class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white">
+    <div class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white opacity-100" class:open={$mobileSidebarClose}>
       <!--
         Close button, show/hide based on off-canvas menu state.
 
@@ -40,12 +44,10 @@
           To: "opacity-0"
       -->
       <div class="absolute top-0 right-0 -mr-12 pt-2">
-        <button class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+        <button class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" on:click={() => {mobileSidebarClose.set(!$mobileSidebarClose)}}>
           <span class="sr-only">Close sidebar</span>
           <!-- Heroicon name: outline/x -->
-          <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <img src='../assets/outlineX.svg' alt="heroIcon"/>
         </button>
       </div>
 
@@ -118,4 +120,10 @@
 </template>
 
 <style lang="postcss">
+  .open {
+      @apply ease-in-out duration-300 opacity-0;
+    }
+  .open2 {
+@apply transition ease-in-out duration-300 transform translate-x-0;
+    }
 </style>

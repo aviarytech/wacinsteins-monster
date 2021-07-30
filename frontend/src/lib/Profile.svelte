@@ -1,4 +1,5 @@
 <script lang="ts">
+  //stores
   import {profileDropMenu} from '../stores/ui'
 
 </script>
