@@ -71,31 +71,27 @@
           <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <!-- Replace with your content -->
             <div class="py-4">
-              <div
-                class="border-4 border-dashed border-gray-200 rounded-lg h-96"
-              >
-                <Router>
-                  <Route path="">
-                    <Home />
-                  </Route>
+              <Router>
+                <Route path="">
+                  <Home />
+                </Route>
 
-                  <Route path="credentials">
-                    <Credentials />
-                  </Route>
+                <Route path="credentials">
+                  <Credentials />
+                </Route>
 
-                  <Route path="presentations">
-                    <Presentations />
-                  </Route>
+                <Route path="presentations">
+                  <Presentations />
+                </Route>
 
-                  <Route path="messages">
-                    <Messages />
-                  </Route>
+                <Route path="messages">
+                  <Messages />
+                </Route>
 
-                  <Route path="connections">
-                    <Connections />
-                  </Route>
-                </Router>
-              </div>
+                <Route path="connections">
+                  <Connections />
+                </Route>
+              </Router>
             </div>
             <!-- /End replace -->
           </div>
