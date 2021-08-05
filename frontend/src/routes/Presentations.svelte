@@ -1,6 +1,8 @@
 <script lang="ts">
-  //imports
+  // api imports
   import { getCall } from "../api/presentationAxios";
+  //component imports
+  import PresentationTableData from "../lib/PresentationTableFormat.svelte"
 
 
 //TODO: query backend for presentation
@@ -42,6 +44,7 @@
     {/each}
     </ul>
   {/if}
+  <PresentationTableData/>
 </template>
 
 <style lang="postcss">
