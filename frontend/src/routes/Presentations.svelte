@@ -20,6 +20,36 @@
       title:string;
       completed:Boolean;
     }
+  interface PresentationTableInterface {
+      id:number;
+      name:string;
+      jobTitle:string;
+      email:string;
+      role:string;
+    }
+  export const testPresentationData: PresentationTableInterface[] = [
+    {
+        id:0,
+        name: "Jane Cooper",
+        jobTitle: "Regional Paradigm Technician",
+        email:"jane.cooper@example.com",
+        role: "Admin",
+      },
+      {
+        id:1,
+        name: "Cody Fisher",
+        jobTitle: "Product Directives Officer",
+        email:"cody.fisher@example.com",
+        role: "Owner",
+      },
+      {
+        id:2,
+        name: "Bob McBob",
+        jobTitle: "Customer service",
+        email:"BobMcBob@example.com",
+        role: "Employee",
+      },
+  ]
   let data:SampleApi[] = []
   $: if (displayData === true){
       (async() => {
@@ -31,6 +61,7 @@
 </script>
 
 <template>
+  <!-- garbage test data-->
   <div>
     <button on:click={() => {displayData = !displayData}}>
       click me
@@ -44,7 +75,21 @@
     {/each}
     </ul>
   {/if}
-  <PresentationTableData/>
+  <!-- emd test data-->
+
+
+
+
+  {#each testPresentationData as row}
+    <PresentationTableData rowId={row.id}>
+      <span slot="name">{row.name}</span>
+    </PresentationTableData>
+  {/each}
+
+
+
+
+
 </template>
 
 <style lang="postcss">
