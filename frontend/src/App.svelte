@@ -37,9 +37,7 @@
         <div class="ml-4 flex items-center md:ml-6">
           <button class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             <span class="sr-only">View notifications</span>
-            <!--BUG:bell not showing unless I add a letter? -->
-            <img src="./assets/outlineBell.svg" alt='notification'/>
-            u
+            <img src="./assets/outlineBell.svg" alt='notification' class='icon'/>
           </button>
           <Profile/>
 

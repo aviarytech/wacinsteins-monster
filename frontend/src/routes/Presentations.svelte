@@ -25,6 +25,7 @@
         data = res 
         })()
     } 
+  
 </script>
 
 <template>

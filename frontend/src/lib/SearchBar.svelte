@@ -9,8 +9,7 @@
     <div class="relative w-full text-gray-400 focus-within:text-gray-600">
       <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none">
         <!-- Heroicon name: outline/document search -->
-        <!--BUG: the icon doesn't unless there's a letter-->
-        <img src='../assets/outlineDocumentSearch.svg' alt="heroIcon"/>
+        <img src='../assets/outlineDocumentSearch.svg' alt="heroIcon" class="icon"/>
         
 
       </div>
@@ -19,5 +18,9 @@
   </form>
 </template>
 
-<style lang="postcss">
+<style global lang="postcss">
+  .icon {
+    @apply text-gray-400  mr-3 flex-shrink-0 h-6 w-6;
+    group-hover:text-gray-500;
+  }
 </style>
