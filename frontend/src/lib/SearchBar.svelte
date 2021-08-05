@@ -19,8 +19,5 @@
 </template>
 
 <style global lang="postcss">
-  .icon {
-    @apply text-gray-400  mr-3 flex-shrink-0 h-6 w-6;
-    group-hover:text-gray-500;
-  }
+
 </style>

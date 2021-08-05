@@ -86,6 +86,10 @@
 </div>
 </template>
 
-<style lang="postcss">
-
+<style global lang="postcss">
+  /*WARN: is there a global file we can create and reference in tailwind.config.cjs otherwise App.svelte is the most appropriate place for global css*/
+  .icon {
+    @apply text-gray-400  mr-3 flex-shrink-0 h-6 w-6;
+    group-hover:text-gray-500;
+  }
 </style>
