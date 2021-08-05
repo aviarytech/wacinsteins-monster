@@ -52,24 +52,22 @@ async function apiGetCall():Promise<any>{
   }
   let displayData = false
   let data:SampleApi[] = []
-  $: if (displayData === true){
+  $: if (displayData === false){
       (async() => {
         const res = await apiGetCall()
         data = res 
+        displayData = !displayData
         })()
     } 
-  
+ //  <div>
+ //   <button on:click={() => {displayData = !displayData}}>
+ //     display data
+ //   </button>
+ // </div> 
 </script>
 
 <template>
-  <!-- garbage test data-->
-  <div>
-    <button on:click={() => {displayData = !displayData}}>
-      click me
-    </button>
-  </div>
 
-  <!-- emd test data-->
   {#each data as row}
     <PresentationTableData rowId={row.id}>
       <span slot="name">{row.name}</span>
