@@ -4,16 +4,6 @@
   //component imports
   import PresentationTableData from "../lib/PresentationTableFormat.svelte"
 
-
-//TODO: query backend for presentation
-// axios/getall 
-
-  interface SampleApi {
-      userId:number;
-      id:number;
-      title:string;
-      completed:Boolean;
-    }
   interface PresentationTableInterface {
       id:number;
       name:string;
@@ -51,7 +41,7 @@ async function apiGetCall():Promise<any>{
       return res
   }
   let displayData = false
-  let data:SampleApi[] = []
+  let data:PresentationTableInterface[] = []
   $: if (displayData === false){
       (async() => {
         const res = await apiGetCall()
