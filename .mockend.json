@@ -1,6 +1,6 @@
 {
   "User":{
-    "id": { "int": { "min": 0, "max": 100 } },
+    "id": { "int": { "min": -1, "max": 50 } },
     "name": {"string":{}},
     "jobTitle": {"string":{}},
     "email": {"string":{}},

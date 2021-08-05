@@ -8,12 +8,6 @@
 //TODO: query backend for presentation
 // axios/getall 
 
-  async function apiGetCall():Promise<any>{
-      let res = await getCall('https://jsonplaceholder.typicode.com/todos/1')
-      console.log(res)
-      return res
-  }
-  let displayData = false
   interface SampleApi {
       userId:number;
       id:number;
@@ -50,6 +44,13 @@
         role: "Employee",
       },
   ]
+const mockendUrl = 'https://mockend.com/aviarytech/wacinsteins-monster/users'
+async function apiGetCall():Promise<any>{
+      let res = await getCall(mockendUrl)
+      console.log(res)
+      return res
+  }
+  let displayData = false
   let data:SampleApi[] = []
   $: if (displayData === true){
       (async() => {
@@ -68,23 +69,16 @@
     </button>
   </div>
 
-  {#if displayData === true}
-    <ul>
-    {#each Object.values(data) as value }
-      <li>{value}</li>
-    {/each}
-    </ul>
-  {/if}
   <!-- emd test data-->
-
-
-
-
-  {#each testPresentationData as row}
+  {#each data as row}
     <PresentationTableData rowId={row.id}>
       <span slot="name">{row.name}</span>
+      <span slot="jobTitle">{row.jobTitle}</span>
+      <span slot="email">{row.email}</span>
+      <span slot="role">{row.role}</span>
     </PresentationTableData>
   {/each}
+  
 
 
 
