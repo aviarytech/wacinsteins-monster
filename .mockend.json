@@ -1,0 +1,9 @@
+{
+  "User":{
+    "id": { "int": { "min": 0, "max": 100 } },
+    "name": {"string":{}},
+    "jobTitle": {"string":{}},
+    "email": {"string":{}},
+    "role": {"string":{}}
+  }
+}

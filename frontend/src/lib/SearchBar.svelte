@@ -25,3 +25,6 @@
     </div>
   </form>
 </template>
+
+<style global lang="postcss">
+</style>
