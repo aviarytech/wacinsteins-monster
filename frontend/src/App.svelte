@@ -71,31 +71,27 @@
           <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <!-- Replace with your content -->
             <div class="py-4">
-              <div
-                class="border-4 border-dashed border-gray-200 rounded-lg h-96"
-              >
-                <Router>
-                  <Route path="">
-                    <Home />
-                  </Route>
+              <Router>
+                <Route path="">
+                  <Home />
+                </Route>
 
-                  <Route path="credentials">
-                    <Credentials />
-                  </Route>
+                <Route path="credentials">
+                  <Credentials />
+                </Route>
 
-                  <Route path="presentations">
-                    <Presentations />
-                  </Route>
+                <Route path="presentations">
+                  <Presentations />
+                </Route>
 
-                  <Route path="messages">
-                    <Messages />
-                  </Route>
+                <Route path="messages">
+                  <Messages />
+                </Route>
 
-                  <Route path="connections">
-                    <Connections />
-                  </Route>
-                </Router>
-              </div>
+                <Route path="connections">
+                  <Connections />
+                </Route>
+              </Router>
             </div>
             <!-- /End replace -->
           </div>
@@ -106,8 +102,11 @@
 </template>
 
 <style global lang="postcss">
+
+  /*WARN: is there a global file we can create and reference in tailwind.config.cjs otherwise App.svelte is the most appropriate place for global css*/
   .icon {
     @apply text-gray-400  mr-3 flex-shrink-0 h-6 w-6;
-    group-hover: text-gray-500;
+    group-hover:text-gray-500;
+
   }
 </style>

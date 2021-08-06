@@ -1,47 +1,77 @@
 <script lang="ts">
-  //imports
+  // api imports
   import { getCall } from "../api/presentationAxios";
+  //component imports
+  import PresentationTableData from "../lib/PresentationTableFormat.svelte"
 
-
-//TODO: query backend for presentation
-// axios/getall 
-
-  async function apiGetCall():Promise<any>{
-      let res = await getCall('https://jsonplaceholder.typicode.com/todos/1')
+  interface PresentationTableInterface {
+      id:number;
+      name:string;
+      jobTitle:string;
+      email:string;
+      role:string;
+    }
+  export const testPresentationData: PresentationTableInterface[] = [
+    {
+        id:0,
+        name: "Jane Cooper",
+        jobTitle: "Regional Paradigm Technician",
+        email:"jane.cooper@example.com",
+        role: "Admin",
+      },
+      {
+        id:1,
+        name: "Cody Fisher",
+        jobTitle: "Product Directives Officer",
+        email:"cody.fisher@example.com",
+        role: "Owner",
+      },
+      {
+        id:2,
+        name: "Bob McBob",
+        jobTitle: "Customer service",
+        email:"BobMcBob@example.com",
+        role: "Employee",
+      },
+  ]
+const mockendUrl = 'https://mockend.com/aviarytech/wacinsteins-monster/users'
+async function apiGetCall():Promise<any>{
+      let res = await getCall(mockendUrl)
       console.log(res)
       return res
   }
   let displayData = false
-  interface SampleApi {
-      userId:number;
-      id:number;
-      title:string;
-      completed:Boolean;
-    }
-  let data:SampleApi[] = []
-  $: if (displayData === true){
+  let data:PresentationTableInterface[] = []
+  $: if (displayData === false){
       (async() => {
         const res = await apiGetCall()
         data = res 
+        displayData = !displayData
         })()
     } 
-  
+ //  <div>
+ //   <button on:click={() => {displayData = !displayData}}>
+ //     display data
+ //   </button>
+ // </div> 
 </script>
 
 <template>
-  <div>
-    <button on:click={() => {displayData = !displayData}}>
-      click me
-    </button>
-  </div>
 
-  {#if displayData === true}
-    <ul>
-    {#each Object.values(data) as value }
-      <li>{value}</li>
-    {/each}
-    </ul>
-  {/if}
+  {#each data as row}
+    <PresentationTableData rowId={row.id}>
+      <span slot="name">{row.name}</span>
+      <span slot="jobTitle">{row.jobTitle}</span>
+      <span slot="email">{row.email}</span>
+      <span slot="role">{row.role}</span>
+    </PresentationTableData>
+  {/each}
+  
+
+
+
+
+
 </template>
 
 <style lang="postcss">
