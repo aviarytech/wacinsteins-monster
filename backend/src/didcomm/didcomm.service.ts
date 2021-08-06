@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { DIDResolverService } from 'src/dids/didresolver.service';
+import { DIDResolverService } from '../dids/didresolver.service';
 
-import { DBService } from 'src/db/db.service';
+import { DBService } from '../db/db.service';
 import { IDIDDocument } from '@aviarytech/did-core';
 import { DIDComm } from '@aviarytech/didcomm-core';
 import {
@@ -11,11 +11,15 @@ import {
 import { JsonWebKey } from '@transmute/json-web-signature';
 import { JsonWebKey2020 } from '@transmute/web-crypto-key-pair';
 import { X25519KeyAgreementKey2019 } from '@transmute/x25519-key-pair';
+import { KMSService } from '../kms/kms.service';
 
 @Injectable()
 export class DIDCommService {
   private didcomm: DIDComm;
-  constructor(private didResolver: DIDResolverService, private db: DBService) {
+  constructor(
+    private didResolver: DIDResolverService,
+    private kms: KMSService,
+  ) {
     this.didcomm = new DIDComm();
   }
 
@@ -48,7 +52,7 @@ export class DIDCommService {
   ): Promise<IDIDCommPlaintextPayload> {
     console.log(msg.recipients[0].header);
     const keyId = DIDComm.getKeyIdFromMessage(msg);
-    const key = this.db.getKey(keyId);
+    const key = await this.kms.getKey(keyId);
     return await this.didcomm.unpackMessage(
       mediaType,
       key as X25519KeyAgreementKey2019,

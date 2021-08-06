@@ -1,31 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DBService } from 'src/db/db.service';
-import { generateEd25519 } from 'src/kms/ed25519';
-import { generateX25519 } from 'src/kms/x25519';
-import { generateBls12381G1, generateBls12381G2 } from 'src/kms/bls12381';
 import { IDIDDocument } from '@aviarytech/did-core';
-import { KeyEntity } from 'src/db/entities/key';
+import { Key } from '../kms/entities/key';
 import { JsonWebKey } from '@transmute/json-web-signature';
 import { X25519KeyPair } from '@transmute/x25519-key-pair';
-import { JsonWebKey2020 } from '@transmute/web-crypto-key-pair';
 import { randomBytes } from 'crypto';
 import { encode } from 'b58';
+import { KMSService } from '../kms/kms.service';
+import { DBService } from 'src/db/db.service';
 
 @Injectable()
 export class DIDWebService {
-  keys: KeyEntity[];
+  keys: Key[];
   did: string;
 
   constructor(
-    private dbService: DBService,
+    private kms: KMSService,
     private configService: ConfigService,
+    private db: DBService,
   ) {
-    this.getKeys();
     if (!this.configService.get('HOST')) {
       throw Error('HOST env var must be set');
     }
     this.did = `did:web:${this.configService.get('HOST')}`;
+    this.getKeys();
   }
 
   get serviceProtocol(): string {
@@ -35,6 +33,7 @@ export class DIDWebService {
   }
 
   async getKeys() {
+    await this.db.ready;
     const key0 = await this.getKey0();
     const key1 = await this.getKey1();
     // const keyG1 = await this.getKeyG1();
@@ -42,8 +41,8 @@ export class DIDWebService {
     this.keys = [key0, key1];
   }
 
-  async getKey0(): Promise<KeyEntity> {
-    let key0 = this.dbService.getKey(`${this.did}#key-0`);
+  async getKey0(): Promise<Key> {
+    let key0 = await this.kms.getKey(`${this.did}#key-0`);
     if (!key0) {
       const keyPair = await JsonWebKey.generate({
         kty: 'OKP',
@@ -51,8 +50,9 @@ export class DIDWebService {
       });
       const { publicKeyJwk, privateKeyJwk } = await keyPair.export({
         type: 'JsonWebKey2020',
+        privateKey: true,
       });
-      key0 = this.dbService.createKey({
+      key0 = await this.kms.createKey({
         id: `${this.did}#key-0`,
         controller: this.did,
         type: 'JsonWebKey2020',
@@ -60,11 +60,11 @@ export class DIDWebService {
         privateKeyJwk: privateKeyJwk,
       });
     }
-    return key0 as KeyEntity;
+    return key0 as Key;
   }
 
-  async getKey1(): Promise<KeyEntity> {
-    let key1 = this.dbService.getKey(`${this.did}#key-1`);
+  async getKey1(): Promise<Key> {
+    let key1 = await this.kms.getKey(`${this.did}#key-1`);
     if (!key1) {
       const keyPair = await X25519KeyPair.generate({
         secureRandom: () => {
@@ -72,7 +72,7 @@ export class DIDWebService {
         },
       });
 
-      key1 = this.dbService.createKey({
+      key1 = await this.kms.createKey({
         id: `${this.did}#key-1`,
         type: 'X25519KeyAgreementKey2019',
         controller: this.did,
@@ -80,41 +80,41 @@ export class DIDWebService {
         privateKeyBase58: encode(keyPair.privateKey),
       });
     }
-    return key1 as KeyEntity;
+    return key1 as Key;
   }
 
-  async getKeyG1(): Promise<KeyEntity> {
-    let keyg1 = this.dbService.getKey(`${this.did}#key-g1`);
+  async getKeyG1(): Promise<Key> {
+    let keyg1 = await this.kms.getKey(`${this.did}#key-g1`);
     if (!keyg1) {
       const keyPair = await JsonWebKey.generate({
         kty: 'EC',
         crv: 'BLS12381_G1',
       });
-      keyg1 = this.dbService.createKey({
+      keyg1 = await this.kms.createKey({
         ...keyPair,
         id: `${this.did}#key-g1`,
       });
     }
-    return keyg1 as KeyEntity;
+    return keyg1 as Key;
   }
 
-  async getKeyG2(): Promise<KeyEntity> {
-    let keyg2 = this.dbService.getKey(`${this.did}#key-g2`);
+  async getKeyG2(): Promise<Key> {
+    let keyg2 = await this.kms.getKey(`${this.did}#key-g2`);
     if (!keyg2) {
       const keyPair = await JsonWebKey.generate({
         kty: 'EC',
         crv: 'BLS12381_G2',
       });
-      keyg2 = this.dbService.createKey({
+      keyg2 = await this.kms.createKey({
         ...keyPair,
         id: `${this.did}#key-g2`,
       });
     }
-    return keyg2 as KeyEntity;
+    return keyg2 as Key;
   }
 
   async getWebDIDDoc(): Promise<IDIDDocument> {
-    const keys = this.dbService.getAllKeys();
+    const keys = await this.kms.getAllKeys();
     return {
       '@context': [
         'https://www.w3.org/ns/did/v1',
