@@ -1,7 +1,7 @@
-import { InMemoryDBModule } from '@nestjs-addons/in-memory-db';
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
+import { AdminController } from './admin/admin.controller';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DBService } from './db/db.service';
@@ -12,17 +12,22 @@ import { HandleMessageSaga } from './didcomm/handle-message.saga';
 import { DIDResolverService } from './dids/didresolver.service';
 import { DIDWebService } from './didweb/didweb.service';
 import { DocumentLoaderService } from './documentLoader/documentLoader.service';
+import { KMSModule } from './kms/kms.module';
+import { KMSService } from './kms/kms.service';
+import { PresentationsModule } from './presentations/presentations.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), InMemoryDBModule.forRoot({}), CqrsModule],
-  controllers: [AppController],
+  imports: [ConfigModule.forRoot(), CqrsModule, PresentationsModule, KMSModule],
+  controllers: [AppController, AdminController],
   providers: [
     AppService,
     DIDWebService,
     DBService,
     DIDCommService,
+    Logger,
     DIDResolverService,
     DocumentLoaderService,
+    KMSService,
     ...CommandHandlers,
     ...EventHandlers,
     HandleMessageSaga,

@@ -1,7 +1,4 @@
-import { InMemoryDBEntity } from '@nestjs-addons/in-memory-db';
-
-
-export interface KeyEntity extends InMemoryDBEntity {
+export interface Key {
   id: string;
   type: string;
   controller: string;

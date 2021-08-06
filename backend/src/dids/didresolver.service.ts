@@ -1,10 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { DBService } from 'src/db/db.service';
-import { generateEd25519 } from 'src/kms/ed25519';
-import { generateX25519 } from 'src/kms/x25519';
-import { generateBls12381G1, generateBls12381G2 } from 'src/kms/bls12381';
-import { DocumentLoaderService } from 'src/documentLoader/documentLoader.service';
+import { DocumentLoaderService } from '../documentLoader/documentLoader.service';
 import {
   IDIDDocument,
   IDIDDocumentServiceDescriptor,
