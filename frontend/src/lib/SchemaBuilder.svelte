@@ -1,22 +1,22 @@
 <script lang='ts'>
-  import type { SchemaSelect } from '../interfaces';
+  // interfaces
+  import type { NameSchema } from '../interfaces';
+  //stores
+  import { vaccinationJsonLD } from '../stores/schema'
+  
+  let index = -1
+  let schemaChossen:any // assing a type
+  $: if(schemaChossen !== ''){
+      index = $vaccinationJsonLD.findIndex((x) => x.schema === schemaChossen)//implicit return
+      console.log(index)
+    }
+  $: if(index !== -1){
+      console.log('index',index);
+      let storeValue:Array<any> = []
+      $vaccinationJsonLD[index].store.subscribe(value => {
+        storeValue.push(value)})
 
-
-  import { vaccinationCertificateStore,vaccineRecipientStore, vaccineStore } from '../stores/schema'
-  //
-  let availableSchemas:SchemaSelect[] = [
-   {id:0,schemaStore:vaccineRecipientStore,schemaInterface:"VaccineRecipient"},
-   {id:1,schemaStore:vaccinationCertificateStore,schemaInterface:"VaccinationCertificateInterface"},
-   {id:2,schemaStore:vaccineStore,schemaInterface:"VaccineRecipientInterface"}
-  ]
-  let schemaChossen:any
-  let tmp:any //don't know what to do/name this var yet
-  let schemaBuild:any //need a type (is the return value of all this)
-  //TODO: access the store when its not undefined and make it so that once a field has been added it can't be added again
-  $: if (schemaChossen !== undefined){
-      schemaChossen.schemaStore.subscribe((fields) =>{
-        tmp = fields
-      })
+      console.log(storeValue)
     }
 </script>
 
@@ -28,17 +28,18 @@
     <input type="text" placeholder="my name is..."/>
     <h3>Schema</h3>
       <select bind:value={schemaChossen} on:change={() => console.log(schemaChossen)}>
-        {#each availableSchemas as availableSchema}
-          <option value={availableSchema}>
-            {availableSchema.schemaInterface}
+        {#each $vaccinationJsonLD as item}
+          <option value={item.schema}>
+            {item.name}
           </option>
         {/each}
       </select>
     <h3>Fields</h3>
     
-    {#if schemaChossen !== undefined}
-      {schemaChossen.schemaStore}
+    {#if schemaChossen !== ''}
+      {schemaChossen}
     {/if}
+
     <!--
       <select bind:value={schemaBuild} on:change={() => console.log(schemaBuild)}>
         {#each tmp as schemaField}
