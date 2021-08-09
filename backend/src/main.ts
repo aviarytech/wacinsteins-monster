@@ -6,6 +6,7 @@ import {
 } from '@nestjs/platform-fastify';
 import fastify from 'fastify';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const server = fastify();
@@ -28,6 +29,15 @@ async function bootstrap() {
     new FastifyAdapter(server),
   );
   app.useGlobalPipes(new ValidationPipe());
+
+  const config = new DocumentBuilder()
+    .setTitle('WACInsteins Monster')
+    .setDescription('WACI Presentation Exchange Implementation')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('/docs', app, document);
+
   await app.listen(process.env.SERVER_PORT ?? 3100, '0.0.0.0');
 }
 bootstrap();

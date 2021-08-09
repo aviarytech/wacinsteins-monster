@@ -9,9 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { decodeJWT, JWE, verifyJWT } from 'did-jwt';
 import { FastifyRequest } from 'fastify';
-import { AppService } from './app.service';
 import { ReceiveMessageCommand } from './didcomm/commands/receive-message.command';
 import { DIDCommService } from './didcomm/didcomm.service';
 
@@ -22,7 +20,6 @@ import { SendDIDCommMessageSchema } from './requestSchemas/SendDIDCommMessageSch
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService,
     private readonly didWebService: DIDWebService,
     private readonly DIDComm: DIDCommService,
     private readonly didResolver: DIDResolverService,
