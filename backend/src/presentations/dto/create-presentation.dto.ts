@@ -1,3 +1,12 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class CreatePresentationDto {
-  context: string;
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  schema: string;
+
+  @ApiProperty()
+  paths: string[]; // assuming type string for now
 }
