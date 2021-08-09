@@ -1,70 +1,67 @@
 import {
-  NameSchema,
   VaccinationCertificateInterface,
   VaccinationEvent,
   VaccineInterface,
   VaccineRecipientInterface,
 } from "src/interfaces";
-import { Readable, readable, Writable, writable } from "svelte/store";
+import { writable, Writable } from "svelte/store";
 
-export const vaccinationCertificateStore: Writable<VaccinationCertificateInterface> =
-  writable({
-    description: "",
-    identifier: "",
-    name: "",
-    image: "",
-  });
+let vaccinationCertificateStore:VaccinationCertificateInterface ={
+    description: false,
+    identifier: false,
+    name: false,
+    image: false,
+  };
 
-export const vaccineRecipientStore: Writable<VaccineRecipientInterface> =
-  writable({
-    birthDate: new Date(),
-    familyName: "",
-    gender: "",
-    givenName: "",
-  });
+let vaccineRecipientStore:VaccineRecipientInterface = {
+    birthDate: false,
+    familyName: false,
+    gender: false,
+    givenName: false,
+  };
 
-export const vaccineStore: Writable<VaccineInterface> = writable({
-  atcCode: "",
-  disease: "",
-  event: "",
-});
+let vaccineStore:VaccineInterface = {
+  atcCode: false,
+  disease: false,
+  event: false,
+};
 
-export const vaccinationEventStore:Writable<VaccinationEvent> = writable({
-  administeringCentre:'',
-  batchNumber: '',
-  countryOfVaccination:'',
-  dateOfVaccination: new Date(),
-  healthProfessional: '',
-  nextVaccinationDate: '',
-  order:'',
-  recipient:'',
-  vaccine:''
-})
+let vaccinationEventStore:VaccinationEvent ={
+  administeringCentre:false,
+  batchNumber: false,
+  countryOfVaccination:false,
+  dateOfVaccination: false,
+  healthProfessional: false,
+  nextVaccinationDate: false,
+  order:false,
+  recipient:false,
+  vaccine:false
+}
 
-export const vaccinationJsonLD = readable([
+export const vaccinationJsonLD:Writable<any> = writable([
   {
     name:'',
     schema: '',
-    store: undefined
+    fields: undefined
   },
   {
     name: "VaccinationCertificate",
     schema: "https://w3id.org/vaccination#VaccinationCertificate",
-    store: vaccinationCertificateStore
+    fields: vaccinationCertificateStore
   },
   {
     name: "VaccinationEvent",
     schema: "https://w3id.org/vaccination#VaccinationEvent",
-    store: vaccinationEventStore
+    fields: vaccinationEventStore
   },
   {
     name: "VaccineRecipient",
     schema: "https://w3id.org/vaccination#VaccinationRecipient",
-    store: vaccineRecipientStore
+    fields: vaccineRecipientStore
   },
   {
     name: "Vaccine",
     schema: "https://w3id.org/vaccination#Vaccine",
-    store: vaccineStore
+    fields: vaccineStore
   }
 ]);

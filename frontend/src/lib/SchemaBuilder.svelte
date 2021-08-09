@@ -5,19 +5,23 @@
   import { vaccinationJsonLD } from '../stores/schema'
   
   let index = -1
-  let schemaChossen:any // assing a type
+  let schemaChossen:string = ''
+  let subStoreValues:Array<any> = []
+
   $: if(schemaChossen !== ''){
       index = $vaccinationJsonLD.findIndex((x) => x.schema === schemaChossen)//implicit return
-      console.log(index)
     }
-  $: if(index !== -1){
-      console.log('index',index);
-      let storeValue:Array<any> = []
-      $vaccinationJsonLD[index].store.subscribe(value => {
-        storeValue.push(value)})
 
-      console.log(storeValue)
+  function displayNestedStoreField() {
+    console.log('click')
+    if(schemaChossen !== ''){
+       
+      console.log($vaccinationJsonLD[index])
+    } else {
+      alert('please select a schema')
     }
+
+  }
 </script>
 
 <template>
@@ -35,32 +39,22 @@
         {/each}
       </select>
     <h3>Fields</h3>
-    
     {#if schemaChossen !== ''}
-      {schemaChossen}
+    <h3> Schema reference: {schemaChossen}</h3>
+
+    <ul>
+      {#each Object.entries($vaccinationJsonLD[index].fields) as [key,value]}
+        <li><input type=checkbox bind:checked={$vaccinationJsonLD[index].fields[key]} > {key}</li><!-- this is the html element, checked (boolean equivalent in html)-->
+      {/each}
+    </ul>
+    {:else}
+      <h2>Please select a schema</h2>
     {/if}
-
-    <!--
-      <select bind:value={schemaBuild} on:change={() => console.log(schemaBuild)}>
-        {#each tmp as schemaField}
-          <option value={schemaField}>
-            {schemaField}
-          </option>
-        {/each}
-      </select>
-    -->
-    <button>
-        <img
-          src="../assets/outlinePlusCircle.svg"
-          alt="heroIcon"
-          class="icon"
-        />
-    </button>
-    <button type="submit">
-      Submit
-    </button>
+    
   </form>
-
+  <button type="submit" on:click={displayNestedStoreField}>
+    Submit
+  </button>
 </template>
 
 <style lang='postcss'>
