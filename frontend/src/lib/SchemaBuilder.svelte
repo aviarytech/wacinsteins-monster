@@ -8,14 +8,9 @@
 
   let index:number = -1
   let schemaChossen:string = ''
-  //BUG: there's no reactivity????
   $: if(schemaChossen !== ''){
-      console.log('YES I AM REACTIVE')
       index = $vaccinationJsonLD.findIndex((x) => x.name === schemaChossen)//implicit return
-      console.log(index)
-    } else { 
-      console.log("schemaChossen",schemaChossen)
-      }
+    } 
 
   async function presentationPostRequest() {
     if(schemaChossen !== ''){
@@ -49,7 +44,6 @@
     <h3>Name</h3>
     <input type="text" placeholder="my name is..."/>
     <h3>Schema</h3>
-      <!--BUG: why is the binded value not changing in $: it logs the correct this?-->
       <select bind:value={schemaChossen} on:change={() => console.log(schemaChossen)}>
         {#each $vaccinationJsonLD as item}
           <option value={item.name}>
@@ -67,7 +61,7 @@
       {/each}
     </ul>
     {:else}
-      <h2 class="bg-yellow-400 rounded-lg max-w-prose">Please select a schema</h2>
+      <h2 class="bg-yellow-500 rounded-lg max-w-prose">Please select a schema</h2>
     {/if}
     
   </form>
