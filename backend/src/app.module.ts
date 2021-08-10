@@ -15,9 +15,10 @@ import { DocumentLoaderService } from './documentLoader/documentLoader.service';
 import { KMSModule } from './kms/kms.module';
 import { KMSService } from './kms/kms.service';
 import { PresentationsModule } from './presentations/presentations.module';
+import { CredentialsModule } from './credentials/credentials.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), CqrsModule, PresentationsModule, KMSModule],
+  imports: [ConfigModule.forRoot(), CqrsModule, PresentationsModule, KMSModule, CredentialsModule],
   controllers: [AppController, AdminController],
   providers: [
     AppService,
