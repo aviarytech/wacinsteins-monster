@@ -1,23 +1,38 @@
 <script lang='ts'>
-  import type { SchemaSelect } from '../interfaces';
+  // interfaces
+  import type { PostPresentationPayload } from 'src/interfaces';
+  //stores
+  import { vaccinationJsonLD } from '../stores/schema'
+  //api
+  import { postNewPresentationRequest } from '../api/presentationAxios';
 
+  let index:number = -1
+  let schemaChossen:string = ''
 
-  import { vaccinationCertificateStore,vaccineRecipientStore, vaccineStore } from '../stores/schema'
-  //
-  let availableSchemas:SchemaSelect[] = [
-   {id:0,schemaStore:vaccineRecipientStore,schemaInterface:"VaccineRecipient"},
-   {id:1,schemaStore:vaccinationCertificateStore,schemaInterface:"VaccinationCertificateInterface"},
-   {id:2,schemaStore:vaccineStore,schemaInterface:"VaccineRecipientInterface"}
-  ]
-  let schemaChossen:any
-  let tmp:any //don't know what to do/name this var yet
-  let schemaBuild:any //need a type (is the return value of all this)
-  //TODO: access the store when its not undefined and make it so that once a field has been added it can't be added again
-  $: if (schemaChossen !== undefined){
-      schemaChossen.schemaStore.subscribe((fields) =>{
-        tmp = fields
-      })
+  $: if(schemaChossen !== ''){
+      index = $vaccinationJsonLD.findIndex((x) => x.name === schemaChossen)//implicit return
     }
+
+  async function presentationPostRequest() {
+    if(schemaChossen !== ''){
+      let checkedKeys:string[] = Object.keys(
+        $vaccinationJsonLD[index].fields).filter(
+          (key) => $vaccinationJsonLD[index].fields[key])
+      checkedKeys.forEach( (val, i) => {checkedKeys[i]=`$.${schemaChossen}.${val}`})
+      let postPayload:PostPresentationPayload = {
+          name:schemaChossen,
+          schema:$vaccinationJsonLD[index].schema,
+          paths:checkedKeys
+        }
+      //console.log(postPayload)
+      let res = await postNewPresentationRequest(postPayload)
+      //console.log(res)
+      window.location.reload()
+    } else {
+      alert('please select a schema')
+    }
+
+  }
 </script>
 
 <template>
@@ -28,38 +43,29 @@
     <input type="text" placeholder="my name is..."/>
     <h3>Schema</h3>
       <select bind:value={schemaChossen} on:change={() => console.log(schemaChossen)}>
-        {#each availableSchemas as availableSchema}
-          <option value={availableSchema}>
-            {availableSchema.schemaInterface}
+        {#each $vaccinationJsonLD as item}
+          <option value={item.name}>
+            {item.name}
           </option>
         {/each}
       </select>
     <h3>Fields</h3>
-    
-    {#if schemaChossen !== undefined}
-      {schemaChossen.schemaStore}
-    {/if}
-    <!--
-      <select bind:value={schemaBuild} on:change={() => console.log(schemaBuild)}>
-        {#each tmp as schemaField}
-          <option value={schemaField}>
-            {schemaField}
-          </option>
-        {/each}
-      </select>
-    -->
-    <button>
-        <img
-          src="../assets/outlinePlusCircle.svg"
-          alt="heroIcon"
-          class="icon"
-        />
-    </button>
-    <button type="submit">
-      Submit
-    </button>
-  </form>
+    {#if schemaChossen !== ''}
+    <h3> Schema reference: {schemaChossen}</h3>
 
+    <ul>
+      {#each Object.keys($vaccinationJsonLD[index].fields) as key}
+        <li><input type=checkbox bind:checked={$vaccinationJsonLD[index].fields[key]} > {key}</li><!-- this is the html element, checked (boolean equivalent in html)-->
+      {/each}
+    </ul>
+    {:else}
+      <h2>Please select a schema</h2>
+    {/if}
+    
+  </form>
+  <button type="submit" on:click={presentationPostRequest}>
+    Submit
+  </button>
 </template>
 
 <style lang='postcss'>

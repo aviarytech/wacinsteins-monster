@@ -5,26 +5,48 @@ export interface routeHooks {
   routeUrl: string;
   heroIcon?: string;
 }
-
+//vaccine json-ld (stores)
 export interface VaccinationCertificateInterface {
-  description: string;
-  identifier: string;
-  name: string;
-  image: string;
+  description: boolean;
+  identifier: boolean;
+  name: boolean;
+  image: boolean;
 }
+
 export interface VaccineRecipientInterface {
-  birthDate: Date;
-  familyName: string;
-  gender: string;//maybe I should do an enum
-  givenName: string;
+  birthDate: Boolean;
+  familyName: boolean;
+  gender: boolean;//maybe I should do an enum
+  givenName: boolean;
 }
+
 export interface VaccineInterface {
-  atcCode: string | number;
-  disease: string;
-  event: string;
+  atcCode: boolean;
+  disease: boolean;
+  event: boolean;
 }
-export interface SchemaSelect {
-  id:number;
-  schemaStore:Writable<any>;
-  schemaInterface:string;
+
+
+export interface VaccinationEvent {
+  administeringCentre:boolean;
+  batchNumber: boolean;
+  countryOfVaccination:boolean;
+  dateOfVaccination: boolean;
+  healthProfessional: boolean;
+  nextVaccinationDate: boolean;
+  order:boolean;
+  recipient:boolean;
+  vaccine:boolean;
+}
+
+export interface NameSchema {
+  name: string;
+  schema:string;
+  store:Writable<any>|undefined;
+}
+//api
+export interface PostPresentationPayload {
+  name: string;
+  schema:string;
+  paths: string[];
 }
