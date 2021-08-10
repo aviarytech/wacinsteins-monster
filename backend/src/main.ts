@@ -29,6 +29,7 @@ async function bootstrap() {
     new FastifyAdapter(server),
   );
   app.useGlobalPipes(new ValidationPipe());
+  app.enableCors()
 
   const config = new DocumentBuilder()
     .setTitle('WACInsteins Monster')

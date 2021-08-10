@@ -5,7 +5,7 @@ export interface routeHooks {
   routeUrl: string;
   heroIcon?: string;
 }
-//vaccine json-ld
+//vaccine json-ld (stores)
 export interface VaccinationCertificateInterface {
   description: boolean;
   identifier: boolean;
@@ -44,5 +44,9 @@ export interface NameSchema {
   schema:string;
   store:Writable<any>|undefined;
 }
-
-
+//api
+export interface PostPresentationPayload {
+  name: string;
+  schema:string;
+  paths: Array<any>;
+}

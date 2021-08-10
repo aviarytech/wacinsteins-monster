@@ -1,22 +1,36 @@
 <script lang='ts'>
   // interfaces
-  import type { NameSchema } from '../interfaces';
+  import type { PostPresentationPayload } from 'src/interfaces';
   //stores
   import { vaccinationJsonLD } from '../stores/schema'
-  
-  let index = -1
+  //api
+  import { postNewPresentationRequest } from '../api/presentationAxios';
+
+  let index:number = -1
   let schemaChossen:string = ''
-  let subStoreValues:Array<any> = []
 
   $: if(schemaChossen !== ''){
-      index = $vaccinationJsonLD.findIndex((x) => x.schema === schemaChossen)//implicit return
+      index = $vaccinationJsonLD.findIndex((x) => x.name === schemaChossen)//implicit return
     }
 
-  function displayNestedStoreField() {
-    console.log('click')
+  async function presentationPostRequest() {
     if(schemaChossen !== ''){
-       
-      console.log($vaccinationJsonLD[index])
+      //console.log($vaccinationJsonLD[index].fields)
+      let checkedKeys:Array<string> = Object.keys(
+        $vaccinationJsonLD[index].fields).filter(
+          (key) => $vaccinationJsonLD[index].fields[key])
+      //console.log(checkedKeys)
+      checkedKeys.forEach( (val, i) => {checkedKeys[i]=`$.${schemaChossen}.${val}`})
+      //console.log(checkedKeys)
+      let postPayload:PostPresentationPayload = {
+          name:schemaChossen,
+          schema:$vaccinationJsonLD[index].schema,
+          paths:checkedKeys
+        }
+      console.log(postPayload)
+      let res = await postNewPresentationRequest(postPayload)
+      console.log(res)
+      
     } else {
       alert('please select a schema')
     }
@@ -33,7 +47,7 @@
     <h3>Schema</h3>
       <select bind:value={schemaChossen} on:change={() => console.log(schemaChossen)}>
         {#each $vaccinationJsonLD as item}
-          <option value={item.schema}>
+          <option value={item.name}>
             {item.name}
           </option>
         {/each}
@@ -52,7 +66,7 @@
     {/if}
     
   </form>
-  <button type="submit" on:click={displayNestedStoreField}>
+  <button type="submit" on:click={presentationPostRequest}>
     Submit
   </button>
 </template>

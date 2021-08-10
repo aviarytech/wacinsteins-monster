@@ -34,6 +34,8 @@
         role: "Employee",
       },
   ]
+  //id (top level), name(one sent), schema(one sent), paths
+  //refresh with a new post
 const mockendUrl = 'https://mockend.com/aviarytech/wacinsteins-monster/users'
 async function apiGetCall():Promise<any>{
       let res = await getCall(mockendUrl)
