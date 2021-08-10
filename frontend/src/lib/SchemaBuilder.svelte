@@ -1,6 +1,6 @@
 <script lang='ts'>
   // interfaces
-  import type { PostPresentationPayload } from 'src/interfaces';
+  import type { PostPresentationPayload } from '../interfaces';
   //stores
   import { vaccinationJsonLD } from '../stores/schema'
   //api
@@ -8,17 +8,24 @@
 
   let index:number = -1
   let schemaChossen:string = ''
-
+  //BUG: there's no reactivity????
   $: if(schemaChossen !== ''){
+      console.log('YES I AM REACTIVE')
       index = $vaccinationJsonLD.findIndex((x) => x.name === schemaChossen)//implicit return
-    }
+      console.log(index)
+    } else { 
+      console.log("schemaChossen",schemaChossen)
+      }
 
   async function presentationPostRequest() {
     if(schemaChossen !== ''){
+      
       let checkedKeys:string[] = Object.keys(
         $vaccinationJsonLD[index].fields).filter(
           (key) => $vaccinationJsonLD[index].fields[key])
+
       checkedKeys.forEach( (val, i) => {checkedKeys[i]=`$.${schemaChossen}.${val}`})
+      
       let postPayload:PostPresentationPayload = {
           name:schemaChossen,
           schema:$vaccinationJsonLD[index].schema,
@@ -42,6 +49,7 @@
     <h3>Name</h3>
     <input type="text" placeholder="my name is..."/>
     <h3>Schema</h3>
+      <!--BUG: why is the binded value not changing in $: it logs the correct this?-->
       <select bind:value={schemaChossen} on:change={() => console.log(schemaChossen)}>
         {#each $vaccinationJsonLD as item}
           <option value={item.name}>
