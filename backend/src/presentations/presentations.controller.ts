@@ -13,6 +13,7 @@ import { PresentationsService } from './presentations.service';
 import { CreatePresentationDto } from './dto/create-presentation.dto';
 import { UpdatePresentationDto } from './dto/update-presentation.dto';
 import { Presentation } from './entities/presentation.entity';
+import { CreatePresentationDefinitionDto } from './dto/create-presentation-definition.dto';
 
 @Controller('presentations')
 export class PresentationsController {
@@ -23,10 +24,13 @@ export class PresentationsController {
     @Body() createPresentationDto: CreatePresentationDto,
   ): Promise<Presentation> {
     try {
-      const pres = await this.presentationsService.create(
-        createPresentationDto,
-      );
-      return pres;
+      if (!createPresentationDto.presentationDefinitionId) {
+        throw new HttpException(
+          'presentationDefinitionId is a required field',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      return await this.presentationsService.create(createPresentationDto);
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
@@ -38,20 +42,30 @@ export class PresentationsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.presentationsService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.presentationsService.findOne(id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updatePresentationDto: UpdatePresentationDto,
+  @Post('definitions')
+  async createDefinition(
+    @Body() createPresentationDefinitionDto: CreatePresentationDefinitionDto,
   ) {
-    return this.presentationsService.update(+id, updatePresentationDto);
+    try {
+      return await this.presentationsService.createDefinition(
+        createPresentationDefinitionDto,
+      );
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.presentationsService.remove(+id);
+  @Get('definitions/:id')
+  async findOneDefinition(@Param('id') id: string) {
+    return await this.presentationsService.findOneDefinition(id);
+  }
+
+  @Get('definitions')
+  async findAllDefinitions() {
+    return await this.presentationsService.findAllDefinitions();
   }
 }
