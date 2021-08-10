@@ -1,10 +1,8 @@
 <script lang="ts">
-  import SchemaBuilder from '../lib/SchemaBuilder.svelte'
 </script>
 
 <template>
-  <h1>Messages (w/ SchemaBuilder for dev only)</h1>
-  <SchemaBuilder/>
+  <h1>Messages</h1>
 </template>
 
 <style lang="postcss">

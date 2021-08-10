@@ -1,9 +1,9 @@
   import axios from 'axios';
   import type { PostPresentationPayload } from 'src/interfaces';
   let baseUrl:string = "http://localhost:3100"
-  export async function getCall(url:string): Promise<any> {
+  export async function getPresentations(endpoint:string=`${baseUrl}/presentations`): Promise<any> {
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(endpoint);
       // console.log(response);
       if(response.status == 200){
           // test for status you want, etc

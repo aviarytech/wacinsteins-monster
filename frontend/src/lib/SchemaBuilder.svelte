@@ -15,22 +15,19 @@
 
   async function presentationPostRequest() {
     if(schemaChossen !== ''){
-      //console.log($vaccinationJsonLD[index].fields)
       let checkedKeys:Array<string> = Object.keys(
         $vaccinationJsonLD[index].fields).filter(
           (key) => $vaccinationJsonLD[index].fields[key])
-      //console.log(checkedKeys)
       checkedKeys.forEach( (val, i) => {checkedKeys[i]=`$.${schemaChossen}.${val}`})
-      //console.log(checkedKeys)
       let postPayload:PostPresentationPayload = {
           name:schemaChossen,
           schema:$vaccinationJsonLD[index].schema,
           paths:checkedKeys
         }
-      console.log(postPayload)
+      //console.log(postPayload)
       let res = await postNewPresentationRequest(postPayload)
-      console.log(res)
-      
+      //console.log(res)
+      window.location.reload()
     } else {
       alert('please select a schema')
     }
@@ -57,7 +54,7 @@
     <h3> Schema reference: {schemaChossen}</h3>
 
     <ul>
-      {#each Object.entries($vaccinationJsonLD[index].fields) as [key,value]}
+      {#each Object.keys($vaccinationJsonLD[index].fields) as key}
         <li><input type=checkbox bind:checked={$vaccinationJsonLD[index].fields[key]} > {key}</li><!-- this is the html element, checked (boolean equivalent in html)-->
       {/each}
     </ul>

@@ -1,49 +1,18 @@
 <script lang="ts">
+
   // api imports
-  import { getCall } from "../api/presentationAxios";
+  import { getPresentations } from "../api/presentationAxios";
   //component imports
   import PresentationTableData from "../lib/PresentationTableFormat.svelte"
+  import SchemaBuilder from '../lib/SchemaBuilder.svelte'
 
-  interface PresentationTableInterface {
-      id:number;
-      name:string;
-      jobTitle:string;
-      email:string;
-      role:string;
-    }
-  export const testPresentationData: PresentationTableInterface[] = [
-    {
-        id:0,
-        name: "Jane Cooper",
-        jobTitle: "Regional Paradigm Technician",
-        email:"jane.cooper@example.com",
-        role: "Admin",
-      },
-      {
-        id:1,
-        name: "Cody Fisher",
-        jobTitle: "Product Directives Officer",
-        email:"cody.fisher@example.com",
-        role: "Owner",
-      },
-      {
-        id:2,
-        name: "Bob McBob",
-        jobTitle: "Customer service",
-        email:"BobMcBob@example.com",
-        role: "Employee",
-      },
-  ]
-  //id (top level), name(one sent), schema(one sent), paths
-  //refresh with a new post
-const mockendUrl = 'https://mockend.com/aviarytech/wacinsteins-monster/users'
-async function apiGetCall():Promise<any>{
-      let res = await getCall(mockendUrl)
-      console.log(res)
-      return res
+  async function apiGetCall():Promise<any>{
+    let res = await getPresentations()
+    console.log(res)
+    return res
   }
   let displayData = false
-  let data:PresentationTableInterface[] = []
+  let data:Array<string> = []
   $: if (displayData === false){
       (async() => {
         const res = await apiGetCall()
@@ -51,21 +20,18 @@ async function apiGetCall():Promise<any>{
         displayData = !displayData
         })()
     } 
- //  <div>
- //   <button on:click={() => {displayData = !displayData}}>
- //     display data
- //   </button>
- // </div> 
+
 </script>
 
 <template>
+  <SchemaBuilder />
 
-  {#each data as row}
-    <PresentationTableData rowId={row.id}>
-      <span slot="name">{row.name}</span>
-      <span slot="jobTitle">{row.jobTitle}</span>
-      <span slot="email">{row.email}</span>
-      <span slot="role">{row.role}</span>
+  {#each Object.entries(data) as [i,row]}
+    <PresentationTableData rowId={parseInt(i)}>
+      <span slot="id">{row.id}</span>
+      <span slot="name">{row.request.definition.input_descriptors[0].name}</span>
+      <span slot="schema">{row.request.definition.input_descriptors[0].schema}</span>
+      <span slot="constraint">{row.request.definition.input_descriptors[0].constraints.fields[0].paths}</span>
     </PresentationTableData>
   {/each}
   
