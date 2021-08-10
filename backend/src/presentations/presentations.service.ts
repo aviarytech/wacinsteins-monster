@@ -5,8 +5,8 @@ import { DBService } from 'src/db/db.service';
 import { mapValidationErrorsToMessages } from 'src/utils/errors';
 import { sha256 } from 'src/utils/sha256';
 import { CreatePresentationDefinitionDto } from './dto/create-presentation-definition.dto';
+import { CreatePresentationRequestDto } from './dto/create-presentation-request.dto';
 import { CreatePresentationDto } from './dto/create-presentation.dto';
-import { UpdatePresentationDto } from './dto/update-presentation.dto';
 import {
   InputConstraint,
   InputDescriptor,
@@ -24,42 +24,8 @@ export class PresentationsService {
   async create(
     createPresentationDto: CreatePresentationDto,
   ): Promise<Presentation> {
-    const { presentationDefinitionId } = createPresentationDto;
-    const presentationDefinition = await this.db.getById(
-      presentationDefinitionId,
-    );
-    if (!presentationDefinition) {
-      throw new Error(
-        `Presentation Definition ${presentationDefinitionId} not found`,
-      );
-    }
-    const id = sha256(nanoid());
-    const url = 'REPLACE ME';
-    const domain = 'REPLACE ME';
-    const frame = {};
-    const pres = new Presentation(
-      id,
-      new PresentationRequest(
-        sha256(nanoid()),
-        url,
-        sha256(nanoid()),
-        domain,
-        presentationDefinition,
-      ),
-    );
-
-    await validateOrReject(pres, { validationError: { target: false } }).catch(
-      (e) => {
-        this.log.error('validation failed. errors: ', e);
-        throw new Error(mapValidationErrorsToMessages(e));
-      },
-    );
-
-    return await this.db.create({
-      '@type': 'Presentation',
-      '@id': id,
-      ...JSON.parse(JSON.stringify(pres)),
-    });
+    // todo
+    return null;
   }
 
   async findAll(): Promise<Presentation[]> {
@@ -109,5 +75,52 @@ export class PresentationsService {
 
   async findAllDefinitions() {
     return await this.db.getAllByType('PresentationDefinition');
+  }
+
+  async createRequest(
+    createPresentationRequestDto: CreatePresentationRequestDto,
+  ): Promise<PresentationRequest> {
+    const { presentationDefinitionId } = createPresentationRequestDto;
+    const presentationDefinition = await this.db.getById(
+      presentationDefinitionId,
+    );
+    if (!presentationDefinition) {
+      throw new Error(
+        `Presentation Definition ${presentationDefinitionId} not found`,
+      );
+    }
+    const id = sha256(nanoid());
+    const url = 'REPLACE ME';
+    const domain = 'REPLACE ME';
+    const frame = {};
+
+    const presReq = new PresentationRequest(
+      id,
+      url,
+      sha256(nanoid()),
+      domain,
+      presentationDefinition,
+    );
+
+    await validateOrReject(presReq, {
+      validationError: { target: false },
+    }).catch((e) => {
+      this.log.error('validation failed. errors: ', e);
+      throw new Error(mapValidationErrorsToMessages(e));
+    });
+
+    return await this.db.create({
+      '@type': 'PresentationRequest',
+      '@id': id,
+      ...JSON.parse(JSON.stringify(presReq)),
+    });
+  }
+
+  async findOneRequest(id: string) {
+    return await this.db.getById(id);
+  }
+
+  async findAllRequests() {
+    return await this.db.getAllByType('PresentationRequest');
   }
 }

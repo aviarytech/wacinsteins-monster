@@ -3,45 +3,48 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
 import { PresentationsService } from './presentations.service';
 import { CreatePresentationDto } from './dto/create-presentation.dto';
-import { UpdatePresentationDto } from './dto/update-presentation.dto';
-import { Presentation } from './entities/presentation.entity';
+import {
+  Presentation,
+  PresentationRequest,
+} from './entities/presentation.entity';
 import { CreatePresentationDefinitionDto } from './dto/create-presentation-definition.dto';
+import { CreatePresentationRequestDto } from './dto/create-presentation-request.dto';
 
 @Controller('presentations')
 export class PresentationsController {
   constructor(private readonly presentationsService: PresentationsService) {}
 
-  @Post()
+  @Post('requests')
   async create(
-    @Body() createPresentationDto: CreatePresentationDto,
-  ): Promise<Presentation> {
+    @Body() createPresentationRequestDto: CreatePresentationRequestDto,
+  ): Promise<PresentationRequest> {
     try {
-      if (!createPresentationDto.presentationDefinitionId) {
+      if (!createPresentationRequestDto.presentationDefinitionId) {
         throw new HttpException(
           'presentationDefinitionId is a required field',
           HttpStatus.BAD_REQUEST,
         );
       }
-      return await this.presentationsService.create(createPresentationDto);
+      return await this.presentationsService.createRequest(
+        createPresentationRequestDto,
+      );
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  @Get()
+  @Get('requests')
   async findAll(): Promise<Presentation[]> {
     return await this.presentationsService.findAll();
   }
 
-  @Get(':id')
+  @Get('requests/:id')
   async findOne(@Param('id') id: string) {
     return await this.presentationsService.findOne(id);
   }
@@ -67,5 +70,26 @@ export class PresentationsController {
   @Get('definitions')
   async findAllDefinitions() {
     return await this.presentationsService.findAllDefinitions();
+  }
+
+  @Post('create')
+  async createPresentation(
+    @Body() createPresentationDto: CreatePresentationDto,
+  ) {
+    try {
+      return await this.presentationsService.create(createPresentationDto);
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get(':id')
+  async findOnePresentation(@Param('id') id: string) {
+    return await this.presentationsService.findOne(id);
+  }
+
+  @Get()
+  async findAllPresentation() {
+    return await this.presentationsService.findAll();
   }
 }
