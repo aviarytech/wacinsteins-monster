@@ -1,9 +1,15 @@
 {
-  "User":{
+  "User": {
     "id": { "int": { "min": 0, "max": 50 } },
-    "name": {"string":{}},
-    "jobTitle": {"string":{}},
-    "email": {"string":{}},
-    "role": {"string":{}}
+    "name": { "string": {} },
+    "jobTitle": { "string": {} },
+    "email": { "string": {} },
+    "role": { "string": {} }
+  },
+  "Credential": {
+    "credentialSubject": {
+      "string": ["did:example:123"]
+    },
+    "id": { "int": { "min": 0, "max": 10 } }
   }
 }
