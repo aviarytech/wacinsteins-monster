@@ -40,13 +40,13 @@ export class PresentationsController {
   }
 
   @Get('requests')
-  async findAll(): Promise<Presentation[]> {
-    return await this.presentationsService.findAll();
+  async findAll(): Promise<PresentationRequest[]> {
+    return await this.presentationsService.findAllRequests();
   }
 
   @Get('requests/:id')
-  async findOne(@Param('id') id: string) {
-    return await this.presentationsService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<PresentationRequest> {
+    return await this.presentationsService.findOneRequest(id);
   }
 
   @Post('definitions')
