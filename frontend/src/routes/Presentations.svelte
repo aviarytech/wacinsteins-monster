@@ -12,7 +12,7 @@
     return res
   }
   let displayData = false
-  let data:Array<string> = []
+  let data:string[] = []
   $: if (displayData === false){
       (async() => {
         const res = await apiGetCall()

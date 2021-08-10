@@ -7,9 +7,9 @@
       // console.log(response);
       if(response.status == 200){
           // test for status you want, etc
-          console.log(response.status)
+        console.log(response.status)
+        return response.data
       }
-      return response.data
     } catch (error) {
       console.error(error);
     }
@@ -20,10 +20,9 @@
     console.log(endpoint)
     const response = await axios.post(endpoint, payload)
     if(response.status == 201){
-        // test for status you want, etc
-        console.log(response.status)
+      console.log(response.status)
+      return response.data
     }
-    return response.data
   } catch  (error) {
       console.error(error);
   }

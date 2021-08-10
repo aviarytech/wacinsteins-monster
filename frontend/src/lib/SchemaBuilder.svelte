@@ -15,7 +15,7 @@
 
   async function presentationPostRequest() {
     if(schemaChossen !== ''){
-      let checkedKeys:Array<string> = Object.keys(
+      let checkedKeys:string[] = Object.keys(
         $vaccinationJsonLD[index].fields).filter(
           (key) => $vaccinationJsonLD[index].fields[key])
       checkedKeys.forEach( (val, i) => {checkedKeys[i]=`$.${schemaChossen}.${val}`})
