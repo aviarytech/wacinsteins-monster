@@ -59,11 +59,11 @@
       {/each}
     </ul>
     {:else}
-      <h2>Please select a schema</h2>
+      <h2 class="bg-yellow-400 rounded-lg max-w-prose">Please select a schema</h2>
     {/if}
     
   </form>
-  <button type="submit" on:click={presentationPostRequest}>
+  <button type="submit" on:click={presentationPostRequest} class="bg-red-400 rounded-lg max-w-prose">
     Submit
   </button>
 </template>
