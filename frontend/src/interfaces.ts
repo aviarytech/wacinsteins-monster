@@ -48,5 +48,5 @@ export interface NameSchema {
 export interface PostPresentationPayload {
   name: string;
   schema:string;
-  paths: Array<any>;
+  paths: string[];
 }
