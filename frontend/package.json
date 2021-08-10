@@ -37,6 +37,7 @@
     "vite": "^2.4.4"
   },
   "dependencies": {
+    "@stablelib/sha256": "^1.0.1",
     "axios": "^0.21.1",
     "schema-dts": "^0.10.0",
     "svelte-jester": "^1.7.0",

@@ -1,21 +1,20 @@
 <script lang="ts">
   //components
-  import Sidebar from './lib/Sidebar.svelte';
-  import SearchBar from './lib/SearchBar.svelte';
-  import Profile from './lib/Profile.svelte';
+  import Sidebar from "./lib/Sidebar.svelte";
+  import SearchBar from "./lib/SearchBar.svelte";
+  import Profile from "./lib/Profile.svelte";
   //routes
-  import Home from './routes/Home.svelte';
-  import Connections from './routes/Connections.svelte';
-  import Credentials from './routes/Credentials.svelte';
-  import Messages from './routes/Messages.svelte';
-  import Presentations from './routes/Presentations.svelte';
+  import Home from "./routes/Home.svelte";
+  import Connections from "./routes/Connections.svelte";
+  import Credentials from "./routes/Credentials.svelte";
+  import Messages from "./routes/Messages.svelte";
+  import Presentations from "./routes/Presentations.svelte";
   //js imports
-  import { Router, Route } from 'svelte-navigator';
+  import { Router, Route } from "svelte-navigator";
 </script>
 
 <template class="">
-  <!-- <img src={logo} alt="Svelte Logo" /> -->
-  <div class="h-screen flex overflow-hidden bg-gray-100">
+  <div class="h-screen flex overflow-hidden bg-blue-500">
     <Sidebar />
     <!-- start of the main content -->
     <div class="flex flex-col w-0 flex-1 overflow-hidden">
@@ -64,37 +63,32 @@
       </div>
 
       <main class="flex-1 relative overflow-y-auto focus:outline-none">
-        <div class="py-6">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-            <!-- <h1 class="text-2xl font-semibold text-gray-900">Credentials</h1> -->
+        <div class="max-w-7xl mx-auto sm:px-2">
+          <!-- Replace with your content -->
+          <div class="">
+            <Router>
+              <Route path="">
+                <Home />
+              </Route>
+
+              <Route path="credentials">
+                <Credentials />
+              </Route>
+
+              <Route path="presentations">
+                <Presentations />
+              </Route>
+
+              <Route path="messages">
+                <Messages />
+              </Route>
+
+              <Route path="connections">
+                <Connections />
+              </Route>
+            </Router>
           </div>
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-            <!-- Replace with your content -->
-            <div class="py-4">
-              <Router>
-                <Route path="">
-                  <Home />
-                </Route>
-
-                <Route path="credentials">
-                  <Credentials />
-                </Route>
-
-                <Route path="presentations">
-                  <Presentations />
-                </Route>
-
-                <Route path="messages">
-                  <Messages />
-                </Route>
-
-                <Route path="connections">
-                  <Connections />
-                </Route>
-              </Router>
-            </div>
-            <!-- /End replace -->
-          </div>
+          <!-- /End replace -->
         </div>
       </main>
     </div>
@@ -102,11 +96,9 @@
 </template>
 
 <style global lang="postcss">
-
   /*WARN: is there a global file we can create and reference in tailwind.config.cjs otherwise App.svelte is the most appropriate place for global css*/
   .icon {
     @apply text-gray-400  mr-3 flex-shrink-0 h-6 w-6;
-    group-hover:text-gray-500;
-
+    group-hover: text-gray-500;
   }
 </style>

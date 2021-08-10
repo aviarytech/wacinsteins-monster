@@ -1,9 +1,9 @@
 {
-  "User":{
-    "id": { "int": { "min": 0, "max": 50 } },
-    "name": {"string":{}},
-    "jobTitle": {"string":{}},
-    "email": {"string":{}},
-    "role": {"string":{}}
+  "User": {
+    "id": { "int": { "min": 1000000000000000000, "max": 5100000000000000000 } },
+    "name": { "string": {} },
+    "jobTitle": { "string": {} },
+    "email": { "string": {} },
+    "role": { "string": {} }
   }
 }
