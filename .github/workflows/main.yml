@@ -30,7 +30,7 @@ jobs:
         # uses: docker/build-push-action@1bc1040caef9e604eb543693ba89b5bf4fc80935
         uses: docker/build-push-action@v2.6.1
         with:
-          context: backend/Dockerfile
+          context: ./backend/Dockerfile
           push: false
           tags: wacinstein:latest
           # List of extra privileged entitlement (eg. network.host,security.insecure)
