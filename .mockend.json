@@ -6,7 +6,7 @@
     "email": { "string": {} },
     "role": { "string": {} }
   },
-  "CredentialSubject": {
+  "Credential": {
     "id": { "int": { "min": 0, "max": 10 } }
   }
 }
