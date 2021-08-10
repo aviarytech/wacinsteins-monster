@@ -1,9 +1,12 @@
 {
-  "User":{
+  "User": {
     "id": { "int": { "min": 0, "max": 50 } },
-    "name": {"string":{}},
-    "jobTitle": {"string":{}},
-    "email": {"string":{}},
-    "role": {"string":{}}
+    "name": { "string": {} },
+    "jobTitle": { "string": {} },
+    "email": { "string": {} },
+    "role": { "string": {} }
+  },
+  "CredentialSubject": {
+    "id": { "string": { "min": 10000, "max": 20000 } }
   }
 }
