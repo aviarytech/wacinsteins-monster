@@ -21,14 +21,14 @@ export class InputFilter {
 
 export class InputField {
   @IsArray()
-  paths: string[];
+  path: string[];
 
   @IsNotEmpty()
   @ValidateNested()
   filter: InputFilter;
 
-  constructor(paths: string[], filter: InputFilter) {
-    this.paths = paths;
+  constructor(path: string[], filter: InputFilter) {
+    this.path = path;
     this.filter = filter;
   }
 }
