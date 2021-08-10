@@ -7,6 +7,9 @@
     "role": { "string": {} }
   },
   "Credential": {
+    "credentialSubject": {
+      "id": { "string": ["did:example:123"] }
+    },
     "id": { "int": { "min": 0, "max": 10 } }
   }
 }
