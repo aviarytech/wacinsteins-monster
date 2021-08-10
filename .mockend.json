@@ -4,7 +4,9 @@
     "name": { "string": {} },
     "jobTitle": { "string": {} },
     "email": { "string": {} },
-    "role": { "string": {} }
+    "role": { "string": {} },
+    "http://schema.org/familyName": { "string": {} },
+    "http://schema.org/givenName": { "string": {} }
   },
   "Credential": {
     "credentialSubject": {
