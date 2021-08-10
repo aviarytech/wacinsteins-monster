@@ -30,8 +30,9 @@ jobs:
         with:
           image: wacinstein
           tags: latest ${{ github.sha }}
+          context: backend
           dockerfiles: |
-            ./backend/Dockerfile
+            ./Dockerfile
       - name: Push To Registry
         uses: redhat-actions/push-to-registry@v2
         with:
