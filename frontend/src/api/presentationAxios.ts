@@ -1,7 +1,7 @@
   import axios from 'axios';
   import type { PostPresentationPayload } from 'src/interfaces';
   let baseUrl:string = "http://localhost:3100"
-  export async function getPresentations(endpoint:string=`${baseUrl}/presentations`): Promise<any> {
+  export async function getPresentations(endpoint:string=`${baseUrl}/presentations/requests`): Promise<any> {
     try {
       const response = await axios.get(endpoint);
       // console.log(response);
@@ -15,7 +15,7 @@
     }
   }
 
-  export async function postNewPresentationRequest(payload:PostPresentationPayload,endpoint:string=`${baseUrl}/presentations`):Promise<any> {
+  export async function postNewPresentationRequest(payload:PostPresentationPayload,endpoint:string=`${baseUrl}/presentations/requests`):Promise<any> {
   try {
     console.log(endpoint)
     const response = await axios.post(endpoint, payload)
