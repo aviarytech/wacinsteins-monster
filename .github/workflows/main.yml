@@ -36,7 +36,7 @@ jobs:
       - name: Push To Registry
         uses: redhat-actions/push-to-registry@v2
         with:
-          image: wacinstein:latest
+          image: wacinstein
           registry: default-route-openshift-image-registry.apps.avos.aviary.link/av-images
           # List of extra privileged entitlement (eg. network.host,security.insecure)
 #           allow: # optional
