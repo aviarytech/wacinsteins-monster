@@ -20,6 +20,8 @@ jobs:
           working-directory: frontend
           browser: firefox
           headless: true
+          env: VITE_API_URL=http://localhost:3100,VITE_ENV_TYPE=prod
           build: npm install && npm run build
           start: npm run serve
-          env: VITE_API_URL=http://localhost:3100,VITE_ENV_TYPE=prod
+          parallel: true
+          wait-on: http://localhost:5000
