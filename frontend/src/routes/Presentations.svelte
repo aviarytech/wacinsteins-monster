@@ -1,29 +1,24 @@
 
 <script lang="ts">
+
   // api imports
   import { getPresentations } from "../api/presentationAxios";
   //component imports
   import PresentationTableData from "../lib/PresentationTableFormat.svelte"
   import SchemaBuilder from '../lib/SchemaBuilder.svelte'
+  //js imports
+  import { onMount } from "svelte";
 
 
-  let displayData = true
-  //BUG: we have some issue with the get call hence why everything breaks down. because the first thing this page
-  //BUG: need to talk with the boss regarding the backend changes
   let data:string[] = []
-  $: if (displayData === false){
-      (async() => {
+  onMount(async() => {
         const res = await getPresentations() 
         data = res 
         console.log(data)
         if (data === null){
           console.log('api call wrong')//NOTE: shoud I raise an error?
-        } else {
-          displayData = !displayData
-
         }
-        })()
-    } 
+  }) 
 </script>
 
 <template>
@@ -34,9 +29,9 @@
     {#each Object.entries(data) as [i,row]}
       <PresentationTableData rowId={parseInt(i)}>
         <span slot="id">{row.id}</span>
-        <span slot="name">{row.request.definition.input_descriptors[0].name}</span>
-        <span slot="schema">{row.request.definition.input_descriptors[0].schema}</span>
-        <span slot="constraint">{row.request.definition.input_descriptors[0].constraints.fields[0].paths}</span>
+        <span slot="name">{row.definition.input_descriptors[0].name}</span>
+        <span slot="schema">{row.definition.input_descriptors[0].schema}</span>
+        <span slot="constraint">{row.definition.input_descriptors[0].constraints.fields[0].paths}</span>
       </PresentationTableData>
     {/each}
   {:else}
