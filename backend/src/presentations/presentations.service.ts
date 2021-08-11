@@ -5,7 +5,9 @@ import { DBService } from 'src/db/db.service';
 import { mapValidationErrorsToMessages } from 'src/utils/errors';
 import { sha256 } from 'src/utils/sha256';
 import { CreatePresentationDefinitionDto } from './dto/create-presentation-definition.dto';
+
 import { CreatePresentationRequestDto } from './dto/create-presentation-request.dto';
+
 import { CreatePresentationDto } from './dto/create-presentation.dto';
 import {
   InputConstraint,
@@ -24,6 +26,7 @@ export class PresentationsService {
   async create(
     createPresentationDto: CreatePresentationDto,
   ): Promise<Presentation> {
+
     // todo
     return null;
   }
@@ -52,6 +55,7 @@ export class PresentationsService {
         new InputConstraint(
           paths.map((p) => new InputField([p], new InputFilter('string'))),
         ),
+
       ),
     ]);
 
@@ -63,9 +67,11 @@ export class PresentationsService {
     });
 
     return await this.db.create({
+
       '@type': 'PresentationDefinition',
       '@id': id,
       ...JSON.parse(JSON.stringify(definition)),
+
     });
   }
 
@@ -76,6 +82,7 @@ export class PresentationsService {
   async findAllDefinitions() {
     return await this.db.getAllByType('PresentationDefinition');
   }
+
 
   async createRequest(
     createPresentationRequestDto: CreatePresentationRequestDto,
@@ -103,6 +110,7 @@ export class PresentationsService {
     );
 
     await validateOrReject(presReq, {
+
       validationError: { target: false },
     }).catch((e) => {
       this.log.error('validation failed. errors: ', e);
@@ -110,6 +118,7 @@ export class PresentationsService {
     });
 
     return await this.db.create({
+
       '@type': 'PresentationRequest',
       '@id': id,
       ...JSON.parse(JSON.stringify(presReq)),

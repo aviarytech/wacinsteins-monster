@@ -9,12 +9,14 @@ import {
 } from '@nestjs/common';
 import { PresentationsService } from './presentations.service';
 import { CreatePresentationDto } from './dto/create-presentation.dto';
+
 import {
   Presentation,
   PresentationRequest,
 } from './entities/presentation.entity';
 import { CreatePresentationDefinitionDto } from './dto/create-presentation-definition.dto';
 import { CreatePresentationRequestDto } from './dto/create-presentation-request.dto';
+
 
 @Controller('presentations')
 export class PresentationsController {
@@ -25,15 +27,19 @@ export class PresentationsController {
     @Body() createPresentationRequestDto: CreatePresentationRequestDto,
   ): Promise<PresentationRequest> {
     try {
+
       if (!createPresentationRequestDto.presentationDefinitionId) {
+
         throw new HttpException(
           'presentationDefinitionId is a required field',
           HttpStatus.BAD_REQUEST,
         );
       }
+
       return await this.presentationsService.createRequest(
         createPresentationRequestDto,
       );
+
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
@@ -44,9 +50,11 @@ export class PresentationsController {
     return await this.presentationsService.findAllRequests();
   }
 
+
   @Get('requests/:id')
   async findOne(@Param('id') id: string): Promise<PresentationRequest> {
     return await this.presentationsService.findOneRequest(id);
+
   }
 
   @Post('definitions')
@@ -65,6 +73,7 @@ export class PresentationsController {
   @Get('definitions/:id')
   async findOneDefinition(@Param('id') id: string) {
     return await this.presentationsService.findOneDefinition(id);
+
   }
 
   @Get('definitions')
@@ -91,5 +100,6 @@ export class PresentationsController {
   @Get()
   async findAllPresentation() {
     return await this.presentationsService.findAll();
+
   }
 }
