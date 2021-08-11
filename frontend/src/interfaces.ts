@@ -16,7 +16,7 @@ export interface VaccinationCertificateInterface {
 export interface VaccineRecipientInterface {
   birthDate: Boolean;
   familyName: boolean;
-  gender: boolean;//maybe I should do an enum
+  gender: boolean; //maybe I should do an enum
   givenName: boolean;
 }
 
@@ -26,27 +26,36 @@ export interface VaccineInterface {
   event: boolean;
 }
 
-
 export interface VaccinationEvent {
-  administeringCentre:boolean;
+  administeringCentre: boolean;
   batchNumber: boolean;
-  countryOfVaccination:boolean;
+  countryOfVaccination: boolean;
   dateOfVaccination: boolean;
   healthProfessional: boolean;
   nextVaccinationDate: boolean;
-  order:boolean;
-  recipient:boolean;
-  vaccine:boolean;
+  order: boolean;
+  recipient: boolean;
+  vaccine: boolean;
 }
 
 export interface NameSchema {
   name: string;
-  schema:string;
-  store:Writable<any>|undefined;
+  schema: string;
+  store: Writable<any> | undefined;
 }
 //api
 export interface PostPresentationPayload {
   name: string;
-  schema:string;
+  schema: string;
   paths: string[];
+}
+
+export interface Credential {
+  "@id": string;
+  data: {
+    id: string;
+    issuer: { id: string };
+    issuanceDate: string;
+    name: string;
+  };
 }
