@@ -26,10 +26,12 @@
           schema:$vaccinationJsonLD[index].schema,
           paths:checkedKeys
         }
-      //console.log(postPayload)
+      // WARN:for debug only. (need to add a production flag or something)
+      console.log(postPayload)
       let res = await postNewPresentationRequest(postPayload)
-      //console.log(res)
-      window.location.reload()
+      //console.log(res.status)
+      // WARN:for debug only. (need to add a production flag or something)
+      //window.location.reload()
     } else {
       alert('please select a schema')
     }
