@@ -5,19 +5,15 @@
   //component imports
   import PresentationTableData from "../lib/PresentationTableFormat.svelte"
   import SchemaBuilder from '../lib/SchemaBuilder.svelte'
-  async function apiGetCall():Promise<any>{
-    let res = await getPresentations()
-    console.log(res)
-    return res
-  }
 
-  let displayData = false
+
+  let displayData = true
   //BUG: we have some issue with the get call hence why everything breaks down. because the first thing this page
   //BUG: need to talk with the boss regarding the backend changes
   let data:string[] = []
   $: if (displayData === false){
       (async() => {
-        const res = await apiGetCall()
+        const res = await getPresentations() 
         data = res 
         console.log(data)
         if (data === null){
@@ -33,7 +29,7 @@
 <template>
   <SchemaBuilder />
   <!-- WARN: if statement important in case of an empty db or and error -->
-  {#if data !== null}
+  {#if data !== []}
 
     {#each Object.entries(data) as [i,row]}
       <PresentationTableData rowId={parseInt(i)}>
