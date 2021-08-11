@@ -13,5 +13,6 @@ export async function getAllCredentials(): Promise<any> {
     return [];
   } catch (error) {
     console.error(error);
+    return [];
   }
 }

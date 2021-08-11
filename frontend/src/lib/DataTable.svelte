@@ -52,10 +52,7 @@
                 </td>
                 <td
                   class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium truncate max-w-xs"
-                >
-                  <a href="#" class="text-indigo-600 hover:text-indigo-900"
-                    >Edit</a
-                  >
+                  ><slot name="actions" />
                 </td>
               </tr>
             </tbody>
