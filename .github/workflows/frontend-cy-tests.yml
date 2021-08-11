@@ -21,6 +21,6 @@ jobs:
           browser: firefox
           headless: true
           env: VITE_API_URL=http://localhost:5000,VITE_ENV_TYPE=prod
-          build: npm install && npm run build
+          build: npm run build
           start: npm run serve
           wait-on: http://localhost:5000
