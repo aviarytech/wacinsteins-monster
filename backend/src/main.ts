@@ -9,7 +9,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const server = fastify();
+  const server = fastify({ ignoreTrailingSlash: true });
 
   server.addContentTypeParser(
     'application/didcomm-encrypted+json',
