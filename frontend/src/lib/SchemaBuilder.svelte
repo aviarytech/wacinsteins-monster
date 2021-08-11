@@ -43,10 +43,10 @@
 
   <h2>Schema builder</h2>
   <form>
-    <h3>Name</h3>
-    <input type="text" placeholder="my name is..."/>
-    <h3>Schema</h3>
-      <select bind:value={schemaChossen} on:change={() => console.log(schemaChossen)}>
+    <h3 id="cy-name">Name</h3>
+    <input type="text" placeholder="my name is..." id="cy-name-hook-input"/>
+    <h3 id="cy-schema">Schema</h3>
+      <select bind:value={schemaChossen} on:change={() => console.log(schemaChossen)} id='cy-schema-hook-select'>
         {#each $vaccinationJsonLD as item}
           <option value={item.name}>
             {item.name}
@@ -57,13 +57,13 @@
     {#if schemaChossen !== ''}
     <h3> Schema reference: {schemaChossen}</h3>
 
-    <ul>
+    <ul id='cy-checkbox-check'>
       {#each Object.keys($vaccinationJsonLD[index].fields) as key}
-        <li><input type=checkbox bind:checked={$vaccinationJsonLD[index].fields[key]} > {key}</li><!-- this is the html element, checked (boolean equivalent in html)-->
+        <li><input type=checkbox bind:checked={$vaccinationJsonLD[index].fields[key]}> {key}</li><!-- this is the html element, checked (boolean equivalent in html)-->
       {/each}
     </ul>
     {:else}
-      <h2 class="bg-yellow-500 rounded-lg max-w-prose">Please select a schema</h2>
+      <h2 id='cy-error-msg'class="bg-yellow-500 rounded-lg max-w-prose">Please select a schema</h2>
     {/if}
     
   </form>
