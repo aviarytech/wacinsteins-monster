@@ -1,24 +1,29 @@
 <script lang="ts">
-  import {Person, WithContext} from 'schema-dts';
+  import { getAllCredentials } from "../api/credentials";
+  import DataTable from "../lib/DataTable.svelte";
+  import type { Credential } from "../interfaces";
 
-  const p: WithContext<Person> = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: 'Eve',
-    affiliation: {
-      '@type': 'School',
-      name: 'Nice School',
-    },
-  };
-  console.log(p)
+  let data: Credential[] = [];
+  let fetchData = true;
+
+  $: if (fetchData)
+    (async () => {
+      data = await getAllCredentials();
+      fetchData = !fetchData;
+      console.log(data);
+    })();
 </script>
 
 <template>
-credentials
+  {#each data as row, i}
+    <DataTable columns={['ID', 'Issuance Date', 'Issuer', 'Name']} rowId={i}>
+      <span slot="name">{row.data.id}</span>
+      <span slot="jobTitle">{row.data.issuanceDate}</span>
+      <span slot="email">{row.data.issuer.id}</span>
+      <span slot="role">{row.data.name}</span>
+    </DataTable>
+  {/each}
 </template>
 
 <style lang="postcss">
-
 </style>
-
-
