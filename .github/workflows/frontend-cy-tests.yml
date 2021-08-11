@@ -21,5 +21,5 @@ jobs:
           browser: firefox
           headless: true
           build: npm run build
-          start: npm start
+          start: npm run serve
           env: VITE_API_URL=http://localhost:3100,VITE_ENV_TYPE=dev
