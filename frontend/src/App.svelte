@@ -1,16 +1,19 @@
 <script lang="ts">
   //components
-  import Sidebar from './lib/Sidebar.svelte';
-  import SearchBar from './lib/SearchBar.svelte';
-  import Profile from './lib/Profile.svelte';
+  import Sidebar from "./lib/Sidebar.svelte";
+  import SearchBar from "./lib/SearchBar.svelte";
+  import Profile from "./lib/Profile.svelte";
   //routes
-  import Home from './routes/Home.svelte';
-  import Connections from './routes/Connections.svelte';
-  import Credentials from './routes/Credentials.svelte';
-  import Messages from './routes/Messages.svelte';
-  import Presentations from './routes/Presentations.svelte';
+  import Home from "./routes/Home.svelte";
+  import Connections from "./routes/Connections.svelte";
+  import Credentials from "./routes/Credentials.svelte";
+  import Messages from "./routes/Messages.svelte";
+  import Presentations from "./routes/Presentations.svelte";
   //js imports
-  import { Router, Route } from 'svelte-navigator';
+  import { Router, Route } from "svelte-navigator";
+  import SlideOver from "./lib/SlideOver.svelte";
+
+  import { slideOverContent } from "./stores/ui";
 </script>
 
 <template class="">
@@ -95,15 +98,17 @@
         </div>
       </main>
     </div>
+
+    {#if $slideOverContent}
+      <SlideOver />
+    {/if}
   </div>
 </template>
 
 <style global lang="postcss">
-
   /*WARN: is there a global file we can create and reference in tailwind.config.cjs otherwise App.svelte is the most appropriate place for global css*/
   .icon {
     @apply text-gray-400  mr-3 flex-shrink-0 h-6 w-6;
-    group-hover:text-gray-500;
-
+    group-hover: text-gray-500;
   }
 </style>
