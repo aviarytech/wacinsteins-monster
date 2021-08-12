@@ -1,7 +1,7 @@
 import { Writable } from "svelte/store";
 
 export interface routeHooks {
-  routeName: string | HTMLElement;
+  routeName: string;
   routeUrl: string;
   heroIcon?: string;
 }
