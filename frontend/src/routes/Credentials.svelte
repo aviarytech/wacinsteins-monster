@@ -1,5 +1,5 @@
 <script lang="ts">
-  import CredentialDetails from "../lib/CredentialDetails.svelte";
+  import CredentialDetailView from "../lib/CredentialDetailView.svelte";
   import { onMount } from "svelte";
 
   import { getAllCredentials } from "../api/credentials";
@@ -8,10 +8,11 @@
   import { slideOverContent } from "../stores/ui";
 
   const openCredential = (credentialId) => {
+    const cred = $credentials.find((c) => c["@id"] === credentialId);
     slideOverContent.set({
       title: `Credential: ${credentialId}`,
-      component: CredentialDetails,
-      data: { id: credentialId },
+      component: CredentialDetailView,
+      credential: cred,
     });
   };
 

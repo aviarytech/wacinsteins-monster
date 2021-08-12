@@ -27,7 +27,7 @@
                 From: "translate-x-0"
                 To: "translate-x-full"
             -->
-          <div class="w-screen max-w-md">
+          <div class="w-screen max-w-xl">
             <div
               class="h-full flex flex-col py-6 bg-white shadow-xl overflow-y-scroll"
             >
@@ -71,7 +71,7 @@
                 <div class="absolute inset-0 px-4 sm:px-6">
                   <svelte:component
                     this={$slideOverContent.component}
-                    credentialId={$slideOverContent.data.id}
+                    {...$slideOverContent}
                   />
                 </div>
                 <!-- /End replace -->
