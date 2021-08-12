@@ -1,10 +1,10 @@
 name: Lint Code Base
 on:
   push:
-    branches-ignore: [main, henri/schema]
+    branches-ignore: [ ]
     # Remove the line above to run when pushing to master
   pull_request:
-    branches: [main]
+    branches: [main, henri/schema]
 jobs:
   build:
     # Name the Job
