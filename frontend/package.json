@@ -9,7 +9,10 @@
     "build": "vite build",
     "serve": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "cy:run": "cypress run"
+    "cy:headless": "cypress run --browser=firefox",
+    "cy:debug": "DEBUG=cypress:cli cypress run",
+    "cy:headed": "npx cypress run --headed --no-exit",
+    "prettier": "prettier --write \"{cypress,src}/**/*.{ts,svelte,js,css,html}\""
   },
   "devDependencies": {
     "@babel/preset-env": "^7.14.8",
@@ -20,10 +23,15 @@
     "@testing-library/svelte": "^3.0.3",
     "@tsconfig/svelte": "^2.0.1",
     "@types/jest": "^26.0.24",
+    "@typescript-eslint/parser": "^4.29.1",
     "autoprefixer": "^10.3.1",
     "babel-jest": "^27.0.6",
     "cssnano": "^5.0.6",
     "cypress": "^8.0.0",
+    "cypress-log-to-output": "^1.1.2",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.24.0",
+    "eslint-plugin-node": "^11.1.0",
     "jest": "^26.6.3",
     "postcss": "^8.3.5",
     "postcss-load-config": "^3.1.0",

@@ -1,3 +1,5 @@
+import codeCoverageTask from "@cypress/code-coverage/task";
+import {install,getLogs} from "cypress-log-to-output"
 /// <reference types="cypress" />
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
@@ -9,12 +11,14 @@
 // https://on.cypress.io/plugins-guide
 // ***********************************************************
 
-// cypress/plugins/index.js
-module.exports = (on, config) => {
-  require('@cypress/code-coverage/task')(on, config)
-  // include any other plugin code...
+// This function is called when a project is opened or re-opened (e.g. due to
+// the project's config changing)
 
-  // It's IMPORTANT to return the config object
-  // with any changed environment variables
-  return config
-}
+/**
+ * @type {Cypress.PluginConfig}
+ */
+export default (on, config) => {
+  install(on)
+  codeCoverageTask(on, config);
+  return config;
+};

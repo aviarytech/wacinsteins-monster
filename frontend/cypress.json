@@ -1,6 +1,7 @@
 {
   "componentFolder": "src",
   "testFiles": "**/*.spec.js",
-  "pluginsFile":false,
-  "baseUrl":"http://localhost:3000"
-} 
+  "baseUrl": "http://localhost:3000",
+  "ignoreTestFiles":[],
+  "pluginsFile": "cypress/plugins/index.ts"
+}

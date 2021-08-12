@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let credentialId: string;
+export let credentialId: string;
 </script>
 
 <template>
