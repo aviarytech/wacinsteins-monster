@@ -5,7 +5,7 @@ export interface routeHooks {
   routeUrl: string;
   heroIcon?: string;
 }
-//vaccine json-ld (stores)
+// vaccine json-ld (stores)
 export interface VaccinationCertificateInterface {
   description: boolean;
   identifier: boolean;
@@ -16,7 +16,7 @@ export interface VaccinationCertificateInterface {
 export interface VaccineRecipientInterface {
   birthDate: Boolean;
   familyName: boolean;
-  gender: boolean; //maybe I should do an enum
+  gender: boolean; // maybe I should do an enum
   givenName: boolean;
 }
 
@@ -43,7 +43,7 @@ export interface NameSchema {
   schema: string;
   store: Writable<any> | undefined;
 }
-//api
+// api
 export interface PostPresentationPayload {
   name: string;
   schema: string;

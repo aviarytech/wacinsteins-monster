@@ -6,7 +6,4 @@
 </template>
 
 <style lang="postcss">
-
 </style>
-
-

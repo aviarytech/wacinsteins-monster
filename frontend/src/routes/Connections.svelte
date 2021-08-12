@@ -1,13 +1,7 @@
 <script lang="ts">
-
 </script>
 
-<template>
-connections
-</template>
+<template> connections </template>
 
 <style lang="postcss">
-
 </style>
-
-
