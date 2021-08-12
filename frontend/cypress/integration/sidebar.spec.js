@@ -11,7 +11,9 @@ describe("Presentation schema", () => {
         cy.get("nav").should("contain", msg);
       })
   });
-  console.log('plugin works')
+  
+  console.log('plugin works')//BUG: plugin doesn't display 
+  //INFO: skipped test
   it.skip('the sidebar directs you to the right page', () => {
     cy.wrap(['Credentials','Presentation','Messages','Connections'])
       .each((msg) => {
