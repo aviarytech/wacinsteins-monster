@@ -25,7 +25,7 @@ onMount(async () => {
   <SchemaBuilder />
   <!-- WARN: if statement important in case of an empty db or and error -->
   {#if data !== []}
-    <div>
+    <div id="cy-presentation-results">
       {#each Object.entries(data) as [i, row]}
         <PresentationTableData rowId="{parseInt(i)}">
           <span slot="id">{row.id}</span>

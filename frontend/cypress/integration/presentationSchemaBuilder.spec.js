@@ -45,16 +45,5 @@ describe("Presentation schema", () => {
 
     cy.get('button[type="submit"]').click();
 
-    // stub an empty response to requests for a presentation
-    cy.intercept(
-      "GET",
-      `${import.meta.env.VITE_API_URL}/presentations/requests`,
-      []
-    ).as("getPresentation");
-    // wait for the first response to finish
-    cy.wait("@getPresentation");
-    // the results should be empty because we
-    // responded with an empty array first
-    cy.get("#book-results").should("be.empty");
   });
 });
