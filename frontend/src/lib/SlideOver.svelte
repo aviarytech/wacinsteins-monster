@@ -1,9 +1,9 @@
 <script lang="ts">
-import { slideOverContent } from "../stores/ui";
+  import { slideOverContent } from "../stores/ui";
 
-const closeSlideOver = () => {
-  slideOverContent.set(null);
-};
+  const closeSlideOver = () => {
+    slideOverContent.set(null);
+  };
 </script>
 
 <template>
@@ -11,7 +11,8 @@ const closeSlideOver = () => {
     class="fixed inset-0 overflow-hidden"
     aria-labelledby="slide-over-title"
     role="dialog"
-    aria-modal="true">
+    aria-modal="true"
+  >
     <div class="absolute inset-0 overflow-hidden">
       <!-- Background overlay, show/hide based on slide-over state. -->
       <div class="absolute inset-0" aria-hidden="true">
@@ -26,21 +27,24 @@ const closeSlideOver = () => {
                 From: "translate-x-0"
                 To: "translate-x-full"
             -->
-          <div class="w-screen max-w-md">
+          <div class="w-screen max-w-xl">
             <div
-              class="h-full flex flex-col py-6 bg-white shadow-xl overflow-y-scroll">
+              class="h-full flex flex-col py-6 bg-white shadow-xl overflow-y-scroll"
+            >
               <div class="px-4 sm:px-6">
                 <div class="flex items-start justify-between">
                   <h2
                     class="text-lg font-medium text-gray-900"
-                    id="slide-over-title">
+                    id="slide-over-title"
+                  >
                     {$slideOverContent.title}
                   </h2>
                   <div class="ml-3 h-7 flex items-center">
                     <button
                       class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       type="button"
-                      on:click="{() => closeSlideOver()}">
+                      on:click={() => closeSlideOver()}
+                    >
                       <span class="sr-only">Close panel</span>
                       <!-- Heroicon name: outline/x -->
                       <svg
@@ -49,12 +53,14 @@ const closeSlideOver = () => {
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
-                        aria-hidden="true">
+                        aria-hidden="true"
+                      >
                         <path
                           stroke-linecap="round"
                           stroke-linejoin="round"
                           stroke-width="2"
-                          d="M6 18L18 6M6 6l12 12"></path>
+                          d="M6 18L18 6M6 6l12 12"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -64,8 +70,9 @@ const closeSlideOver = () => {
                 <!-- Replace with your content -->
                 <div class="absolute inset-0 px-4 sm:px-6">
                   <svelte:component
-                    this="{$slideOverContent.component}"
-                    credentialId="{$slideOverContent.data.id}" />
+                    this={$slideOverContent.component}
+                    {...$slideOverContent}
+                  />
                 </div>
                 <!-- /End replace -->
               </div>
