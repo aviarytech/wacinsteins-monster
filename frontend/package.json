@@ -30,9 +30,7 @@
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.24.0",
     "eslint-plugin-node": "^11.1.0",
-    "husky": "^7.0.1",
     "jest": "^26.6.3",
-    "lint-staged": "^11.1.2",
     "postcss": "^8.3.5",
     "postcss-load-config": "^3.1.0",
     "prettier": "^2.3.2",
@@ -74,9 +72,6 @@
   "nyc": {
     "sourceMap": false,
     "instrument": false
-  },
-  "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
   },
   "setupFilesAfterEnv": [
     "@testing-library/jest-dom/extend-expect"
