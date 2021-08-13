@@ -1,5 +1,5 @@
 import codeCoverageTask from "@cypress/code-coverage/task";
-import {install,getLogs} from "cypress-log-to-output"
+import { install, getLogs } from "cypress-log-to-output";
 /// <reference types="cypress" />
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
@@ -18,7 +18,7 @@ import {install,getLogs} from "cypress-log-to-output"
  * @type {Cypress.PluginConfig}
  */
 export default (on, config) => {
-  install(on)
+  install(on);
   codeCoverageTask(on, config);
   return config;
 };

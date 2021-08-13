@@ -44,6 +44,5 @@ describe("Presentation schema", () => {
     cy.get('[type="checkbox"]').last().check();
 
     cy.get('button[type="submit"]').click();
-
   });
 });

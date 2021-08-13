@@ -1,20 +1,20 @@
 <script lang="ts">
-  import { camel2Title } from "../utils/camel2Title";
+import { camel2Title } from "../utils/camel2Title";
 
-  export let credential: object;
-  const credentialTypes = credential["data"].type.filter(
-    (t) => t !== "VerifiableCredential"
-  );
-  let subjects = {};
-  let visibleSubjectIndex = 0;
-  let visible = [];
-  $: if (Object.entries(subjects).length > 0) {
-    visible = Object.values(Object.entries(subjects)[visibleSubjectIndex][1]);
-  }
+export let credential: object;
+const credentialTypes = credential["data"].type.filter(
+  (t) => t !== "VerifiableCredential"
+);
+let subjects = {};
+let visibleSubjectIndex = 0;
+let visible = [];
+$: if (Object.entries(subjects).length > 0) {
+  visible = Object.values(Object.entries(subjects)[visibleSubjectIndex][1]);
+}
 
-  const clicked = (e) => {
-    console.log(e);
-  };
+const clicked = (e) => {
+  console.log(e);
+};
 </script>
 
 <template>
@@ -23,35 +23,32 @@
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
           <button
-            on:click={() => {
+            on:click="{() => {
               visibleSubjectIndex = 0;
-            }}
-            class:border-pink-500={visibleSubjectIndex === 0}
+            }}"
+            class:border-pink-500="{visibleSubjectIndex === 0}"
             class="text-gray-900 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
-            aria-current="page"
-          >
+            aria-current="page">
             Credential
           </button>
           <button
-            on:click={() => {
+            on:click="{() => {
               visibleSubjectIndex = 1;
-            }}
-            class:border-pink-500={visibleSubjectIndex === 1}
+            }}"
+            class:border-pink-500="{visibleSubjectIndex === 1}"
             class="text-gray-900 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
-            aria-current="page"
-          >
+            aria-current="page">
             Subject
           </button>
           <button
-            on:click={() => {
+            on:click="{() => {
               visibleSubjectIndex = 2;
-            }}
-            class:border-pink-500={visibleSubjectIndex === 2}
+            }}"
+            class:border-pink-500="{visibleSubjectIndex === 2}"
             class="text-gray-900 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
-            aria-current="page"
-          >
+            aria-current="page">
             Proof
-          </button>
+          </button>ctx[
         </nav>
       </div>
     </div>
@@ -96,8 +93,7 @@
       {#each Object.entries(credential["data"].credentialSubject) as prop}
         {#if typeof prop[1] === "object"}
           <div
-            class="border-t-2  sm:col-span-2 pt-3 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2"
-          >
+            class="border-t-2  sm:col-span-2 pt-3 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
             <div class="sm:col-span-2 text-md font-semibold text-gray-500">
               {camel2Title(prop[0])}
             </div>

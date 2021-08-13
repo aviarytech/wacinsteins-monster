@@ -5,40 +5,51 @@
 // api imports
 import { getPresentations } from "../api/presentationAxios";
 //component imports
-import PresentationTableData from "../lib/PresentationTableFormat.svelte";
 import SchemaBuilder from "../lib/SchemaBuilder.svelte";
+import DataTable from "../lib/DataTable.svelte";
+import PresentationDetailedView from "../lib/PresentationDetailedView.svelte";
 //js imports
 import { onMount } from "svelte";
+//stores
+import { presentations } from "../stores/presentation";
+import { slideOverContent } from "../stores/ui";
 
-let data: string[] = [];
+const openPresentationRequest = (presentationId) => {
+  const singleRow = $presentations.find((c) => c["@id"] === presentationId);
+  slideOverContent.set({
+    title: singleRow.definition.input_descriptors[0].name,
+    component: PresentationDetailedView,
+    presentation: singleRow,
+  });
+  console.log($slideOverContent)
+};
 onMount(async () => {
   const res = await getPresentations();
-  data = res;
-  console.log(data);
-  if (data === null) {
-    console.log("api call wrong"); //NOTE: shoud I raise an error?
-  }
-});
+    console.log(res)
+    if(res.length > 0){
+        presentations.set(res)
+      };
+  })
 </script>
 
 <template>
-  <SchemaBuilder />
-  <!-- WARN: if statement important in case of an empty db or and error -->
-  {#if data !== []}
-    <div id="cy-presentation-results">
-      {#each Object.entries(data) as [i, row]}
-        <PresentationTableData rowId="{parseInt(i)}">
-          <span slot="id">{row.id}</span>
-          <span slot="name">{row.definition.input_descriptors[0].name}</span>
-          <span slot="schema"
-            >{row.definition.input_descriptors[0].schema}</span>
-          <span slot="constraint"
-            >{row.definition.input_descriptors[0].constraints.fields[0]
-              .paths}</span>
-        </PresentationTableData>
-      {/each}
-    </div>
-  {:else}
-    <h3 class="bg-yellow-500 rounded-lg max-w-prose">Nothing to show</h3>
-  {/if}
+  <SchemaBuilder/>
+  {#each $presentations as row, i}
+    <DataTable
+      columns="{['ID', 'Name', 'Schema', 'Constraints']}"
+      rowId="{i}">
+      <button on:click={() => openPresentationRequest(row['@id'])} slot="name"
+        >{row.id}</button>
+      <span slot="jobTitle">{row.definition.input_descriptors[0].name}</span>
+      <span slot="email">{row.definition.input_descriptors[0].schema}</span>
+      <span slot="role">{row.definition.input_descriptors[0].constraints.fields[0].path}</span>
+      <span slot="actions"
+        ><button
+          on:click={() => openPresentationRequest(row['@id'])}
+          type="button"
+          class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          View
+        </button></span>
+    </DataTable>
+  {/each}
 </template>
