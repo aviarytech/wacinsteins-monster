@@ -10,7 +10,7 @@
   const openCredential = (credentialId) => {
     const cred = $credentials.find((c) => c["@id"] === credentialId);
     slideOverContent.set({
-      title: `Credential: ${credentialId}`,
+      title: cred["data"].name,
       component: CredentialDetailView,
       credential: cred,
     });
@@ -27,7 +27,9 @@
 <template>
   {#each $credentials as row, i}
     <DataTable columns={["ID", "Issuance Date", "Issuer", "Name"]} rowId={i}>
-      <span slot="name">{row.data.id}</span>
+      <button on:click={() => openCredential(row["@id"])} slot="name"
+        >{row.data.id}</button
+      >
       <span slot="jobTitle">{row.data.issuanceDate}</span>
       <span slot="email">{row.data.issuer.id}</span>
       <span slot="role">{row.data.name}</span>
