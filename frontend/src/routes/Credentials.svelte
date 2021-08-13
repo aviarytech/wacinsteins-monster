@@ -31,26 +31,38 @@
     if (resp.length > 0) {
       credentials.set(resp);
     }
-
   });
+<<<<<<< HEAD
 
+=======
+>>>>>>> d6cf834c8ef904639d387b3f62297b3c0b4b5bac
 </script>
 
 <template>
   {#each $credentials as row, i}
+<<<<<<< HEAD
     <DataTable
       columns="{['ID', 'Issuance Date', 'Issuer', 'Name']}"
       rowId="{i}">
       <button on:click={() => openCredential(row['@id'])} slot="name"
         >{row.data.id}</button>
+=======
+    <DataTable columns={["ID", "Issuance Date", "Issuer", "Name"]} rowId={i}>
+      <button on:click={() => openCredential(row["@id"])} slot="name"
+        >{row.data.id}</button
+      >
+>>>>>>> d6cf834c8ef904639d387b3f62297b3c0b4b5bac
       <span slot="jobTitle">{row.data.issuanceDate}</span>
       <span slot="email">{row.data.issuer.id}</span>
       <span slot="role">{row.data.name}</span>
       <span slot="actions"
         ><button
+<<<<<<< HEAD
           on:click={() => openCredential(row['@id'])}
+=======
+          on:click={() => openCredential(row["@id"])}
+>>>>>>> d6cf834c8ef904639d387b3f62297b3c0b4b5bac
           type="button"
-
           class="button"
         >
           View
@@ -59,7 +71,6 @@
           class="button">New Presentation</button
         >
       </span>
-
     </DataTable>
   {/each}
 </template>
