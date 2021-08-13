@@ -30,7 +30,6 @@ $: if (Object.entries(subjects).length > 0) {
     </div>
   </div>
 
-  {presentation.definition.input_descriptors[0].name}
   <!-- <pre>{JSON.stringify(presentation,null,2)}</pre> -->
   
   {#if visibleSubjectIndex === 0}

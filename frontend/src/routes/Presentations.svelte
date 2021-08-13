@@ -24,9 +24,9 @@ const openPresentationRequest = (presentationId) => {
 };
 const newPresentationRequest = (() => {
   slideOverContent.set({
-    title: 'new Presentation',
+    title: 'new Presentation Request',
     component: SchemaBuilder,
-    presentation: [],
+    presentationSubject: [],
   });
 })
 onMount(async () => {
@@ -39,6 +39,7 @@ onMount(async () => {
 </script>
 
 <template>
+  <!-- TODO: henroi fix this terrible table that I made and is self replicating.-->
   <button
     on:click={() => newPresentationRequest()}
     type="button"

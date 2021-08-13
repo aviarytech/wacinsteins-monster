@@ -4,37 +4,32 @@
 <script lang="ts">
 // interfaces
 import type { PostPresentationPayload } from "../interfaces";
+//component
+import CredentialSubjectFieldSelector from "./CredentialSubjectFieldSelector.svelte";
 //stores
-import { vaccinationJsonLD } from "../stores/schema";
+import { credentials } from "../stores/credentials";
 //api
 import { postNewPresentationRequest } from "../api/presentationAxios";
 
-let index: number = -1;
-let schemaChossen: string = "";
-$: if (schemaChossen !== "") {
-  index = $vaccinationJsonLD.findIndex((x) => x.name === schemaChossen); //implicit return
+let unique = {} // every {} is unique, {} === {} evaluates to false
+let selectedSchemaFields
+function clearSelection() {
+   unique = {}
 }
 
-async function presentationPostRequest() {
-  if (schemaChossen !== "") {
-    let checkedKeys: string[] = Object.keys(
-      $vaccinationJsonLD[index].fields
-    ).filter((key) => $vaccinationJsonLD[index].fields[key]);
+let credentialsChosen: any
 
-    checkedKeys.forEach((val, i) => {
-      checkedKeys[i] = `$.${schemaChossen}.${val}`;
-    });
+async function presentationPostRequest() {
+  if (selectedSchemaFields !== "") {
 
     let postPayload: PostPresentationPayload = {
-      name: schemaChossen,
-      schema: $vaccinationJsonLD[index].schema,
-      paths: checkedKeys,
+      name: credentialsChosen.data.name,
+      schema: "https://w3id.org/vaccination#VaccinationCertificate",// TODO: make it more generic !!!!!IMPORTANT
+      paths: selectedSchemaFields,
     };
-    // WARN:for debug only. (need to add a production flag or something)
     console.log(postPayload);
     let res = await postNewPresentationRequest(postPayload);
-    //console.log(res.status)
-    // WARN:for debug only. (need to add a production flag or something)
+    console.log(res.status)
     //window.location.reload()
   } else {
     alert("please select a schema");
@@ -49,30 +44,23 @@ async function presentationPostRequest() {
     <input type="text" placeholder="my name is..." id="cy-name-hook-input" />
     <h3 id="cy-schema">Schema</h3>
     <select
-      bind:value="{schemaChossen}"
-      on:change="{() => console.log(schemaChossen)}"
+      bind:value={credentialsChosen}
+      on:change={() => clearSelection()}
       id="cy-schema-hook-select">
-      {#each $vaccinationJsonLD as item}
-        <option value="{item.name}">
-          {item.name}
+  
+      {#each $credentials as item}
+        <option value={item}>
+          {item['data'].name}
         </option>
       {/each}
     </select>
     <h3>Fields</h3>
-    {#if schemaChossen !== ""}
-      <h3>Schema reference: {schemaChossen}</h3>
-
-      <ul id="cy-checkbox-check">
-        {#each Object.keys($vaccinationJsonLD[index].fields) as key}
-          <li>
-            <input
-              type="checkbox"
-              bind:checked="{$vaccinationJsonLD[index].fields[key]}" />
-            {key}
-          </li>
-          <!-- this is the html element, checked (boolean equivalent in html)-->
-        {/each}
-      </ul>
+    {#if credentialsChosen }
+        <pre>{JSON.stringify(Object.keys(credentialsChosen['data']),null,2)}</pre>
+      {#key unique}
+        <CredentialSubjectFieldSelector credentialSubject={credentialsChosen['data'].credentialSubject} bind:selected={selectedSchemaFields}/>
+        {selectedSchemaFields}
+      {/key}
     {:else}
       <h2 id="cy-error-msg" class="bg-yellow-500 rounded-lg max-w-prose">
         Please select a schema
@@ -81,7 +69,7 @@ async function presentationPostRequest() {
   </form>
   <button
     type="submit"
-    on:click="{presentationPostRequest}"
+    on:click={presentationPostRequest}
     class="bg-red-400 rounded-lg max-w-prose">
     Submit
   </button>

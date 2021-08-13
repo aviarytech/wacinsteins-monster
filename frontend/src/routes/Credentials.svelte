@@ -50,9 +50,9 @@ onMount(async () => {
 <template>
   {#each $credentials as row, i}
     <DataTable
-      columns="{['ID', 'Issuance Date', 'Issuer', 'Name']}"
+      columns={['ID', 'Issuance Date', 'Issuer', 'Name']}
       rowId="{i}">
-      <button on:click="{() => openCredential(row['@id'])}" slot="name"
+      <button on:click={() => openCredential(row['@id'])} slot="name"
         >{row.data.id}</button>
 
       <span slot="jobTitle">{row.data.issuanceDate}</span>
