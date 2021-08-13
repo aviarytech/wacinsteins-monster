@@ -1,8 +1,7 @@
 <script lang="ts">
-import CredentialDetailView from "../lib/CredentialDetailView.svelte";
-import DataTable from "../lib/DataTable.svelte";
-import { onMount } from "svelte";
-
+  import CredentialDetailView from "../lib/CredentialDetailView.svelte";
+  import DataTable from "../lib/DataTable.svelte";
+  import { onMount } from "svelte";
 
   import { credentials } from "../stores/credentials";
   import { slideOverContent } from "../stores/ui";
@@ -34,14 +33,7 @@ import { onMount } from "svelte";
     }
 
   });
-};
 
-onMount(async () => {
-  const resp = await getAllCredentials();
-  if (resp.length > 0) {
-    credentials.set(resp);
-  }
-});
 </script>
 
 <template>
@@ -49,14 +41,14 @@ onMount(async () => {
     <DataTable
       columns="{['ID', 'Issuance Date', 'Issuer', 'Name']}"
       rowId="{i}">
-      <button on:click="{() => openCredential(row['@id'])}" slot="name"
+      <button on:click={() => openCredential(row['@id'])} slot="name"
         >{row.data.id}</button>
       <span slot="jobTitle">{row.data.issuanceDate}</span>
       <span slot="email">{row.data.issuer.id}</span>
       <span slot="role">{row.data.name}</span>
       <span slot="actions"
         ><button
-          on:click="{() => openCredential(row['@id'])}"
+          on:click={() => openCredential(row['@id'])}
           type="button"
 
           class="button"
