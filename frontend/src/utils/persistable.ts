@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 import Dexie from "dexie";
 
-let userPreferencesDB = new Dexie("pace-user-preferences");
+let userPreferencesDB = new Dexie("user-preferences");
 userPreferencesDB.version(1).stores({
   user_preferences: "[key],value",
 });
@@ -13,8 +13,8 @@ export function putUserPreference(key, value) {
   });
 }
 
-export function getUserPreference(key) {
-  return userPreferencesDB["user_preferences"].get([key]);
+export async function getUserPreference(key) {
+  return await userPreferencesDB["user_preferences"].get([key]);
 }
 
 /*
@@ -28,9 +28,9 @@ export function persistable(key, defaultValue) {
   const { subscribe, set, update } = writable(defaultValue);
   try {
     getUserPreference(key).then((persisted) => {
-      if (persisted && persisted.Value !== undefined) {
-        currentValue = persisted.Value;
-        set(persisted.Value);
+      if (persisted && persisted.value !== undefined) {
+        currentValue = persisted.value;
+        set(persisted.value);
       }
     });
   } catch (error) {

@@ -15,5 +15,3 @@
     navigate("/login");
   });
 </script>
-
-<h1>Logging out..</h1>

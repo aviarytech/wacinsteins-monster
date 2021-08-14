@@ -12,13 +12,18 @@
   const login = async () => {
     await magic.auth.loginWithMagicLink({ email });
   };
-  setInterval(async () => {
+  const interval = setInterval(async () => {
     if (await magic.user.isLoggedIn()) {
       const meta = await magic.user.getMetadata();
       user.set({ email: meta.email });
       navigate("");
     }
   }, 2000);
+  user.subscribe((v) => {
+    if (v) {
+      clearInterval(interval);
+    }
+  });
 </script>
 
 <div
