@@ -40,11 +40,11 @@
 
         <div class="flex-1 px-4 flex justify-between">
           <div class="flex-1 flex">
-            <SearchBar />
+            <!-- <SearchBar /> -->
           </div>
 
           <div class="ml-4 flex items-center md:ml-6">
-            <button
+            <!-- <button
               class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               <span class="sr-only">View notifications</span>
@@ -53,7 +53,7 @@
                 alt="notification"
                 class="icon"
               />
-            </button>
+            </button> -->
             <Profile />
           </div>
         </div>

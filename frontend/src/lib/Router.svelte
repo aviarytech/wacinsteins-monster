@@ -6,6 +6,7 @@
   import Presentations from "../routes/Presentations.svelte";
   import Messages from "../routes/Messages.svelte";
   import Connections from "../routes/Connections.svelte";
+  import Identities from "../routes/Identities.svelte";
   import Logout from "../routes/Logout.svelte";
 
   import { Router, Route } from "svelte-navigator";
@@ -14,9 +15,6 @@
 
 <AuthGuard>
   <Router slot="not_authed">
-    <Route path="">
-      <Login />
-    </Route>
     <Route path="login">
       <Login />
     </Route>
@@ -44,6 +42,10 @@
 
     <Route path="connections">
       <Connections />
+    </Route>
+
+    <Route path="identities">
+      <Identities />
     </Route>
 
     <Route path="logout">
