@@ -44,7 +44,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: "The linter has detected the following issues",
-              body: "Automation has failed us! The linter has detected the following issues from ${{github.event.number}}"
+              body: "Automation has failed us!"
               labels: ['CI failed']
             })
             console.log('create', create)
