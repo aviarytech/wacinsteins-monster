@@ -3,6 +3,7 @@ on:
   push:
     branches-ignore: [ ]
     # Remove the line above to run when pushing to master
+    branches: [main]
   pull_request:
     branches: [main]
 jobs:
@@ -21,7 +22,10 @@ jobs:
       - name: Lint Code Base
         uses: docker://ghcr.io/github/super-linter:slim-v4
         env:
-          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_TYPESCRIPT_ES: true
+          VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_JSON: true
           OUTPUT_FOLDER: super-linter.report
           OUTPUT_DETAILS: detailed
           DEFAULT_BRANCH: main
@@ -34,12 +38,14 @@ jobs:
         with:
           # https://octokit.github.io/rest.js/v18#issues-create
           github-token: ${{secrets.GITHUB_TOKEN}}
+          assignees: vanderscycle
           script: |
             const create = await github.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: "Failed to deploy release to production",
-              body: "Automation has failed us! Failed to push release ${{ env.RELEASE_VERSION }}"
+              title: "The linter has detected the following issues",
+              body: "Automation has failed us! The linter has detected the following issues from ${{github.event.number}}"
+              labels: ['CI failed']
             })
             console.log('create', create)
             return create.data.number
