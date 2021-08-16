@@ -1,6 +1,6 @@
 import { Writable } from "svelte/store";
 
-export interface routeHooks {
+export interface routeHooks { s
   routeName: string;
   routeUrl: string;
   heroIcon?: string;
