@@ -27,6 +27,4 @@ export let data: object[][];
       </tbody>
     </table>
   </div>
-  <!-- </div> -->
-  <!-- </div> -->
 </div>

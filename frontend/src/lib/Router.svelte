@@ -16,10 +16,10 @@
 <AuthGuard>
   <Router slot="not_authed">
     <route path="">
-      <login />
+      <Login />
     </route>
     <route path="login">
-      <login />
+      <Login />
     </route>
   </Router>
   <Router slot="authed">
