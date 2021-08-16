@@ -25,6 +25,7 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_TYPESCRIPT_ES: true
           VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_YAML: true
           VALIDATE_JSON: true
           OUTPUT_FOLDER: super-linter.report
           OUTPUT_DETAILS: detailed
