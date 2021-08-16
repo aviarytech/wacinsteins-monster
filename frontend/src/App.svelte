@@ -14,9 +14,18 @@ import SlideOver from "./lib/SlideOver.svelte";
 
 import { slideOverContent } from "./stores/ui";
 import Router from "./lib/Router.svelte";
+import { getAllCredentials } from "./api/credentials";
 
 import { user } from "./stores/user";
-// user.subscribe((v) => alert("bleb"));
+import { credentials } from "./stores/credentials";
+import { onMount } from "svelte";
+
+onMount(async () => {
+  const resp = await getAllCredentials();
+  if (resp.length > 0) {
+    credentials.set(resp);
+  }
+});
 </script>
 
 {#if $user}
