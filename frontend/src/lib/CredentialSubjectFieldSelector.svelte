@@ -2,7 +2,7 @@
   import { camel2Title } from "../utils/camel2Title";
 
   export let credentialSubject: object;
-
+  export let selected
   $: selected = [];
 
   const toggleField = (fieldName: string) => {
