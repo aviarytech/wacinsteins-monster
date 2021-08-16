@@ -34,12 +34,10 @@ jobs:
       - name: Create GitHub Issue for failure
         if: failure()
         uses: actions/github-script@v4.0.2
-        uses: pozil/auto-assign-issue@v1
         id: create-issue
         with:
           # https://octokit.github.io/rest.js/v18#issues-create
           github-token: ${{secrets.GITHUB_TOKEN}}
-          assignees: vanderscycle
           script: |
             const create = await github.issues.create({
               owner: context.repo.owner,
@@ -50,3 +48,19 @@ jobs:
             })
             console.log('create', create)
             return create.data.number
+
+      - name: Assign junior web dev on issue
+        uses: actions/github-script@v4.0.2
+        if: failure()
+        with:
+          # https://octokit.github.io/rest.js/v18#issues-create
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: "${{ steps.create-issue.outputs.result }}",
+              assignees: [
+                'vanderscycle',
+              ]
+            })
