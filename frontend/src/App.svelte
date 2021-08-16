@@ -19,7 +19,7 @@ import { getAllCredentials } from "./api/credentials";
 import { user } from "./stores/user";
 import { credentials } from "./stores/credentials";
 import { onMount } from "svelte";
-
+//HACK: added so that the user doesn't have to go to the credential page to proprely use the presentation page.
 onMount(async () => {
   const resp = await getAllCredentials();
   if (resp.length > 0) {
