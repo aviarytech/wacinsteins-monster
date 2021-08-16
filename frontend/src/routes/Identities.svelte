@@ -12,6 +12,14 @@ import { slideOverContent } from "../stores/ui";
 import { user } from "../stores/user";
 import { sha256 } from "../utils/sha256";
 
+const openIdentity = (email: string) => {
+  slideOverContent.set({
+    component: Text,
+    text: email,
+    title: `email: ${email}`,
+  });
+};
+
 onMount(async () => {
   // TODO
   // const resp = await getAllIdentities();
@@ -51,19 +59,21 @@ onMount(async () => {
           items: [
             {
               component: Button,
-              callback: () => {},
+              callback: () => {
+                openIdentity(i.email);
+              },
               label: 'View',
             },
-            {
-              component: Button,
-              callback: () => {},
-              label: 'Rotate',
-            },
-            {
-              component: Button,
-              callback: () => {},
-              label: 'Delete',
-            },
+            // {
+            //   component: Button,
+            //   callback: () => {},
+            //   label: 'Rotate',
+            // },
+            // {
+            //   component: Button,
+            //   callback: () => {},
+            //   label: 'Delete',
+            // },
           ],
         },
       ];

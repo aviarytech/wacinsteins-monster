@@ -65,11 +65,9 @@ import { user } from "./stores/user";
       </header>
 
       <main class="flex-1 relative overflow-y-auto focus:outline-none">
-        <div class="py-6">
-          <div class="mx-auto px-2 sm:px-4 md:px-4">
-            <div class="py-4">
-              <Router />
-            </div>
+        <div class="mx-auto px-2 sm:px-4 md:px-4">
+          <div class="py-4">
+            <Router />
           </div>
         </div>
       </main>
