@@ -54,8 +54,8 @@ onMount(async () => {
   </div>
   {#if $presentations}
     <DataTable
-      headers="{['ID', 'Name', 'Schema', 'Constraints', '']}"
-      data="{$presentations.map((p) => {
+      headers={['ID', 'Name', 'Schema', 'Constraints', '']}
+      data={$presentations.map((p) => {
         console.log(p.definition.input_descriptors[0].constraints);
         return [
           {
@@ -86,6 +86,6 @@ onMount(async () => {
             },
           },
         ];
-      })}" />
+      })} />
   {/if}
 </template>
