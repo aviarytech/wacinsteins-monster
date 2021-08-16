@@ -1,9 +1,10 @@
 <script lang="ts">
   export let label: string;
   export let callback: () => {};
+  export let type:string
 </script>
 
-<button on:click={callback} class="button">{label}</button>
+<button on:click={callback} class="button" type={type}>{label}</button>
 
 <style lang="postcss">
   .button {

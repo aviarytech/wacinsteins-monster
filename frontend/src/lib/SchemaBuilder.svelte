@@ -6,6 +6,8 @@
 import type { PostPresentationPayload } from "../interfaces";
 //component
 import CredentialSubjectFieldSelector from "./CredentialSubjectFieldSelector.svelte";
+import Button from "../lib/Button.svelte";
+
 //stores
 import { credentials } from "../stores/credentials";
 //api
@@ -66,10 +68,5 @@ async function presentationPostRequest() {
       </h2>
     {/if}
   </form>
-  <button
-    type="submit"
-    on:click={presentationPostRequest}
-    class="bg-red-400 rounded-lg max-w-prose">
-    Submit
-  </button>
+  <Button callback={presentationPostRequest} type="submit" label='Review'/>
 </template>
