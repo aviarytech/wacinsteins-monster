@@ -4,7 +4,7 @@ on:
     branches-ignore: [ ]
     # Remove the line above to run when pushing to master
   pull_request:
-    branches: [main, henri/schema]
+    branches: [main]
 jobs:
   build:
     # Name the Job
@@ -19,8 +19,25 @@ jobs:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
       - name: Lint Code Base
-        uses: github/super-linter@v4
+        uses: docker://ghcr.io/github/super-linter:slim-v4
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #linting has failed
+      - name: Create GitHub Issue for failure
+        if: failure()
+        uses: actions/github-script@v4.0.2
+        id: create-issue
+        with:
+          # https://octokit.github.io/rest.js/v18#issues-create
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const create = await github.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: "Failed to deploy release to production",
+              body: "Automation has failed us! Failed to push release ${{ env.RELEASE_VERSION }}"
+            })
+            console.log('create', create)
+            return create.data.number

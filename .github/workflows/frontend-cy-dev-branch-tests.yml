@@ -3,9 +3,13 @@ name: Cypress Tests (dev branch only)
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ henri/schema]
+    branches-ignore:
+      - '**'    
+    # branches: [ main, henri/schema ]
   pull_request:
-    branches: [ henri/schema ]
+    branches-ignore:
+      - '**'    
+    #branches: [ main, henri/schema ]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
