@@ -24,7 +24,7 @@ async function presentationPostRequest() {
 
     let postPayload: PostPresentationPayload = {
       name: credentialsChosen.data.name,
-      schema: "https://w3id.org/vaccination#VaccinationCertificate",// TODO: make it more generic !!!!!IMPORTANT
+      schema: "https://w3id.org/vaccination#VaccinationCertificate",// TODO: make it more generic !!!!!IMPORTANT //grab context from credentialsChosen
       paths: selectedSchemaFields,
     };
     console.log(postPayload);

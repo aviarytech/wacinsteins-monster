@@ -43,7 +43,7 @@ onMount(async () => {
 {#if $identities}
   <DataTable
     headers="{['', 'ID', 'Email', '']}"
-    data="{$identities.map((i) => {
+    data={$identities.map((i) => {
       return [
         {
           component: Image,
@@ -51,6 +51,7 @@ onMount(async () => {
           alt: i.avatar,
           width: 32,
           height: 32,
+          dataTableSpecialClass: 'pl-4 whitespace-nowrap text-sm font-medium text-gray-900 truncate max-w-xs'
         },
         { component: Text, text: sha256(i), classes: 'max-w-xs' },
         { component: Text, text: i.email },
@@ -77,5 +78,5 @@ onMount(async () => {
           ],
         },
       ];
-    })}" />
+    })} />
 {/if}
