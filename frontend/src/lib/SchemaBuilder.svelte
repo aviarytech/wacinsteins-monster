@@ -21,6 +21,19 @@ function clearSelection() {
 
 let credentialsChosen: any
 
+async function presentationPreview(){
+  if (selectedSchemaFields !== "") {
+    //loop that goes through each selectedSchemaFields and build a json
+    // INFO: https://stackoverflow.com/questions/16507222/create-json-object-dynamically-via-javascript-without-concate-strings
+    for (let value of selectedSchemaFields){
+
+      //regex to get the middle value (type)
+      //check if the type is already present in the json
+      //if not create and append value /else find and append the value
+      console.log(value)
+      }
+    }
+  }
 async function presentationPostRequest() {
   if (selectedSchemaFields !== "") {
 
@@ -68,5 +81,6 @@ async function presentationPostRequest() {
       </h2>
     {/if}
   </form>
-  <Button callback={presentationPostRequest} type="submit" label='Review'/>
+  <!-- <Button callback={presentationPostRequest} type="submit" label='Review'/> -->
+  <Button callback={presentationPreview} type="submit" label='Review'/>
 </template>
