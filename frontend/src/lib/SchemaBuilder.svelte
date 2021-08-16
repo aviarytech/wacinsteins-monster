@@ -56,7 +56,6 @@ async function presentationPostRequest() {
     </select>
     <h3>Fields</h3>
     {#if credentialsChosen }
-        <pre>{JSON.stringify(Object.keys(credentialsChosen['data']),null,2)}</pre>
       {#key unique}
         <CredentialSubjectFieldSelector credentialSubject={credentialsChosen['data'].credentialSubject} bind:selected={selectedSchemaFields}/>
         {selectedSchemaFields}
