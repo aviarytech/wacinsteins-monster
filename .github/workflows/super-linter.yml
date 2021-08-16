@@ -34,6 +34,7 @@ jobs:
       - name: Create GitHub Issue for failure
         if: failure()
         uses: actions/github-script@v4.0.2
+        uses: pozil/auto-assign-issue@v1
         id: create-issue
         with:
           # https://octokit.github.io/rest.js/v18#issues-create
