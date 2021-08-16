@@ -1,14 +1,22 @@
+<style global lang="postcss">
+/*WARN: is there a global file we can create and reference in tailwind.config.cjs otherwise App.svelte is the most appropriate place for global css*/
+.icon {
+  @apply text-gray-400  mr-3 flex-shrink-0 h-6 w-6;
+  group-hover: text-gray-500;
+}
+</style>
+
 <script lang="ts">
-  import Sidebar from "./lib/Sidebar.svelte";
-  import SearchBar from "./lib/SearchBar.svelte";
-  import Profile from "./lib/Profile.svelte";
-  import SlideOver from "./lib/SlideOver.svelte";
+import Sidebar from "./lib/Sidebar.svelte";
+import SearchBar from "./lib/SearchBar.svelte";
+import Profile from "./lib/Profile.svelte";
+import SlideOver from "./lib/SlideOver.svelte";
 
-  import { slideOverContent } from "./stores/ui";
-  import Router from "./lib/Router.svelte";
+import { slideOverContent } from "./stores/ui";
+import Router from "./lib/Router.svelte";
 
-  import { user } from "./stores/user";
-  // user.subscribe((v) => alert("bleb"));
+import { user } from "./stores/user";
+// user.subscribe((v) => alert("bleb"));
 </script>
 
 {#if $user}
@@ -17,8 +25,7 @@
     <div class="flex flex-col w-0 flex-1 overflow-hidden">
       <header class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
         <button
-          class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
-        >
+          class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden">
           <span class="sr-only">Open sidebar</span>
           <!-- Heroicon name: outline/menu-alt-2 -->
           <svg
@@ -27,14 +34,12 @@
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            aria-hidden="true"
-          >
+            aria-hidden="true">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h7"
-            />
+              d="M4 6h16M4 12h16M4 18h7"></path>
           </svg>
         </button>
 
@@ -61,7 +66,7 @@
 
       <main class="flex-1 relative overflow-y-auto focus:outline-none">
         <div class="py-6">
-          <div class="mx-auto px-4 sm:px-6 md:px-8">
+          <div class="mx-auto px-2 sm:px-4 md:px-4">
             <div class="py-4">
               <Router />
             </div>
@@ -77,11 +82,3 @@
 {:else}
   <Router />
 {/if}
-
-<style global lang="postcss">
-  /*WARN: is there a global file we can create and reference in tailwind.config.cjs otherwise App.svelte is the most appropriate place for global css*/
-  .icon {
-    @apply text-gray-400  mr-3 flex-shrink-0 h-6 w-6;
-    group-hover: text-gray-500;
-  }
-</style>
