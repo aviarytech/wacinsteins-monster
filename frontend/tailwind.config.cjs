@@ -9,6 +9,12 @@ const config = {
         sky: colors.sky,
         cyan: colors.cyan,
       },
+      maxWidth: {
+        "1/8": "12%",
+        "1/4": "25%",
+        "1/2": "50%",
+        "3/4": "75%",
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],
