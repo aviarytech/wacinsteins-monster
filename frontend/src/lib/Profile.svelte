@@ -1,9 +1,15 @@
+<style lang="postcss">
+.open {
+  @apply transition ease-out duration-100 transform opacity-100 scale-100;
+}
+</style>
+
 <script lang="ts">
-  //stores
-  import { Link } from "svelte-navigator";
-  import { profileDropMenu } from "../stores/ui";
-  import { user } from "../stores/user";
-  import { sha256 } from "../utils/sha256";
+//stores
+import { Link, Router } from "svelte-navigator";
+import { profileDropMenu } from "../stores/ui";
+import { user } from "../stores/user";
+import { sha256 } from "../utils/sha256";
 </script>
 
 <template>
@@ -17,18 +23,16 @@
           id="user-menu-button"
           aria-expanded="false"
           aria-haspopup="true"
-          on:click={() => {
+          on:click="{() => {
             profileDropMenu.set(!$profileDropMenu);
-          }}
-        >
+          }}">
           <span class="sr-only">Open user menu</span>
           <img
             class="h-8 w-8 rounded-full"
-            src={`http://tinygraphs.com/labs/isogrids/hexa16/${sha256(
+            src="{`http://tinygraphs.com/labs/isogrids/hexa16/${sha256(
               $user.email
-            )}?theme=seascape&numcolors=2`}
-            alt=""
-          />
+            )}?theme=seascape&numcolors=2`}"
+            alt="" />
         </button>
       </div>
 
@@ -45,42 +49,34 @@
       {#if $profileDropMenu}
         <div
           class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none transform opacity-0 scale-95"
-          class:open={$profileDropMenu}
+          class:open="{$profileDropMenu}"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="user-menu-button"
-          tabindex="-1"
-        >
+          tabindex="-1">
           <!-- Active: "bg-gray-100", Not Active: "" -->
-          <a
-            href="/identities"
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-gray-500"
-            role="menuitem"
-            tabindex="-1"
-            id="user-menu-item-0">Identities</a
-          >
+          <Router>
+            <Link
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-gray-500"
+              role="menuitem"
+              to="identities"
+              id="user-menu-item-0">Identities</Link>
 
-          <!-- <a
+            <!-- <a
             class="block px-4 py-2 text-sm text-gray-700"
             role="menuitem"
             tabindex="-1"
             id="user-menu-item-1">Settings</a
           > -->
 
-          <a
-            href="/logout"
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-gray-500"
-            role="menuitem"
-            id="user-menu-item-2">Sign out</a
-          >
+            <Link
+              to="logout"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-gray-500"
+              role="menuitem"
+              id="user-menu-item-2">Sign out</Link>
+          </Router>
         </div>
       {/if}
     </div>
   {/if}
 </template>
-
-<style lang="postcss">
-  .open {
-    @apply transition ease-out duration-100 transform opacity-100 scale-100;
-  }
-</style>

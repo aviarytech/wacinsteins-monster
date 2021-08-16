@@ -5,7 +5,8 @@ on:
   push:
     branches-ignore:
       - '**'    
-    # branches: [ main, henri/schema ]
+    #branches: [ main, henri/schema ]
+      as
   pull_request:
     branches-ignore:
       - '**'    

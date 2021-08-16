@@ -14,9 +14,18 @@ import SlideOver from "./lib/SlideOver.svelte";
 
 import { slideOverContent } from "./stores/ui";
 import Router from "./lib/Router.svelte";
+import { getAllCredentials } from "./api/credentials";
 
 import { user } from "./stores/user";
-// user.subscribe((v) => alert("bleb"));
+import { credentials } from "./stores/credentials";
+import { onMount } from "svelte";
+//HACK: added so that the user doesn't have to go to the credential page to proprely use the presentation page.
+onMount(async () => {
+  const resp = await getAllCredentials();
+  if (resp.length > 0) {
+    credentials.set(resp);
+  }
+});
 </script>
 
 {#if $user}
@@ -65,11 +74,9 @@ import { user } from "./stores/user";
       </header>
 
       <main class="flex-1 relative overflow-y-auto focus:outline-none">
-        <div class="py-6">
-          <div class="mx-auto px-2 sm:px-4 md:px-4">
-            <div class="py-4">
-              <Router />
-            </div>
+        <div class="mx-auto px-2 sm:px-4 md:px-4">
+          <div class="py-4">
+            <Router />
           </div>
         </div>
       </main>
