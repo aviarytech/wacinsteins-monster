@@ -22,17 +22,31 @@ function clearSelection() {
 let credentialsChosen: any
 
 async function presentationPreview(){
-  if (selectedSchemaFields !== "") {
-    //loop that goes through each selectedSchemaFields and build a json
-    // INFO: https://stackoverflow.com/questions/16507222/create-json-object-dynamically-via-javascript-without-concate-strings
-    for (let value of selectedSchemaFields){
+  //loop that goes through each selectedSchemaFields and build a json
+  // INFO: https://stackoverflow.com/questions/16507222/create-json-object-dynamically-via-javascript-without-concate-strings
+  let inputDescriptor: Object = {}
+  console.log('schemaFields',selectedSchemaFields)
+  for (let value of selectedSchemaFields){
+    const reIndex:RegExp = /(?<=\.)(\w*?)(?=\.)/gi 
+    const rePayload:RegExp = /(?!\w*\.)(?<=\.)(.*)/gi
+    value = value.replace('$.credentialSubject','')
 
-      //regex to get the middle value (type)
-      //check if the type is already present in the json
-      //if not create and append value /else find and append the value
-      console.log(value)
-      }
+    console.log(value)
+
+    let regexIndexValue:string = reIndex.exec(value)[0] //BUG: crashes here
+    let regexIndexPayload:string = rePayload.exec(value)[0]
+
+    console.log('data',value,regexIndexValue, regexIndexPayload)
+
+    if (regexIndexValue in inputDescriptor){
+      console.log('add')
+      inputDescriptor[`${regexIndexValue}`].push(regexIndexPayload)
+    } else {
+      console.log('new')
+      inputDescriptor[`${regexIndexValue}`] = [regexIndexPayload]
     }
+  }
+  console.log(inputDescriptor)
   }
 async function presentationPostRequest() {
   if (selectedSchemaFields !== "") {
