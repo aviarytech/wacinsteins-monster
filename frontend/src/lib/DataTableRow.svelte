@@ -5,11 +5,10 @@ export let columns: object[];
 
 <tr class="bg-white " class:bg-gray-50="{rowId % 2 !== 0}">
   {#each columns as col}
-    <!-- NOTE: to rewrite using a class ternary-->
-      <td
-        class={col['dataTableSpecialClass'] ? col['dataTableSpecialClass']: "cell" }>
-        <svelte:component this="{col['component']}" {...col} />
-      </td>
+    <td
+      class={col['dataTableSpecialClass'] ? col['dataTableSpecialClass']: "cell" }>
+      <svelte:component this="{col['component']}" {...col} />
+    </td>
 
   {/each}
 </tr>
