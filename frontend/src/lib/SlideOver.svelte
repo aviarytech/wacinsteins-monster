@@ -1,13 +1,18 @@
 <script lang="ts">
 
-  import { fly } from "svelte/transition";
-  import { quintOut } from "svelte/easing";
+import { fly } from "svelte/transition";
+import { quintOut } from "svelte/easing";
 
-  import { slideOverContent } from "../stores/ui";
+import { slideOverContent, slidePreviewOverContent } from "../stores/ui";
 
 
 const closeSlideOver = () => {
-  slideOverContent.set(null);
+  if ($slidePreviewOverContent){
+    slideOverContent.set($slidePreviewOverContent);
+    slidePreviewOverContent.set(null);
+  } else {
+    slideOverContent.set(null);
+  }
 };
 </script>
 

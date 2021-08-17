@@ -2,16 +2,14 @@
 </style>
 
 <script lang="ts">
-// interfaces
-import type { PostPresentationPayload } from "../interfaces";
-//component
+//components
 import CredentialSubjectFieldSelector from "./CredentialSubjectFieldSelector.svelte";
 import Button from "../lib/Button.svelte";
-
 //stores
 import { credentials } from "../stores/credentials";
-//api
-import { postNewPresentationRequest } from "../api/presentationAxios";
+import { slideOverContent, slidePreviewOverContent } from "../stores/ui";
+import Preview from "./Preview.svelte";
+import swal from 'sweetalert';
 
 let unique = {} // every {} is unique, {} === {} evaluates to false
 let selectedSchemaFields
@@ -22,48 +20,52 @@ function clearSelection() {
 let credentialsChosen: any
 
 async function presentationPreview(){
-  //loop that goes through each selectedSchemaFields and build a json
-  // INFO: https://stackoverflow.com/questions/16507222/create-json-object-dynamically-via-javascript-without-concate-strings
+
   let inputDescriptor: Object = {}
-  console.log('schemaFields',selectedSchemaFields)
   for (let value of selectedSchemaFields){
     const reIndex:RegExp = /(?<=\.)(\w*?)(?=\.)/gi 
     const rePayload:RegExp = /(?!\w*\.)(?<=\.)(.*)/gi
     value = value.replace('$.credentialSubject','')
-
+    let regexIndexPayload:string
+    let regexIndexValue:string
     console.log(value)
+    //$.xxx.key.value format
 
-    let regexIndexValue:string = reIndex.exec(value)[0] //BUG: crashes here
-    let regexIndexPayload:string = rePayload.exec(value)[0]
-
-    console.log('data',value,regexIndexValue, regexIndexPayload)
-
+    if(/(?<=\.)(\w*?)(?=\.)/gi.test(value)){
+       regexIndexValue = reIndex.exec(value)[0]
+       regexIndexPayload = rePayload.exec(value)[0]
+    } else {
+    //$.xxx.key format
+      regexIndexValue = value.slice(1)
+      regexIndexPayload = regexIndexValue
+    }
+    //building the json object
     if (regexIndexValue in inputDescriptor){
-      console.log('add')
       inputDescriptor[`${regexIndexValue}`].push(regexIndexPayload)
     } else {
-      console.log('new')
       inputDescriptor[`${regexIndexValue}`] = [regexIndexPayload]
     }
   }
-  console.log(inputDescriptor)
-  }
-async function presentationPostRequest() {
-  if (selectedSchemaFields !== "") {
-
-    let postPayload: PostPresentationPayload = {
-      name: credentialsChosen.data.name,
-      schema: "https://w3id.org/vaccination#VaccinationCertificate",// TODO: make it more generic !!!!!IMPORTANT //grab context from credentialsChosen
-      paths: selectedSchemaFields,
-    };
-    console.log(postPayload);
-    let res = await postNewPresentationRequest(postPayload);
-    console.log(res.status)
-    //window.location.reload()
+  if (Object.keys(inputDescriptor).length === 0){
+    
+    swal({
+        title: "Empty selection",
+        text: "Please select the credential fields you want presented",
+        icon: "error",
+      })
   } else {
-    alert("please select a schema");
+
+    slidePreviewOverContent.set($slideOverContent);
+    slideOverContent.set({
+        title:"review",
+        component:Preview,
+        data:[inputDescriptor,selectedSchemaFields]
+
+      })
+    console.log(inputDescriptor)
   }
 }
+
 </script>
 
 <template>
@@ -95,6 +97,5 @@ async function presentationPostRequest() {
       </h2>
     {/if}
   </form>
-  <!-- <Button callback={presentationPostRequest} type="submit" label='Review'/> -->
   <Button callback={presentationPreview} type="submit" label='Review'/>
 </template>
