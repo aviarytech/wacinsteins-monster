@@ -9,13 +9,14 @@ import SchemaBuilder from "../lib/SchemaBuilder.svelte";
 import DataTable from "../lib/DataTable.svelte";
 import PresentationDetailedView from "../lib/PresentationDetailedView.svelte";
 import Text from "../lib/Text.svelte";
+import Button from "../lib/Button.svelte";
+import ComponentList from "../lib/ComponentList.svelte"
 //js imports
 import { onMount } from "svelte";
 //stores
 import { presentations } from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
-import Button from "../lib/Button.svelte";
-import ComponentList from "../lib/ComponentList.svelte";
+;
 
 import Tag from "../lib/Tag.svelte";
 
