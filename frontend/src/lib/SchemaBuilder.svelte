@@ -23,6 +23,7 @@ async function presentationPreview(){
 
   let inputDescriptor: Object = {}
   for (let value of selectedSchemaFields){
+    //NOTE: for the next refactor...use str.split and NOT REGEXS YOU WILL NEVER GET THAT TIME BACK
     const reIndex:RegExp = /(?<=\.)(\w*?)(?=\.)/gi 
     const rePayload:RegExp = /(?!\w*\.)(?<=\.)(.*)/gi
     value = value.replace('$.credentialSubject','')
@@ -34,17 +35,20 @@ async function presentationPreview(){
     if(/(?<=\.)(\w*?)(?=\.)/gi.test(value)){
        regexIndexValue = reIndex.exec(value)[0]
        regexIndexPayload = rePayload.exec(value)[0]
+
+      //building the json object
+      if (regexIndexValue in inputDescriptor){
+        inputDescriptor[`${regexIndexValue}`].push(regexIndexPayload)
+      } else {
+        inputDescriptor[`${regexIndexValue}`] = [regexIndexPayload]
+      }
     } else {
     //$.xxx.key format
       regexIndexValue = value.slice(1)
-      regexIndexPayload = regexIndexValue
+      //HACK: ASSUMING THE VALUE WILL REMAIN AN EMPTY OBJECT
+      inputDescriptor[`${regexIndexValue}`] = {}
     }
-    //building the json object
-    if (regexIndexValue in inputDescriptor){
-      inputDescriptor[`${regexIndexValue}`].push(regexIndexPayload)
-    } else {
-      inputDescriptor[`${regexIndexValue}`] = [regexIndexPayload]
-    }
+
   }
   if (Object.keys(inputDescriptor).length === 0){
     
