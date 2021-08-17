@@ -37,10 +37,10 @@ const closeSlideOver = () => {
                 >
                   <span class="sr-only">Close panel</span>
                   <!-- Heroicon name: outline/x -->
-                    <img
-                      src="../../public/assets/outlineX.svg"
-                      class="icon"
-                      alt="heroIcon" />
+                  <img
+                    src="../../public/assets/outlineX.svg"
+                    class="icon"
+                    alt="X" />
                 </button>
 
               </div>
