@@ -25,7 +25,6 @@ let credentialsChosen: any
 function presentationPreview(){
 
   let inputDescriptor: Object = {"credentialSubject":inputDescriptionBuilder(selectedSchemaFields,credentialsChosen)}
-  console.log(credentialsChosen)
   inputDescriptor["type"] = credentialsChosen['data']['type']
   inputDescriptor["@context"] = credentialsChosen['data']['@context']
 

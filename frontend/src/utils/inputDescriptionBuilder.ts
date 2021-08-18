@@ -42,3 +42,4 @@ export default function inputDescriptionBuilder(selectedSchemaFields:string[], f
   //grab context and type from credential
   return inputDescriptor
 }
+

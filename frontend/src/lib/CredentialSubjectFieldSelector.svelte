@@ -25,9 +25,9 @@ const removeField = (fullField: string) => {
   }
 };
 </script>
-<!-- INFO: DEBUG ONLY -->
+<!-- INFO: DEBUG ONLY
 <pre>{JSON.stringify(Object.entries(credentialSubject), null, 2)}</pre>
-
+-->
 {#if selected.length > 0}
   <div class="bg-gray-100 p-2 mb-2">
     <div class="sm:col-span-2 text-md font-semibold text-gray-500">
