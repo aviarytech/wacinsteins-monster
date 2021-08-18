@@ -9,10 +9,11 @@ import Preview from "./Preview.svelte";
 //stores
 import { credentials } from "../stores/credentials";
 import { slideOverContent, slidePreviewOverContent } from "../stores/ui";
-
 //js imports
 import swal from 'sweetalert';
 import inputDescriptionBuilder from '../utils/inputDescriptionBuilder'
+
+
 let unique = {} // every {} is unique, {} === {} evaluates to false
 let selectedSchemaFields:string[]
 function clearSelection() {
@@ -23,7 +24,11 @@ let credentialsChosen: any
 
 function presentationPreview(){
 
-  let inputDescriptor: Object = inputDescriptionBuilder(selectedSchemaFields)
+  let inputDescriptor: Object = {"credentialSubject":inputDescriptionBuilder(selectedSchemaFields,credentialsChosen)}
+  console.log(credentialsChosen)
+  inputDescriptor["type"] = credentialsChosen['data']['type']
+  inputDescriptor["@context"] = credentialsChosen['data']['@context']
+
   if (Object.keys(inputDescriptor).length === 0){
     
     swal({
@@ -40,7 +45,7 @@ function presentationPreview(){
         data:[inputDescriptor,selectedSchemaFields]
 
       })
-    console.log(inputDescriptor)
+    //console.log(inputDescriptor)
   }
 }
 

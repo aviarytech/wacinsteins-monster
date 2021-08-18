@@ -1,4 +1,4 @@
-export default function inputDescriptionBuilder(selectedSchemaFields:string[]):Object{
+export default function inputDescriptionBuilder(selectedSchemaFields:string[], fullObject:Object):Object{
   let inputDescriptor: Object = {}
   for (let value of selectedSchemaFields){
     //NOTE: for the next refactor...use str.split and NOT REGEXS YOU WILL NEVER GET THAT TIME BACK
@@ -20,10 +20,15 @@ export default function inputDescriptionBuilder(selectedSchemaFields:string[]):O
 
       } else {
         //the key doesn't exist
-        console.log(regexIndexPayload)
         // TODO: good improvement is to make it recursive (for deeper levels)
         inputDescriptor[`${regexIndexValue}`] = {}
         inputDescriptor[`${regexIndexValue}`][`${regexIndexPayload}`] = {}
+        // grab the type
+
+        inputDescriptor[`${regexIndexValue}`]["type"] = [fullObject['data']['credentialSubject'][`${regexIndexValue}`]["type"]]
+
+
+        
       }
     } else {
       //$.xxx.key format
@@ -31,5 +36,9 @@ export default function inputDescriptionBuilder(selectedSchemaFields:string[]):O
       inputDescriptor[`${regexIndexValue}`] = {}
     }
   }
+  inputDescriptor["type"] = [fullObject['data']['credentialSubject']["type"]]
+  inputDescriptor["@explicit"] = true
+  //key credentialSubject 
+  //grab context and type from credential
   return inputDescriptor
 }
