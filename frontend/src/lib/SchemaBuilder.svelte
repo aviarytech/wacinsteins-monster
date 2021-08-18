@@ -11,7 +11,7 @@ import { credentials } from "../stores/credentials";
 import { slideOverContent, slidePreviewOverContent } from "../stores/ui";
 //js imports
 import swal from 'sweetalert';
-import inputDescriptionBuilder from '../utils/inputDescriptionBuilder'
+import inputDescriptionBuilder from '../utils/frameBuilder'
 
 
 let unique = {} // every {} is unique, {} === {} evaluates to false
@@ -71,7 +71,6 @@ function presentationPreview(){
     {#if credentialsChosen }
       {#key unique}
         <CredentialSubjectFieldSelector credentialSubject={credentialsChosen['data'].credentialSubject} bind:selected={selectedSchemaFields}/>
-        {selectedSchemaFields}
       {/key}
     {:else}
       <h2 id="cy-error-msg" class="bg-yellow-500 rounded-lg max-w-prose">
