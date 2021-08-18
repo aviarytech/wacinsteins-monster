@@ -5,51 +5,25 @@
 //components
 import CredentialSubjectFieldSelector from "./CredentialSubjectFieldSelector.svelte";
 import Button from "../lib/Button.svelte";
+import Preview from "./Preview.svelte";
 //stores
 import { credentials } from "../stores/credentials";
 import { slideOverContent, slidePreviewOverContent } from "../stores/ui";
-import Preview from "./Preview.svelte";
-import swal from 'sweetalert';
 
+//js imports
+import swal from 'sweetalert';
+import inputDescriptionBuilder from '../utils/inputDescriptionBuilder'
 let unique = {} // every {} is unique, {} === {} evaluates to false
-let selectedSchemaFields
+let selectedSchemaFields:string[]
 function clearSelection() {
    unique = {}
 }
 
 let credentialsChosen: any
 
-async function presentationPreview(){
+function presentationPreview(){
 
-  let inputDescriptor: Object = {}
-  for (let value of selectedSchemaFields){
-    //NOTE: for the next refactor...use str.split and NOT REGEXS YOU WILL NEVER GET THAT TIME BACK
-    const reIndex:RegExp = /(?<=\.)(\w*?)(?=\.)/gi 
-    const rePayload:RegExp = /(?!\w*\.)(?<=\.)(.*)/gi
-    value = value.replace('$.credentialSubject','')
-    let regexIndexPayload:string
-    let regexIndexValue:string
-    console.log(value)
-    //$.xxx.key.value format
-
-    if(/(?<=\.)(\w*?)(?=\.)/gi.test(value)){
-       regexIndexValue = reIndex.exec(value)[0]
-       regexIndexPayload = rePayload.exec(value)[0]
-
-      //building the json object
-      if (regexIndexValue in inputDescriptor){
-        inputDescriptor[`${regexIndexValue}`].push(regexIndexPayload)
-      } else {
-        inputDescriptor[`${regexIndexValue}`] = [regexIndexPayload]
-      }
-    } else {
-    //$.xxx.key format
-      regexIndexValue = value.slice(1)
-      //HACK: ASSUMING THE VALUE WILL REMAIN AN EMPTY OBJECT
-      inputDescriptor[`${regexIndexValue}`] = {}
-    }
-
-  }
+  let inputDescriptor: Object = inputDescriptionBuilder(selectedSchemaFields)
   if (Object.keys(inputDescriptor).length === 0){
     
     swal({
