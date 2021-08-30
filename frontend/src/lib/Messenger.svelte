@@ -1,5 +1,5 @@
 <script lang="ts">
-let localArray:string[] // WARN:very temp
+let localArray:string[]=[''] // WARN:very temp
 let chatMsg:string
 export function newMsg() {
   console.log(chatMsg, localArray)
