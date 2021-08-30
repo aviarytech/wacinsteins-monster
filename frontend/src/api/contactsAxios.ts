@@ -2,7 +2,7 @@ import axios from "axios";
 const baseUrl: string | boolean = import.meta.env.VITE_API_URL;
 
 export async function postNewContact(
-  payload: string,
+  payload: Object,
   endpoint: string = `${baseUrl}/contacts`
 ): Promise<any> {
   try {

@@ -2,18 +2,17 @@
 </style>
 
 <script lang="ts">
-import { postNewContact } from "src/api/contactsAxios";
-
+//api
+import { postNewContact } from "../api/contactsAxios";
+//stores
 import { contactDropDownOptions } from "../stores/contacts";
 
 let localVal:string[] = ["",""]
 function newContactValidator() {
-  const payload:string = 'did:' + localVal.join(':')
-  console.log(localVal, payload.toLowerCase())
-  postNewContact(payload.toLowerCase())
+  let payload:Object = { 'did': 'did:' + localVal.join(':').toLowerCase()}
+  postNewContact(payload)
   
   } 
-$: contactDropDownOptions
 </script>
 
 <template>
