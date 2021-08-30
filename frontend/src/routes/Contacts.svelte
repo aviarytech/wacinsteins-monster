@@ -10,8 +10,11 @@ import NewContacts from "../lib/NewContacts.svelte";
 import { slideOverContent } from "../stores/ui";
 //js imports
 import { onMount } from "svelte";
+//api
 import { getContacts } from "../api/contactsAxios";
+//stores
 import { availableContacts } from "../stores/contacts";
+import { sha256 } from "../utils/sha256";
 
 let newContactWindowDisplayed:boolean = false
 function newContactCreation() {
@@ -38,7 +41,13 @@ onMount(async () => {
   <Button label="New Contact" callback={newContactCreation}/>
   <ul>
     {#each $availableContacts as contact}
-      <li>{contact.id}</li>
+      <img
+        class="h-8 w-8 rounded-full"
+        src="{`http://tinygraphs.com/labs/isogrids/hexa16/${sha256(
+          contact.id
+        )}?theme=seascape&numcolors=4`}"
+        alt="" />
+      <li> { contact.dids} - {contact.id}</li>
     {/each}
   </ul>
 </template>
