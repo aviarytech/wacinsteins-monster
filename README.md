@@ -20,4 +20,23 @@ TODO:
 DONE:
 
 - Use did:web to create a did with a service block that will work for DIDComm
-- 
+-
+
+UML
+@startuml
+actor Alice as a
+participant AV1A as av1a
+participant AV1B as av1b
+actor Bob as b
+
+a -> av1a : Create Request
+av1a -> av1b : DIDComm Message\n\
+ Present Proof v3 - Request\n\
+ Presentation Exchange Definition
+av1b -> b : Display Credential Selector
+b -> av1b : Submit Selectively Disclosed attributes
+av1b -> av1a : DIDComm Message\n\
+ Present Proof v3 - Presentation\n\
+ Presentation Exchange Submission
+av1a -> a : Display Verified Data
+@enduml
