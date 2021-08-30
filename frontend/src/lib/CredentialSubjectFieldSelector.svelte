@@ -25,7 +25,9 @@ const removeField = (fullField: string) => {
   }
 };
 </script>
-
+<!-- INFO: DEBUG ONLY
+<pre>{JSON.stringify(Object.entries(credentialSubject), null, 2)}</pre>
+-->
 {#if selected.length > 0}
   <div class="bg-gray-100 p-2 mb-2">
     <div class="sm:col-span-2 text-md font-semibold text-gray-500">
@@ -49,19 +51,21 @@ const removeField = (fullField: string) => {
           {camel2Title(prop[0])}
         </div>
         {#each Object.entries(prop[1]) as subProp}
-          <div
-            on:click="{() => {
-              toggleField(`$.credentialSubject.${prop[0]}.${subProp[0]}`);
-            }}"
-            class="sm:col-span-1 mb-3 p-2 hover:bg-blue-100 cursor-pointer"
-            class:bg-blue-100="{selected.indexOf(
-              `$.credentialSubject.${prop[0]}.${subProp[0]}`
-            ) >= 0}">
-            <dt class="sm:col-span-2 text-sm font-medium text-gray-500">
-              {camel2Title(subProp[0])}
-            </dt>
-            <dd class="mt-1 text-sm text-gray-900">xxx</dd>
-          </div>
+          {#if subProp[0] !== "type"}
+            <div
+              on:click={() => {
+                toggleField(`$.credentialSubject.${prop[0]}.${subProp[0]}`);
+              }}
+              class="sm:col-span-1 mb-3 p-2 hover:bg-blue-100 cursor-pointer"
+              class:bg-blue-100={selected.indexOf(
+                `$.credentialSubject.${prop[0]}.${subProp[0]}`
+              ) >= 0}>
+              <dt class="sm:col-span-2 text-sm font-medium text-gray-500">
+                {camel2Title(subProp[0])}
+              </dt>
+              <dd class="mt-1 text-sm text-gray-900">xxx</dd>
+            </div>
+          {/if}
         {/each}
       </div>
     {:else}
