@@ -2,62 +2,38 @@
 </style>
 
 <script lang="ts">
-//api
-import { postNewContact } from "../api/contactsAxios";
-//stores
-import { contactDropDownOptions } from "../stores/contacts";
+//component imports
+import Button from "../lib/Button.svelte";
+import NewContacts from "../lib/NewContacts.svelte";
 
-let localVal:string[] = ["",""]
-function newContactValidator() {
-  let payload:Object = { 'did': 'did:' + localVal.join(':').toLowerCase()}
-  postNewContact(payload)
-  
-  } 
+// stores
+import { slideOverContent } from "../stores/ui";
+//js imports
+import { onMount } from "svelte";
+import { getContacts } from "../api/contactsAxios";
+import { availableContacts } from "../stores/contacts";
+
+function newContactCreation() {
+  slideOverContent.set({
+    title: "New Contact",
+    component: NewContacts,
+  })
+}
+onMount(async () => {
+  const res = await getContacts();
+  console.log(res);
+  if (res.length > 0) {
+    availableContacts.set(res);
+  }
+});
+//if works close the slider and display a message
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-      <div>
-        <img class="mx-auto h-12 w-auto" src="../favicon.ico" alt="Av1 icon">
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Add a new contact
-        </h2>
-
-      </div>
-      <form class="mt-8 space-y-6"  on:submit|preventDefault={newContactValidator}>
-        <input type="hidden" name="remember" value="true">
-        <div class="rounded-md shadow-sm -space-y-px">
-          <div>
-            <select
-              bind:value={localVal[0]}
-              
-              required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              >
-              {#each $contactDropDownOptions as item}
-                <option value={item}>
-                  {item}
-                </option>
-              {/each}
-
-            </select>
-          </div>
-          <div>
-            <label for="url" class="sr-only">Url</label>
-            <input id="url" name="url" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Url string" bind:value={localVal[1]}>
-          </div>
-        </div>
-
-        <div>
-          <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" >
-            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-              <!-- Heroicon name: outline/outlineUserAdd -->
-        <img class="mx-auto h-6 w-auto" src="../assets/outlineUserAdd.svg" alt="Workflow">
-            </span>
-            Add
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
+  <Button label="New Contact" callback={newContactCreation}/>
+  <ul>
+    {#each $availableContacts as contact}
+      <li>{contact.id}</li>
+    {/each}
+  </ul>
 </template>

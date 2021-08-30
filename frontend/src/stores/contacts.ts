@@ -1,4 +1,5 @@
 import { Writable, writable } from "svelte/store";
 
-const placeholderData = ['','Web']
+const placeholderData = ['web']
 export const contactDropDownOptions:Writable<string[]> = writable(placeholderData)
+export const availableContacts:Writable<string[]> = writable([])
