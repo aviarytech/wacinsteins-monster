@@ -31,7 +31,7 @@ import { sha256 } from "../utils/sha256";
             class="h-8 w-8 rounded-full"
             src="{`http://tinygraphs.com/labs/isogrids/hexa16/${sha256(
               $user.email
-            )}?theme=seascape&numcolors=2`}"
+            )}?theme=seascape&numcolors=4`}"
             alt="" />
         </button>
       </div>
