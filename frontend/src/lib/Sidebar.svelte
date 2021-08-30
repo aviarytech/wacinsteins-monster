@@ -138,12 +138,9 @@ import Image from "./Image.svelte";
           </div>
           <Router>
             <nav class="flex-1 px-2 py-3 bg-white space-y-1">
-              <!-- Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
               {#each Routes as route}
                 {#if route.heroIcon !== ""}
-                  <!-- <div
-                    class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                  > -->
+
                   <Link
                     to="{route.routeUrl}"
                     class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">

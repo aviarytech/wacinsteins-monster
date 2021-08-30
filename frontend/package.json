@@ -55,7 +55,8 @@
     "magic-sdk": "^4.4.1",
     "schema-dts": "^0.10.0",
     "svelte-jester": "^1.7.0",
-    "svelte-navigator": "^3.1.5"
+    "svelte-navigator": "^3.1.5",
+    "sweetalert": "^2.1.2"
   },
   "jest": {
     "rootDir": "src",

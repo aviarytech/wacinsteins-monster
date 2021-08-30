@@ -2,39 +2,52 @@
 </style>
 
 <script lang="ts">
-// interfaces
-import type { PostPresentationPayload } from "../interfaces";
-//component
+//components
 import CredentialSubjectFieldSelector from "./CredentialSubjectFieldSelector.svelte";
+import Button from "../lib/Button.svelte";
+import Preview from "./Preview.svelte";
 //stores
 import { credentials } from "../stores/credentials";
-//api
-import { postNewPresentationRequest } from "../api/presentationAxios";
+import { slideOverContent, slidePreviewOverContent } from "../stores/ui";
+//js imports
+import swal from 'sweetalert';
+import inputDescriptionBuilder from '../utils/frameBuilder'
+
 
 let unique = {} // every {} is unique, {} === {} evaluates to false
-let selectedSchemaFields
+let selectedSchemaFields:string[]
 function clearSelection() {
    unique = {}
 }
 
 let credentialsChosen: any
 
-async function presentationPostRequest() {
-  if (selectedSchemaFields !== "") {
+function presentationPreview(){
 
-    let postPayload: PostPresentationPayload = {
-      name: credentialsChosen.data.name,
-      schema: "https://w3id.org/vaccination#VaccinationCertificate",// TODO: make it more generic !!!!!IMPORTANT
-      paths: selectedSchemaFields,
-    };
-    console.log(postPayload);
-    let res = await postNewPresentationRequest(postPayload);
-    console.log(res.status)
-    //window.location.reload()
+  let inputDescriptor: Object = {"credentialSubject":inputDescriptionBuilder(selectedSchemaFields,credentialsChosen)}
+  inputDescriptor["type"] = credentialsChosen['data']['type']
+  inputDescriptor["@context"] = credentialsChosen['data']['@context']
+
+  if (Object.keys(inputDescriptor).length === 0){
+    
+    swal({
+        title: "Empty selection",
+        text: "Please select the credential fields you want presented",
+        icon: "error",
+      })
   } else {
-    alert("please select a schema");
+
+    slidePreviewOverContent.set($slideOverContent);
+    slideOverContent.set({
+        title:"review",
+        component:Preview,
+        data:[inputDescriptor,selectedSchemaFields]
+
+      })
+    //console.log(inputDescriptor)
   }
 }
+
 </script>
 
 <template>
@@ -56,10 +69,8 @@ async function presentationPostRequest() {
     </select>
     <h3>Fields</h3>
     {#if credentialsChosen }
-        <pre>{JSON.stringify(Object.keys(credentialsChosen['data']),null,2)}</pre>
       {#key unique}
         <CredentialSubjectFieldSelector credentialSubject={credentialsChosen['data'].credentialSubject} bind:selected={selectedSchemaFields}/>
-        {selectedSchemaFields}
       {/key}
     {:else}
       <h2 id="cy-error-msg" class="bg-yellow-500 rounded-lg max-w-prose">
@@ -67,10 +78,5 @@ async function presentationPostRequest() {
       </h2>
     {/if}
   </form>
-  <button
-    type="submit"
-    on:click={presentationPostRequest}
-    class="bg-red-400 rounded-lg max-w-prose">
-    Submit
-  </button>
+  <Button callback={presentationPreview} type="submit" label='Review'/>
 </template>
