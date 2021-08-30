@@ -13,11 +13,16 @@ import { onMount } from "svelte";
 import { getContacts } from "../api/contactsAxios";
 import { availableContacts } from "../stores/contacts";
 
+let newContactWindowDisplayed:boolean = false
 function newContactCreation() {
   slideOverContent.set({
     title: "New Contact",
     component: NewContacts,
   })
+  if (newContactWindowDisplayed){
+    slideOverContent.set(null)
+  }
+  newContactWindowDisplayed = !newContactWindowDisplayed
 }
 onMount(async () => {
   const res = await getContacts();
