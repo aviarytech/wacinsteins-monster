@@ -8,13 +8,20 @@ import { postNewContact } from "../api/contactsAxios";
 //stores
 import { contactDropDownOptions } from "../stores/contacts";
 //ecma
-import { IsFQDN, IsString, validateSync } from 'class-validator';
+import { IsFQDN, IsString,IsNotEmpty, validateSync, validateOrReject } from 'class-validator';
+import swal from 'sweetalert';
 
+//INFO: realy cool way to use opp to validate entries
 class ValidContact {
+
   @IsString()
+  @IsNotEmpty()
   type:string;
+
   @IsFQDN()
   url:string;
+
+  error:boolean=false
 
   constructor(message:string[]){
     this.type = message[0]
@@ -25,21 +32,33 @@ class ValidContact {
     const errors = validateSync(this);
     if (errors.length > 0) {
       console.log("incorrect contact generated: ", errors)
+      swal('Incorrect Entry','Please ensure the domain name is valid',"error")
+    } else {
+      console.log('validation succeed');
+      swal('Success',`New contact from domain: ${this.url} has been added`,"success")
     }
   }
+
   generatePayload() {
     return {"did": `did:${this.type}:${this.url}`}
   }
 }
 
+async function validateOrRejectEntry(input) {
+  try {
+    await validateOrReject(input);
+    //if correct we make the post call
+    postNewContact(input.generatePayload())
+  } catch (errors) {
+    console.log('Caught promise rejection (validation failed). Errors: ', errors);
+  }
+}
+
 let localVal:string[] = ["web",""]
 function newContactValidator() {
-  console.log(localVal)
   let payload = new ValidContact(localVal)
-  //let payload:Object = { 'did': 'did:' + localVal.join(':').toLowerCase()}
   //check class validator for domain only names
-  console.log(payload.generatePayload())
-  postNewContact(payload.generatePayload())
+  validateOrRejectEntry(payload)
   } 
 </script>
 
@@ -72,15 +91,18 @@ function newContactValidator() {
           </div>
           <div>
             <label for="url" class="sr-only">Ur</label>
-            <input id="url" name="url" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Domain Name" bind:value={localVal[1]}>
+            <input id="url" name="url" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Domain" bind:value={localVal[1]}>
           </div>
         </div>
 
         <div>
           <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" >
-            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-              <!-- Heroicon name: outline/outlineUserAdd -->
-        <img class="mx-auto h-6 w-auto" src="../assets/outlineUserAdd.svg" alt="Workflow">
+            <span class="absolute left-0 inset-y-0 flex items-center pl-3 stroke-current text-white">
+              <!-- Heroicon name: outline/outlineUserAdd (normally would have called an img)-->
+              
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
             </span>
             Add
           </button>
