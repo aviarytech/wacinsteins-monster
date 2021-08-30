@@ -16,10 +16,10 @@ export class ContactsService {
       const contact = await this.db.create({
         '@type': 'Contact',
         id,
-        dids: [createContactDto.did],
+        did: createContactDto.did,
       });
       await this.eventBus.publish(
-        new ContactCreatedEvent(id, [createContactDto.did]),
+        new ContactCreatedEvent(id, createContactDto.did),
       );
       return contact;
     } catch (e) {
