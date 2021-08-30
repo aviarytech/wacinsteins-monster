@@ -16,9 +16,17 @@ import { KMSModule } from './kms/kms.module';
 import { KMSService } from './kms/kms.service';
 import { PresentationsModule } from './presentations/presentations.module';
 import { CredentialsModule } from './credentials/credentials.module';
+import { ContactsModule } from './contacts/contacts.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), CqrsModule, PresentationsModule, KMSModule, CredentialsModule],
+  imports: [
+    ConfigModule.forRoot(),
+    CqrsModule,
+    PresentationsModule,
+    KMSModule,
+    CredentialsModule,
+    ContactsModule,
+  ],
   controllers: [AppController, AdminController],
   providers: [
     AppService,
