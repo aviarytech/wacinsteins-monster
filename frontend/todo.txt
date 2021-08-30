@@ -1,2 +1,7 @@
 connection and contact page
 messages working
+
+
+3 components (same folder)
+40: contact creation form/box (1 drop donw - web ) (2 input - url) (submit - button) concatenation and send to backend w/did appended at beginning
+``
