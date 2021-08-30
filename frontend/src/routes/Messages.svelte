@@ -7,6 +7,7 @@ import Button from "../lib/Button.svelte";
 import DataTable from "../lib/DataTable.svelte";
 import Text from '../lib/Text.svelte'
 import Image from "../lib/Image.svelte";
+import Messenger from "../lib/Messenger.svelte";
 //api
 import { getContacts } from "../api/contactsAxios";
 //stores
@@ -14,6 +15,7 @@ import { availableContacts } from "../stores/contacts";
 import { sha256 } from "../utils/sha256";
 //ecma imports
 import { onMount } from "svelte";
+
 onMount(async () => {
   const res = await getContacts();
   console.log(res);
@@ -34,7 +36,7 @@ function openConversation(id) {
         <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last">
           <!-- Start main area-->
           <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8">
-            <div class="h-full border-2 border-gray-200 border-dashed rounded-lg"></div>
+            <Messenger/>
           </div>
           <!-- End main area -->
         </main>
