@@ -33,7 +33,7 @@ onMount(async () => {
       id: sha256($user.email),
       avatar: `http://tinygraphs.com/labs/isogrids/hexa16/${sha256(
         $user.email
-      )}?theme=seascape&numcolors=2`,
+      )}?theme=seascape&numcolors=4`,
     },
   ]);
 });
