@@ -5,7 +5,7 @@
   import Credentials from "../routes/Credentials.svelte";
   import Presentations from "../routes/Presentations.svelte";
   import Messages from "../routes/Messages.svelte";
-  import Connections from "../routes/Connections.svelte";
+  import Contacts from "../routes/Contacts.svelte"
   import Identities from "../routes/Identities.svelte";
   import Logout from "../routes/Logout.svelte";
 
@@ -15,12 +15,12 @@
 
 <AuthGuard>
   <Router slot="not_authed">
-    <route path="">
+    <Route path="">
       <Login />
-    </route>
-    <route path="login">
+    </Route>
+    <Route path="login">
       <Login />
-    </route>
+    </Route>
   </Router>
   <Router slot="authed">
     <Route path="">
@@ -44,7 +44,7 @@
     </Route>
 
     <Route path="connections">
-      <Connections />
+      <Contacts />
     </Route>
 
     <Route path="identities">

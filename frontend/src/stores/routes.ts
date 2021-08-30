@@ -21,9 +21,9 @@ export const Routes: routeHooks[] = [
   //   routeUrl: "messages",
   //   heroIcon: "../assets/outlineChatAlt2.svg",
   // },
-  // {
-  //   routeName: "Connections", // be cool if we could use a cog
-  //   routeUrl: "connections",
-  //   heroIcon: "../assets/outlineUser.svg",
-  // },
+  {
+    routeName: "Contacts", // be cool if we could use a cog
+    routeUrl: "contacts",
+    heroIcon: "../assets/outlineUser.svg",
+  },
 ];
