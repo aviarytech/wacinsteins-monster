@@ -4,7 +4,7 @@ import { BaseEvent, Merklize } from '../../base-event';
 import { DBService } from 'src/db/db.service';
 
 export class ContactCreatedEvent extends BaseEvent {
-  constructor(public readonly id: string, public readonly dids: string[]) {
+  constructor(public readonly id: string, public readonly did: string) {
     super();
   }
 }

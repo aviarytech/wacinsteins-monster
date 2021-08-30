@@ -5,6 +5,6 @@ export class Contact {
   @IsNotEmpty()
   id: string;
 
-  @IsArray()
-  dids: string[];
+  @IsString()
+  did: string;
 }
