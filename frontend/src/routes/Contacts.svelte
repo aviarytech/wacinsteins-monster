@@ -11,7 +11,7 @@ import Image from "../lib/Image.svelte";
 
 // stores
 import { slideOverContent } from "../stores/ui";
-//js imports
+//ecma imports
 import { onMount } from "svelte";
 //api
 import { getContacts } from "../api/contactsAxios";
