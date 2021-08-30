@@ -225,6 +225,14 @@ export class DBService {
 
   async create(obj) {
     try {
+      const currentContact = await this.client
+        .db(this.dbName)
+        .collection(this.collection)
+        .findOne({ id: obj.id });
+      if (currentContact) {
+        throw new Error('Contact already exists');
+      }
+
       const timestamp = new Date();
       const res = await this.client
         .db(this.dbName)

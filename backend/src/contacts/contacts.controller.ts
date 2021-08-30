@@ -18,7 +18,11 @@ export class ContactsController {
 
   @Post()
   async create(@Body() createContactDto: CreateContactDto) {
-    return await this.contactsService.create(createContactDto);
+    const contact = await this.contactsService.create(createContactDto);
+    if (!contact) {
+      throw new HttpException('Error creating contact', 400);
+    }
+    return contact;
   }
 
   @Get()
