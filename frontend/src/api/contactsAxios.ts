@@ -10,7 +10,7 @@ export async function postNewContact(
   try {
     const contactResponse = await axios.post(endpoint, payload);
     if (contactResponse.status == 201) {
-      console.log(contactResponse.data)
+      //console.log(contactResponse.data)
       slideOverContent.set(null)
       //NOTE: is there a better way? destroy and reload the component?
     }
@@ -27,7 +27,7 @@ export async function deleteContact(
   try {
     const contactResponse = await axios.delete(`${endpoint}/${payload}`);
     if (contactResponse.status == 200) {
-      console.log(contactResponse.data)
+      //console.log(contactResponse.data)
       return contactResponse.data
     }
     return [];
@@ -43,7 +43,7 @@ export async function getContacts(
   try {
     const contactResponse = await axios.get(endpoint);
     if (contactResponse.status == 200) {
-      console.log(contactResponse.data)
+      //console.log(contactResponse.data)
       return contactResponse.data
     }
     return [];
