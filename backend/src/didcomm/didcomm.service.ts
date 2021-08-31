@@ -1,17 +1,16 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DIDResolverService } from '../dids/didresolver.service';
 
 import {
   DIDComm,
-  IDIDCommMessage,
   DIDCOMM_MESSAGE_MEDIA_TYPE,
+  IDIDCommMessage,
 } from '@aviarytech/didcomm-messaging';
 import { KMSService } from '../kms/kms.service';
-import { IJWE } from '@aviarytech/did-secrets/node_modules/@aviarytech/crypto-core';
-import {
-  DefaultTrustPingMessageHandler,
-  DefaultTrustPingResponseMessageHandler,
-} from '@aviarytech/didcomm-protocols.trust-ping';
+import { DefaultTrustPingResponseMessageHandler } from '@aviarytech/didcomm-protocols.trust-ping';
+import { TrustPingMessageHandler } from './handlers/trust-ping.handler';
+import { ContactsService } from '../contacts/contacts.service';
+import { IJWE } from '@aviarytech/crypto-core';
 
 @Injectable()
 export class DIDCommService {
@@ -19,10 +18,16 @@ export class DIDCommService {
   constructor(
     private didResolver: DIDResolverService,
     private kms: KMSService,
+    private contactsService: ContactsService,
   ) {
     this.didcomm = new DIDComm(
       [
-        new DefaultTrustPingMessageHandler(),
+        new TrustPingMessageHandler(async (did) => {
+          const exists = await this.contactsService.findByProps({ did: did });
+          if (!exists) {
+            this.contactsService.create({ did });
+          }
+        }),
         new DefaultTrustPingResponseMessageHandler(),
         {
           type: 'BasicMessage',

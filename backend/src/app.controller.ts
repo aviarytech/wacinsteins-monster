@@ -1,5 +1,4 @@
 import { IJWE } from '@aviarytech/crypto-core';
-import { IDIDCommPayload } from '@aviarytech/didcomm-core/dist/interfaces';
 import {
   TrustPingMessage,
   TRUST_PING_PING_TYPE,
@@ -17,7 +16,7 @@ import {
 import { CommandBus } from '@nestjs/cqrs';
 import { FastifyRequest } from 'fastify';
 import { nanoid } from 'nanoid';
-import { ReceiveMessageCommand } from './didcomm/commands/receive-message.command';
+import { SendTrustPingCommand } from './didcomm/commands/send-trust-ping.command';
 import { DIDCommService } from './didcomm/didcomm.service';
 
 import { DIDResolverService } from './dids/didresolver.service';
@@ -44,10 +43,6 @@ export class AppController {
     @Req() req: FastifyRequest<{ Body: IJWE }>,
   ): Promise<string> {
     const received = await this.DIDComm.receiveMessage(req.body);
-    // console.log('Received', req.body);
-    // this.commandBus.execute(
-    //   new ReceiveMessageCommand(req.headers['content-type'], req.body),
-    // );
     if (!received) {
       throw new HttpException('Failed to receive message', 400);
     }
@@ -76,17 +71,9 @@ export class AppController {
   @Post('ping/:did')
   async TrustPing(@Param() params: { did: string }): Promise<string> {
     try {
-      const message: TrustPingMessage = {
-        payload: {
-          id: sha256(nanoid()),
-          type: TRUST_PING_PING_TYPE,
-          from: this.didWebService.did,
-          to: [params.did],
-          body: { response_requested: true },
-        },
-        repudiable: false,
-      };
-      const sent = await this.DIDComm.sendMessage(params.did, message);
+      const sent = await this.commandBus.execute(
+        new SendTrustPingCommand(params.did),
+      );
       if (sent) {
         return 'Message successfully sent';
       }

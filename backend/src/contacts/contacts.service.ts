@@ -16,10 +16,10 @@ export class ContactsService {
       const contact = await this.db.create({
         '@type': 'Contact',
         id,
-        dids: [createContactDto.did],
+        did: createContactDto.did,
       });
       await this.eventBus.publish(
-        new ContactCreatedEvent(id, [createContactDto.did]),
+        new ContactCreatedEvent(id, createContactDto.did),
       );
       return contact;
     } catch (e) {
@@ -27,11 +27,19 @@ export class ContactsService {
     }
   }
 
+  async findByProps(props: object) {
+    return await this.db.getByProps({ '@type': 'Contact', ...props });
+  }
+
   async findAll() {
     return await this.db.getAllByType('Contact');
   }
 
   async findOne(id: string) {
+    return await this.db.getById(id);
+  }
+
+  async findOneByProp(id: string) {
     return await this.db.getById(id);
   }
 
