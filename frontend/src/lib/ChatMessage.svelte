@@ -9,9 +9,9 @@ import Image from "./Image.svelte";
 </script>
 
 <div class={`message ${messageClass}`}>
-  <Image src={avatar} alt={avatar} height="32" width="32"/> 
-  <div class="message-text">
-    <p>{message.data}</p>
+  <Image src={avatar} alt={avatar} height="32" width="32" class="rounded-full"/> 
+  <div class="message-text ">
+    <p class="rounded-lg">{message.data}</p>
 
     <time>{ts.toLocaleTimeString()}</time>
   </div>

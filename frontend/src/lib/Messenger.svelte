@@ -24,15 +24,18 @@ let user:object = {
   }
 let userMsg1:object = {
     who:"general-Kenobi",
-    data:"Hello there"
+    data:"Hello there",
+    when: new Date() 
+
   }
 let user2:object = {
     who:"laber-saber-robot-collector",
-    when:"2020-01-21",
   }
 let user2Msg1:object = {
     who:"laber-saber-robot-collector",
-    data:"general-Kenobi!"
+    data:"general-Kenobi!",
+    when: new Date()
+
   }
 </script>
 
@@ -49,8 +52,8 @@ let user2Msg1:object = {
   </div>
   <ul>
   <!--TODO: check that the chat is showing -->
-  <ChatMessage message={userMsg1} sender={user} />
-  <ChatMessage message={user2Msg1} sender={user2} />
+  <ChatMessage message={userMsg1} sender={user2.who} />
+  <ChatMessage message={user2Msg1} sender={user2.who} />
   {#each localArray as entry}
     <li>{entry}</li>
   {/each}
