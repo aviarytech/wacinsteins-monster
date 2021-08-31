@@ -119,6 +119,17 @@ export class DBService {
     return res;
   }
 
+  async deleteById(id: string){
+    console.log("deleting", id)
+    let res = this.getById(id)
+    console.log(res)
+      await this.client
+        .db(this.dbName)
+        .collection(this.collection)
+        .deleteOne({ '@id': id });
+      return res
+  }
+
   async getManyById(ids: string[]) {
     const res = await this.client
       .db(this.dbName)

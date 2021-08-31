@@ -38,4 +38,7 @@ export class ContactsService {
   async update(id: string, updateContactDto: UpdateContactDto) {
     return `This action updates a #${id} contact`;
   }
+  async delete(id:string):Promise<any>{
+    return await this.db.deleteById(id)
+  }
 }
