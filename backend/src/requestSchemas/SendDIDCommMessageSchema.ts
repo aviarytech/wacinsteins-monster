@@ -8,8 +8,7 @@ export class SendDIDCommMessageSchema implements IDIDCommPayload {
   @IsNotEmpty()
   type: string;
 
-  @IsNotEmpty()
-  to: string;
+  to?: string[];
 
   @IsObject()
   body: any;

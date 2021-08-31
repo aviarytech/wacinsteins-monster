@@ -1,10 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { DIDResolverService } from '../dids/didresolver.service';
 
-import { DIDComm, IDIDCommMessage } from '@aviarytech/didcomm-messaging';
+import {
+  DIDComm,
+  IDIDCommMessage,
+  DIDCOMM_MESSAGE_MEDIA_TYPE,
+} from '@aviarytech/didcomm-messaging';
 import { KMSService } from '../kms/kms.service';
 import { IJWE } from '@aviarytech/did-secrets/node_modules/@aviarytech/crypto-core';
-import { DIDCOMM_MESSAGE_MEDIA_TYPE } from '@aviarytech/didcomm-core/dist/constants';
+import {
+  DefaultTrustPingMessageHandler,
+  DefaultTrustPingResponseMessageHandler,
+} from '@aviarytech/didcomm-protocols.trust-ping';
 
 @Injectable()
 export class DIDCommService {
@@ -15,6 +22,8 @@ export class DIDCommService {
   ) {
     this.didcomm = new DIDComm(
       [
+        new DefaultTrustPingMessageHandler(),
+        new DefaultTrustPingResponseMessageHandler(),
         {
           type: 'BasicMessage',
           handle: async (m) => {
@@ -28,9 +37,9 @@ export class DIDCommService {
     );
   }
 
-  async sendMessage(msg: IDIDCommMessage): Promise<boolean> {
+  async sendMessage(toDid: string, msg: IDIDCommMessage): Promise<boolean> {
     try {
-      return await this.didcomm.sendMessage(msg);
+      return await this.didcomm.sendMessage(toDid, msg);
     } catch (e) {
       return false;
     }
