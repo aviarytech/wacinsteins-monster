@@ -2,9 +2,10 @@
   export let label: string;
   export let callback: () => {};
   export let type:string
+  export let additionalClasses:string
 </script>
 
-<button on:click={callback} class="button" type={type}>{label}</button>
+<button on:click={callback} class={ additionalClasses ? `${additionalClasses} button`:"button"} type={type}>{label}</button>
 
 <style lang="postcss">
   .button {
