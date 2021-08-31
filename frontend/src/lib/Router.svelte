@@ -1,16 +1,17 @@
 <script lang="ts">
-import Loading from "../routes/Loading.svelte";
-import Login from "../routes/Login.svelte";
-import Home from "../routes/Home.svelte";
-import Credentials from "../routes/Credentials.svelte";
-import Presentations from "../routes/Presentations.svelte";
-import Messages from "../routes/Messages.svelte";
-import Connections from "../routes/Connections.svelte";
-import Identities from "../routes/Identities.svelte";
-import Logout from "../routes/Logout.svelte";
+  import Loading from "../routes/Loading.svelte";
+  import Login from "../routes/Login.svelte";
+  import Home from "../routes/Home.svelte";
+  import Credentials from "../routes/Credentials.svelte";
+  import Presentations from "../routes/Presentations.svelte";
+  import Messages from "../routes/Messages.svelte";
+  import Contacts from "../routes/Contacts.svelte"
+  import Identities from "../routes/Identities.svelte";
+  import Logout from "../routes/Logout.svelte";
 
-import { Router, Route } from "svelte-navigator";
-import AuthGuard from "./AuthGuard.svelte";
+  import { Router, Route } from "svelte-navigator";
+  import AuthGuard from "./AuthGuard.svelte";
+
 </script>
 
 <AuthGuard>
@@ -43,8 +44,8 @@ import AuthGuard from "./AuthGuard.svelte";
       <Messages />
     </Route>
 
-    <Route path="connections">
-      <Connections />
+    <Route path="contacts">
+      <Contacts />
     </Route>
 
     <Route path="identities">

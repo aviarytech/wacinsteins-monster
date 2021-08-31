@@ -1,2 +1,0 @@
-connection and contact page
-messages working

@@ -28,12 +28,18 @@ const openPresentationRequest = (presentationId) => {
     presentation: singleRow,
   });
 };
+let rightPreviewWindowDisplayed:boolean = false
+
 const newPresentationRequest = () => {
   slideOverContent.set({
     title: "New Presentation Request",
     component: SchemaBuilder,
     presentationSubject: [],
   });
+  if (rightPreviewWindowDisplayed){
+    slideOverContent.set(null)
+  }
+  rightPreviewWindowDisplayed = !rightPreviewWindowDisplayed
 };
 onMount(async () => {
   const res = await getPresentations();
