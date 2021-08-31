@@ -1,4 +1,5 @@
-import { IDIDCommEncryptedMessage } from '@aviarytech/didcomm-core/dist/interfaces';
+import { IJWE } from '@aviarytech/crypto-core';
+import { IDIDCommPayload } from '@aviarytech/didcomm-core/dist/interfaces';
 import {
   Body,
   Controller,
@@ -33,11 +34,16 @@ export class AppController {
 
   @Post('didcomm')
   async ReceiveDIDCommMessage(
-    @Req() req: FastifyRequest<{ Body: IDIDCommEncryptedMessage }>,
+    @Req() req: FastifyRequest<{ Body: IJWE }>,
   ): Promise<string> {
-    this.commandBus.execute(
-      new ReceiveMessageCommand(req.headers['content-type'], req.body),
-    );
+    const received = await this.DIDComm.receiveMessage(req.body);
+    // console.log('Received', req.body);
+    // this.commandBus.execute(
+    //   new ReceiveMessageCommand(req.headers['content-type'], req.body),
+    // );
+    if (!received) {
+      throw new HttpException('Failed to receive message', 400);
+    }
     return 'OK';
   }
 
@@ -46,9 +52,10 @@ export class AppController {
     @Body() body: SendDIDCommMessageSchema,
   ): Promise<string> {
     try {
-      const didDoc = await this.didResolver.resolve(body.to);
-      const res = await this.DIDComm.createMessage(didDoc, body);
-      const sent = await this.DIDComm.sendMessage(didDoc, res);
+      const sent = await this.DIDComm.sendMessage({
+        payload: body,
+        repudiable: false,
+      });
       if (sent) {
         return 'Message successfully sent';
       }

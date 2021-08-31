@@ -1,4 +1,4 @@
-import { IDIDCommEncryptedMessage } from '@aviarytech/didcomm-core/dist/interfaces';
+import { IJWE } from '@aviarytech/crypto-core';
 import {
   CommandHandler,
   EventBus,
@@ -11,7 +11,7 @@ import { MessageDecryptedEvent } from '../events/message-decrypted.event';
 export class ReceiveMessageCommand {
   constructor(
     public readonly mediaType: string,
-    public readonly message: IDIDCommEncryptedMessage,
+    public readonly message: IJWE,
   ) {}
 }
 
@@ -23,7 +23,8 @@ export class ReceiveMessageHandler
 
   async execute(command: ReceiveMessageCommand) {
     const { mediaType, message } = command;
-    const plainMessage = await this.didcomm.unpackMessage(mediaType, message);
-    await this.eventBus.publish(new MessageDecryptedEvent(plainMessage));
+    // TODO
+    // const plainMessage = await this.didcomm.unpackMessage(mediaType, message);
+    // await this.eventBus.publish(new MessageDecryptedEvent(plainMessage));
   }
 }
