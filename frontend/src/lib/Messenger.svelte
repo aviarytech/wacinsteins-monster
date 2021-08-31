@@ -1,4 +1,8 @@
 <script lang="ts">
+//stores
+
+import ChatMessage from "./ChatMessage.svelte"
+
 let localArray:string[]=[''] // WARN:very temp
 let chatMsg:string
 export function newMsg() {
@@ -14,6 +18,22 @@ const onKeyPress = e => {
     newMsg()
   };
 };
+let user:object = {
+    who:"general-Kenobi",
+    when:"2020-01-20",
+  }
+let userMsg1:object = {
+    who:"general-Kenobi",
+    data:"Hello there"
+  }
+let user2:object = {
+    who:"laber-saber-robot-collector",
+    when:"2020-01-21",
+  }
+let user2Msg1:object = {
+    who:"laber-saber-robot-collector",
+    data:"general-Kenobi!"
+  }
 </script>
 
 <template>
@@ -29,6 +49,8 @@ const onKeyPress = e => {
   </div>
   <ul>
   <!--TODO: check that the chat is showing -->
+  <ChatMessage message={userMsg1} sender={user} />
+  <ChatMessage message={user2Msg1} sender={user2} />
   {#each localArray as entry}
     <li>{entry}</li>
   {/each}

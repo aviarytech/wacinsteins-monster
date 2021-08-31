@@ -53,11 +53,11 @@ function openConversation(id) {
                   alt: p['did'],
                   width: 32,
                   height: 32,
-                  dataTableSpecialClass:'',
                 },
                 {
                   component: Text,
                   text: p['did'],
+                  classes:'truncate'
                 },
               ];
             })} />
