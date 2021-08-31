@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DocumentLoaderService } from '../documentLoader/documentLoader.service';
 import {
+  DIDDocument,
   IDIDDocument,
   IDIDDocumentServiceDescriptor,
 } from '@aviarytech/did-core';
@@ -10,7 +11,8 @@ export class DIDResolverService {
   constructor(private documentLoader: DocumentLoaderService) {}
 
   async resolve(did: string): Promise<IDIDDocument> {
-    return (await this.documentLoader.load(did)).document;
+    const doc = (await this.documentLoader.load(did)).document;
+    return new DIDDocument(doc);
   }
 
   public static getServiceOfType(
