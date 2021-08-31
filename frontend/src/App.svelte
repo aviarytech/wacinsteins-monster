@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import Sidebar from "./lib/Sidebar.svelte";
-import SearchBar from "./lib/SearchBar.svelte";
+//import SearchBar from "./lib/SearchBar.svelte";
 import Profile from "./lib/Profile.svelte";
 import SlideOver from "./lib/SlideOver.svelte";
 
