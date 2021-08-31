@@ -36,6 +36,8 @@ class ValidContact {
     } else {
       console.log('validation succeed');
       swal('Success',`New contact from domain: ${this.url} has been added`,"success")
+      .then(() => window.location.reload())
+
     }
   }
 

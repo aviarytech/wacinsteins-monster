@@ -13,8 +13,9 @@ import Image from "../lib/Image.svelte";
 import { slideOverContent } from "../stores/ui";
 //ecma imports
 import { onMount } from "svelte";
+import swal from "sweetalert";
 //api
-import { getContacts } from "../api/contactsAxios";
+import { getContacts,deleteContact } from "../api/contactsAxios";
 //stores
 import { availableContacts } from "../stores/contacts";
 import { sha256 } from "../utils/sha256";
@@ -30,6 +31,24 @@ function newContactCreation() {
   }
   newContactWindowDisplayed = !newContactWindowDisplayed
 }
+
+async function deleteContactApi(id) {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this imaginary file!",
+      icon: "warning",
+      buttons: [true,true],
+      dangerMode: true,
+    })
+    .then((value) => {
+      if(value){
+        deleteContact(id)     
+        window.location.reload()
+      }
+    })
+    
+  }
+
 onMount(async () => {
   const res = await getContacts();
   console.log(res);
@@ -38,7 +57,7 @@ onMount(async () => {
   }
 });
 function openConversation(id) {
-    console.log('click', id)
+    console.log('open click', id)
   }
 //if works close the slider and display a message
 </script>
@@ -49,7 +68,7 @@ function openConversation(id) {
   </div>
   <!-- TODO: once the user selects a conversation the menu shoudl split in 3-->
   <DataTable
-    headers={['SHA256', 'Domain', 'ID', '']}
+    headers={['SHA256', 'Domain', 'ID', '', '']}
     data={$availableContacts.map((p) => {
       return [
         {
@@ -75,6 +94,14 @@ function openConversation(id) {
           callback: () => {
             openConversation(p['id']);
           },
+        },
+        {
+          component: Button,
+          label: 'Delete',
+          callback: () => {
+            deleteContactApi(p['id']);
+          },
+          dataTableSpecialClass: ""
         },
       ];
     })} />
