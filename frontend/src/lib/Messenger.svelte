@@ -69,6 +69,7 @@ const onKeyPress = e => {
       <svelte:component this={ChatMessage} message={message.msg} />
     {/each}
   {:else}
+  <!--BUG: not working in all situations  -->
     <svelte:component this={ChatMessage} message={{from:"Aviary Tech",to:'placeholder', data:"This is the start of a new conversation", when: new Date()}}/>
   {/if}
 </template>
