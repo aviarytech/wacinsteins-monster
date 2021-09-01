@@ -1,7 +1,7 @@
-export class MessagesApi {
+export interface SingleMessageInterface{
   id:string;
   who:string;
-  to:String;
+  to:string;
   data:string;
   when:DateConstructor;
 }
