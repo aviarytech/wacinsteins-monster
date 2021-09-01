@@ -1,6 +1,6 @@
 export interface SingleMessageInterface{
   id:string;
-  who:string;
+  from:string;
   to:string;
   data:string;
   when:DateConstructor;

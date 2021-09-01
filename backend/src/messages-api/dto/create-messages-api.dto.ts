@@ -5,7 +5,7 @@ export class CreateMessagesApiDto {
   
   @ApiProperty()
   @IsString()
-  who:string;
+  from:string;
   
   @ApiProperty()
   @IsString()

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sha256 } from '../utils/sha256';
 import { DBService } from '../db/db.service';
 import { CreateMessagesApiDto } from './dto/create-messages-api.dto';
+
 // import { UpdateMessagesApiDto } from './dto/update-messages-api.dto';
 @Injectable()
 export class MessagesApiService {
@@ -29,6 +30,18 @@ export class MessagesApiService {
 
   async findOne(id: string) {
     return await this.db.getById(id);
+  }
+  
+  //hash to/from user instead for a single query
+  async findConversation(from:string, to:string) {
+    const res = await this.db.getManyByProps(
+      { $or: [
+        {"msg.from":from,"msg.to":to},
+        {"msg.from":to,"msg.to":from}
+      ]}
+    )
+    console.log(res)
+    return res
   }
 
 //     return `This action updates a #${id} messagesApi`;
