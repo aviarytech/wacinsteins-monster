@@ -12,6 +12,7 @@ import Messenger from "../lib/Messenger.svelte";
 import { getContacts } from "../api/contactsAxios";
 //stores
 import { availableContacts } from "../stores/contacts";
+import { selectedUser } from "../stores/messages";
 import { sha256 } from "../utils/sha256";
 //ecma imports
 import { onMount } from "svelte";
@@ -23,8 +24,9 @@ onMount(async () => {
     availableContacts.set(res);
   }
 });
-function openConversation(id) {
+function openConversation(id:string) {
     console.log('click', id)
+    selectedUser.set(id)
   }
 </script>
 
@@ -44,7 +46,7 @@ function openConversation(id) {
           <!-- Start secondary column (hidden on smaller screens) -->
           <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8 overflow-y-auto">
           <DataTable
-            headers={['SHA256', 'Domain', '']}
+            headers={['SHA256', 'Domain','']}
             data={$availableContacts.map((p) => {
               return [
                 {
@@ -53,6 +55,7 @@ function openConversation(id) {
                   alt: p['dids'],
                   width: 32,
                   height: 32,
+                  callback: () => openConversation(p['dids'])
                 },
                 {
                   component: Text,

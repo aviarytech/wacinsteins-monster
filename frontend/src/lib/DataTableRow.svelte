@@ -1,23 +1,30 @@
 <script lang="ts">
 export let rowId: number;
 export let columns: object[];
+export let callback: () => {};
+console.log(columns)
 </script>
 <!-- WARN: use svelte navigator. On click:{eventHandler} to implement--> 
-
-<tr class="bg-white " class:bg-gray-50="{rowId % 2 !== 0}" >
+{#if callback}
+<tr class="bg-white hover:bg-yellow-400 cursor-pointer" class:bg-gray-50="{rowId % 2 !== 0}" on:click={callback} >
   {#each columns as col}
     <td
       class={col['dataTableSpecialClass'] ? col['dataTableSpecialClass']: "cell" }>
-      {#if col['clickable']}
-        <a href={col['clickable']}>
-          <svelte:component this="{col['component']}" {...col} />
-        </a>
-      {:else}
         <svelte:component this="{col['component']}" {...col} />
-      {/if}
     </td>
   {/each}
 </tr>
+{:else}
+<tr class="bg-white" class:bg-gray-50="{rowId % 2 !== 0}">
+  {#each columns as col}
+    <td
+      class={col['dataTableSpecialClass'] ? col['dataTableSpecialClass']: "cell" }>
+        <svelte:component this="{col['component']}" {...col} />
+    </td>
+  {/each}
+</tr>
+
+{/if}
 
 
 <style lang="postcss">

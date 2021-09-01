@@ -1,6 +1,5 @@
 <script lang="ts">
 import DataTableRow from "./DataTableRow.svelte";
-
 export let headers: string[];
 export let data: object[][];
 </script>
@@ -22,7 +21,7 @@ export let data: object[][];
       </thead>
       <tbody>
         {#each data as row, i}
-          <DataTableRow rowId="{i}" columns="{row}" />
+          <DataTableRow rowId="{i}" columns="{row}" callback={row[0]['callback']}/>
         {/each}
       </tbody>
     </table>
