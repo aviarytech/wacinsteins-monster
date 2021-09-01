@@ -16,7 +16,9 @@ import { DIDCommService } from './didcomm/didcomm.service';
 import { DIDResolverService } from './dids/didresolver.service';
 import { DIDWebService } from './didweb/didweb.service';
 import { SendDIDCommMessageSchema } from './requestSchemas/SendDIDCommMessageSchema';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("didcoms")
 @Controller()
 export class AppController {
   constructor(

@@ -16,8 +16,9 @@ import {
 } from './entities/presentation.entity';
 import { CreatePresentationDefinitionDto } from './dto/create-presentation-definition.dto';
 import { CreatePresentationRequestDto } from './dto/create-presentation-request.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags("presentations")
 @Controller('presentations')
 export class PresentationsController {
   constructor(private readonly presentationsService: PresentationsService) {}
