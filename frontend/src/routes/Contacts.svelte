@@ -8,6 +8,7 @@ import NewContacts from "../lib/NewContacts.svelte";
 import DataTable from "../lib/DataTable.svelte";
 import Text from '../lib/Text.svelte'
 import Image from "../lib/Image.svelte";
+import ComponentList from "../lib/ComponentList.svelte";
 
 // stores
 import { slideOverContent } from "../stores/ui";
@@ -87,21 +88,20 @@ function openConversation(id) {
           component: Text,
           text: p['id']
         },
-
         {
-          component: Button,
-          label: 'View',
-          callback: () => {
-            openConversation(p['id']);
-          },
-        },
-        {
-          component: Button,
-          label: 'Delete',
-          callback: () => {
-            deleteContactApi(p['id']);
-          },
-          dataTableSpecialClass: ""
+          component: ComponentList,
+          items: [
+            {
+              component: Button,
+              callback: () => openConversation(p['@id']),
+              label: 'View',
+            },
+            {
+              component: Button,
+              callback: () => deleteContactApi(p['id']),
+              label: 'Delete',
+            },
+          ],
         },
       ];
     })} />
