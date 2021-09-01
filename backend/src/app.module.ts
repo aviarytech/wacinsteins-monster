@@ -17,6 +17,7 @@ import { KMSService } from './kms/kms.service';
 import { PresentationsModule } from './presentations/presentations.module';
 import { CredentialsModule } from './credentials/credentials.module';
 import { ContactsModule } from './contacts/contacts.module';
+import { MessagesApiModule } from './messages-api/messages-api.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ContactsModule } from './contacts/contacts.module';
     KMSModule,
     CredentialsModule,
     ContactsModule,
+    MessagesApiModule,
   ],
   controllers: [AppController, AdminController],
   providers: [
