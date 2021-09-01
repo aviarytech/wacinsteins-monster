@@ -2,7 +2,6 @@
 export let rowId: number;
 export let columns: object[];
 export let callback: () => {};
-console.log(columns)
 </script>
 <!-- WARN: use svelte navigator. On click:{eventHandler} to implement--> 
 {#if callback}

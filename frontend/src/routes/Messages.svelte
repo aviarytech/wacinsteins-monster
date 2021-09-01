@@ -3,7 +3,6 @@
 
 <script lang="ts">
 //components import
-import Button from "../lib/Button.svelte";
 import DataTable from "../lib/DataTable.svelte";
 import Text from '../lib/Text.svelte'
 import Image from "../lib/Image.svelte";
@@ -19,14 +18,15 @@ import { onMount } from "svelte";
 
 onMount(async () => {
   const res = await getContacts();
-  console.log(res);
+  //console.log(res);
   if (res.length > 0) {
     availableContacts.set(res);
+    selectedUser.set(res[0]['dids'][0])
   }
 });
 function openConversation(id:string) {
-    console.log('click', id)
-    selectedUser.set(id)
+    selectedUser.set(id[0])
+    console.log($selectedUser)
   }
 </script>
 
@@ -38,7 +38,7 @@ function openConversation(id:string) {
         <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last">
           <!-- Start main area-->
           <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8">
-            <Messenger/>
+            <Messenger />
           </div>
           <!-- End main area -->
         </main>

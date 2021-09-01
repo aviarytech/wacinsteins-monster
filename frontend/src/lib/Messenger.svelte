@@ -7,14 +7,16 @@ import { msgUSerBackend, selectedUser } from "../stores/messages";
 import { onMount } from "svelte";
 import { getCurrentConversation,postNewMsg2Conversation } from "../api/messagesLogic";
 
-//on click, make a call to the backend and display all messages. originaly only displays the msg of the first contact
-//placeholdername
-selectedUser.set("did:web:placeholder.bob.com")
 onMount(async () => {
   if($selectedUser){
     msgUSerBackend.set(await getCurrentConversation($selectedUser))
   }
 })
+//because ${storename} only grabs the current value we need to introduce reactivity by subscribing (probably exists a way to use $: (value))
+//svelte is weird but the best so far
+selectedUser.subscribe(async (v) => {
+    msgUSerBackend.set(await getCurrentConversation($selectedUser))
+  })
 
 let chatMsg:string
 async function newMsg() {
