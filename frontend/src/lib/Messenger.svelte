@@ -3,30 +3,35 @@
 import ChatMessage from "./ChatMessage.svelte"
 import { user } from "../stores/user";
 import { sha256 } from "../utils/sha256";
-import { msgUSerBackend } from "../stores/messages";
+import { msgUSerBackend, selectedUser } from "../stores/messages";
+import { onMount } from "svelte";
+import { getCurrentConversation,postNewMsg2Conversation } from "../api/messagesLogic";
 
 //on click, make a call to the backend and display all messages. originaly only displays the msg of the first contact
-$: localMessages = $msgUSerBackend
+//placeholdername
+selectedUser.set("did:web:placeholder.bob.com")
+onMount(async () => {
+  if($selectedUser){
+    msgUSerBackend.set(await getCurrentConversation($selectedUser))
+  }
+})
 
 let chatMsg:string
-export function newMsg() {
+async function newMsg() {
   if(chatMsg){
     //building the new entry
     const fullPayload:Object = {
-      from:sha256($user.email),
-      to:"implement new user",
+      to:$selectedUser,
       data: chatMsg,
       when: new Date()
       }
     chatMsg=''
     console.log(fullPayload)
-    //saving to the stores
-    if(!$msgUSerBackend){
-      //make the api call
-      msgUSerBackend.set([fullPayload])
-    } else {
-      msgUSerBackend.set([...$msgUSerBackend,fullPayload])
-    }
+    await postNewMsg2Conversation(fullPayload)
+    //works but I don't like this ()
+    msgUSerBackend.set(await getCurrentConversation($selectedUser))
+    
+    console.log("localMSg",$msgUSerBackend)
   }
 }
 const onKeyPress = e => {
@@ -55,11 +60,13 @@ const onKeyPress = e => {
       alt={$user.email} />
   </div>
   <!--TODO: check that the chat is showing -->
-  {#if localMessages}
-    {#each localMessages as message}
-      <svelte:component this={ChatMessage} message={message} />
+  
+
+  {#if $msgUSerBackend}
+    {#each $msgUSerBackend as message}
+      <svelte:component this={ChatMessage} message={message.msg} />
     {/each}
   {:else}
-    <svelte:component this={ChatMessage} message={{from:"Aviary Tech",to:sha256($user.email), data:"This is the start of a new conversation", when: new Date()}}/>
+    <svelte:component this={ChatMessage} message={{from:"Aviary Tech",to:'placeholder', data:"This is the start of a new conversation", when: new Date()}}/>
   {/if}
 </template>
