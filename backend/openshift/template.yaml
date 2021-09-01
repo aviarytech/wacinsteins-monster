@@ -1,0 +1,130 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: av1
+  annotations:
+    openshift.io/display-name: WACInstein
+    description: Template for WACInstein
+    tags: av1
+message: |-
+  Deployed with the host ${HOST}:
+  - wacinstein
+labels:
+  template: av1
+objects:
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: "${HOST}"
+      annotations:
+        kubernetes.io/tls-acme: "true"
+    spec:
+      host: ${HOST}
+      to:
+        kind: Service
+        name: "${NAME}"
+      tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+      port:
+        targetPort: ${{SERVER_PORT}}
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: "${NAME}"
+    spec:
+      selector:
+        name: "${NAME}"
+      ports:
+        - protocol: TCP
+          name: tcp
+          port: ${{SERVER_PORT}}
+  - kind: DeploymentConfig
+    apiVersion: v1
+    metadata:
+      name: "${NAME}"
+      destroy: true
+    spec:
+      replicas: 1
+      test: false
+      selector:
+        name: "${NAME}"
+      template:
+        metadata:
+          labels:
+            app: wacinstein
+            name: "${NAME}"
+        spec:
+          containers:
+            - name: "${NAME}"
+              image: wacinstein
+              ports:
+                - containerPort: ${{SERVER_PORT}}
+                  protocol: TCP
+              env:
+                - name: HOST
+                  value: ${HOST}
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "50Mi"
+                limits:
+                  cpu: "2000m"
+                  memory: "6000Mi"
+              terminationMessagePath: "/dev/termination-log"
+              terminationMessagePolicy: File
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                capabilities: {}
+                privileged: false
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirst
+          securityContext: {}
+          schedulerName: default-scheduler
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - "${NAME}"
+            from:
+              namespace: "${IMAGE_NAMESPACE}"
+              kind: ImageStreamTag
+              name: wacinstein:latest
+      strategy:
+        type: Recreate
+        recreateParams:
+          timeoutSeconds: 600
+        activeDeadlineSeconds: 21600
+
+parameters:
+  - name: NAME
+    required: true
+  - name: NAMESPACE
+    value: wacinstein
+  - name: HOST
+    required: true
+  - name: IMAGE_NAMESPACE
+    value: wacinstein
+  - name: DBHOST
+    required: true
+  - name: DBPORT
+    required: true
+  - name: DBUSER
+    required: true
+  - name: DBPASSWORD
+    displayName: mongo password
+    required: true
+  # - name: DBAUTHSOURCE
+  #   displayName: mongo auth source
+  #   required: true
+  # - name: DBPASSWORD
+  #   displayName: mongo admin password
+  #   required: true
+  - name: DBNAME
+    required: true
+  - name: SERVER_PORT
+    required: true
