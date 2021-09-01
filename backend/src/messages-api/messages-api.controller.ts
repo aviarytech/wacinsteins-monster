@@ -27,9 +27,9 @@ export class MessagesApiController {
   findOne(@Param('id') id: string) {
     return this.messagesApiService.findOne(id);
   }
-  @Get('/:from/:to')
-  findConversation(@Param('from') from: string, @Param("to") to:string) {
-    return this.messagesApiService.findConversation(from,to);
+  @Get('conversation/:to')
+  findConversation(@Param("to") to:string) {
+    return this.messagesApiService.findConversation(to);
   }
 //   @Patch(':id')
 //   update(@Param('id') id: string, @Body() updateMessagesApiDto: UpdateMessagesApiDto) {
