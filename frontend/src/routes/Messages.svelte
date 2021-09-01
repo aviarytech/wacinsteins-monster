@@ -50,13 +50,13 @@ function openConversation(id) {
                 {
                   component: Image,
                   src: `http://tinygraphs.com/labs/isogrids/hexa16/${sha256(p['id'])}?theme=seascape&numcolors=4`,
-                  alt: p['did'],
+                  alt: p['dids'],
                   width: 32,
                   height: 32,
                 },
                 {
                   component: Text,
-                  text: p['did'],
+                  text: p['dids'],
                   classes:'truncate'
                 },
               ];
