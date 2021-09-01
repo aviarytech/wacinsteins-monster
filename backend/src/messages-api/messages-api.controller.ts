@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException } from '@nestjs/common';
 import { MessagesApiService } from './messages-api.service';
 import { CreateMessagesApiDto } from './dto/create-messages-api.dto';
-import { UpdateMessagesApiDto } from './dto/update-messages-api.dto';
+//import { UpdateMessagesApiDto } from './dto/update-messages-api.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags("messages-api")
