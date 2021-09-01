@@ -1,7 +1,6 @@
 <script lang="ts">
 export let rowId: number;
 export let columns: object[];
-console.log('passed data',columns)
 </script>
 <!-- WARN: use svelte navigator. On click:{eventHandler} to implement--> 
 

@@ -1,6 +1,6 @@
 import type { Writable } from "svelte/store";
 import { writable } from "svelte/store";
-
+//placeholder data
 let user1:object = {
     who:"general-Kenobi",
     when:"2020-01-20",
@@ -28,4 +28,4 @@ let localChatHistory:object[] = [
   message: user2Msg1,
   sender: user2
     }] 
-export const localMessages:Writable<any> = writable(localChatHistory)
+export const msgUSerBackend:Writable<any> = writable(null)

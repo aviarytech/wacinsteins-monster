@@ -3,24 +3,34 @@
 import ChatMessage from "./ChatMessage.svelte"
 import { user } from "../stores/user";
 import { sha256 } from "../utils/sha256";
-import { localMessages } from "../stores/messages";
+import { msgUSerBackend } from "../stores/messages";
+
+//on click, make a call to the backend and display all messages. originaly only displays the msg of the first contact
+$: localMessages = $msgUSerBackend
 
 let chatMsg:string
 export function newMsg() {
   if(chatMsg){
-    const payload:Object = {
+    //building the new entry
+    const payloadMsg:Object = {
       who:sha256($user.email),
       data: chatMsg,
       when: new Date()
       }
-
-    localMessages.set(n => n.push(payload))
+    const fullPayload:Object = {
+        message: payloadMsg,
+        sender: sha256($user.email)
+      }
     chatMsg=''
-    console.log(payload)
-    console.log($localMessages)
-
+    console.log(payloadMsg,fullPayload)
+    //saving to the stores
+    if(!$msgUSerBackend){
+      msgUSerBackend.set([fullPayload])
+    } else {
+      msgUSerBackend.set([...$msgUSerBackend,fullPayload])
     }
   }
+}
 const onKeyPress = e => {
   if (e.charCode === 13) {
     newMsg()
@@ -47,12 +57,11 @@ const onKeyPress = e => {
       alt={$user.email} />
   </div>
   <!--TODO: check that the chat is showing -->
-  {#each $localMessages as message}
-    <svelte:component this={ChatMessage} message={message.message} sender={message.sender} />
-  {/each}
-  <!-- 
-  <ChatMessage message={userMsg1} sender={user2.who} />
-  <ChatMessage message={user2Msg1} sender={user2.who} />
-  -->
-
+  {#if localMessages}
+    {#each localMessages as message}
+      <svelte:component this={ChatMessage} message={message.message} sender={message.sender} />
+    {/each}
+  {:else}
+      <svelte:component this={ChatMessage} message={{who:"Aviary Tech", data:"This is the start of a new conversation", when: new Date()}} sender={{who:"Aviary Tech"}} />
+  {/if}
 </template>
