@@ -1,4 +1,4 @@
-import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import { IsString,IsDate } from "class-validator";
 import { Injectable } from "@nestjs/common";
 
