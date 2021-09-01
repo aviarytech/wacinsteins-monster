@@ -12,19 +12,17 @@ let chatMsg:string
 export function newMsg() {
   if(chatMsg){
     //building the new entry
-    const payloadMsg:Object = {
-      who:sha256($user.email),
+    const fullPayload:Object = {
+      from:sha256($user.email),
+      to:"implement new user",
       data: chatMsg,
       when: new Date()
       }
-    const fullPayload:Object = {
-        message: payloadMsg,
-        sender: sha256($user.email)
-      }
     chatMsg=''
-    console.log(payloadMsg,fullPayload)
+    console.log(fullPayload)
     //saving to the stores
     if(!$msgUSerBackend){
+      //make the api call
       msgUSerBackend.set([fullPayload])
     } else {
       msgUSerBackend.set([...$msgUSerBackend,fullPayload])
@@ -59,9 +57,9 @@ const onKeyPress = e => {
   <!--TODO: check that the chat is showing -->
   {#if localMessages}
     {#each localMessages as message}
-      <svelte:component this={ChatMessage} message={message.message} sender={message.sender} />
+      <svelte:component this={ChatMessage} message={message} />
     {/each}
   {:else}
-      <svelte:component this={ChatMessage} message={{who:"Aviary Tech", data:"This is the start of a new conversation", when: new Date()}} sender={{who:"Aviary Tech"}} />
+    <svelte:component this={ChatMessage} message={{from:"Aviary Tech",to:sha256($user.email), data:"This is the start of a new conversation", when: new Date()}}/>
   {/if}
 </template>
