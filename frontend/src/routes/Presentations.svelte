@@ -23,7 +23,7 @@ import Tag from "../lib/Tag.svelte";
 const openPresentationRequest = (presentationId) => {
   const singleRow = $presentations.find((c) => c["@id"] === presentationId);
   slideOverContent.set({
-    title: singleRow.definition.input_descriptors[0].name,
+    title: `Presentation of credentials requested from ${singleRow.definition.input_descriptors[0].name}`,
     component: PresentationDetailedView,
     presentation: singleRow,
   });
