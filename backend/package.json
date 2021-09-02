@@ -24,7 +24,7 @@
   "dependencies": {
     "@aviarytech/crypto-core": "^0.0.26",
     "@aviarytech/did-core": "^0.1.13",
-    "@aviarytech/did-secrets": "^0.1.10",
+    "@aviarytech/did-secrets": "^0.1.14",
     "@aviarytech/didcomm-messaging": "^0.1.21",
     "@aviarytech/didcomm-protocols.trust-ping": "^0.1.21",
     "@nestjs/common": "^8.0.6",
