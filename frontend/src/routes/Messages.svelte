@@ -21,7 +21,7 @@ onMount(async () => {
   //console.log(res);
   if (res.length > 0) {
     availableContacts.set(res);
-    selectedUser.set(res[0]['dids'][0])
+    selectedUser.set(res[0]['did'][0])
   }
 });
 function openConversation(id:string) {
@@ -52,14 +52,14 @@ function openConversation(id:string) {
                 {
                   component: Image,
                   src: `http://tinygraphs.com/labs/isogrids/hexa16/${sha256(p['id'])}?theme=seascape&numcolors=4`,
-                  alt: p['dids'],
+                  alt: p['did'],
                   width: 32,
                   height: 32,
-                  callback: () => openConversation(p['dids'])
+                  callback: () => openConversation(p['did'])
                 },
                 {
                   component: Text,
-                  text: p['dids'],
+                  text: p['did'],
                   classes:'truncate'
                 },
               ];

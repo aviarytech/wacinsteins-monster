@@ -69,20 +69,20 @@ function openConversation(id) {
   </div>
   <!-- TODO: once the user selects a conversation the menu shoudl split in 3-->
   <DataTable
-    headers={['SHA256', 'Domain', 'ID', '', '']}
+    headers={['SHA256', 'Domain', 'ID', '']}
     data={$availableContacts.map((p) => {
       return [
         {
           component: Image,
           src: `http://tinygraphs.com/labs/isogrids/hexa16/${sha256(p['id'])}?theme=seascape&numcolors=4`,
-          alt: p['dids'],
+          alt: p['did'],
           width: 32,
           height: 32,
           dataTableSpecialClass:'',
         },
         {
           component: Text,
-          text: p['dids'],
+          text: p['did'],
         },
         {
           component: Text,
