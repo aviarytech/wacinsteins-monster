@@ -1,0 +1,1 @@
+oc process -f db-template.yaml --param-file=params/mongo.params | oc apply -f -

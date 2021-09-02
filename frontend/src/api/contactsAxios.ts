@@ -1,7 +1,9 @@
 import axios from "axios";
 import { slideOverContent } from "../stores/ui";
 
-const baseUrl: string | boolean = import.meta.env.VITE_API_URL;
+const baseUrl = import.meta.env.VITE_API_URL
+  ? import.meta.env.VITE_API_URL
+  : `https://api.${window.location.hostname}`;
 
 export async function postNewContact(
   payload: Object,
@@ -10,7 +12,6 @@ export async function postNewContact(
   try {
     const contactResponse = await axios.post(endpoint, payload);
     if (contactResponse.status == 201) {
-      //console.log(contactResponse.data)
       slideOverContent.set(null)
       //NOTE: is there a better way? destroy and reload the component?
     }
@@ -43,8 +44,7 @@ export async function getContacts(
   try {
     const contactResponse = await axios.get(endpoint);
     if (contactResponse.status == 200) {
-      //console.log(contactResponse.data)
-      return contactResponse.data
+      return contactResponse.data;
     }
     return [];
   } catch (error) {

@@ -1,21 +1,28 @@
-import { IDIDCommEncryptedMessage } from '@aviarytech/didcomm-core/dist/interfaces';
+import { IJWE } from '@aviarytech/crypto-core';
+import {
+  TrustPingMessage,
+  TRUST_PING_PING_TYPE,
+} from '@aviarytech/didcomm-protocols.trust-ping';
 import {
   Body,
   Controller,
   Get,
   HttpException,
   HttpStatus,
+  Param,
   Post,
   Req,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { FastifyRequest } from 'fastify';
-import { ReceiveMessageCommand } from './didcomm/commands/receive-message.command';
+import { nanoid } from 'nanoid';
+import { SendTrustPingCommand } from './didcomm/commands/send-trust-ping.command';
 import { DIDCommService } from './didcomm/didcomm.service';
 
 import { DIDResolverService } from './dids/didresolver.service';
 import { DIDWebService } from './didweb/didweb.service';
 import { SendDIDCommMessageSchema } from './requestSchemas/SendDIDCommMessageSchema';
+import { sha256 } from './utils/sha256';
 
 @Controller()
 export class AppController {
@@ -33,22 +40,40 @@ export class AppController {
 
   @Post('didcomm')
   async ReceiveDIDCommMessage(
-    @Req() req: FastifyRequest<{ Body: IDIDCommEncryptedMessage }>,
+    @Req() req: FastifyRequest<{ Body: IJWE }>,
   ): Promise<string> {
-    this.commandBus.execute(
-      new ReceiveMessageCommand(req.headers['content-type'], req.body),
-    );
+    const received = await this.DIDComm.receiveMessage(req.body);
+    if (!received) {
+      throw new HttpException('Failed to receive message', 400);
+    }
     return 'OK';
   }
 
-  @Post('didcomm/send')
+  @Post('didcomm/send/:did')
   async SendDIDCommMessage(
     @Body() body: SendDIDCommMessageSchema,
+    @Param() params: { did: string },
   ): Promise<string> {
     try {
-      const didDoc = await this.didResolver.resolve(body.to);
-      const res = await this.DIDComm.createMessage(didDoc, body);
-      const sent = await this.DIDComm.sendMessage(didDoc, res);
+      const sent = await this.DIDComm.sendMessage(params.did, {
+        payload: body,
+        repudiable: false,
+      });
+      if (sent) {
+        return 'Message successfully sent';
+      }
+      throw new HttpException('Message failed to send', HttpStatus.BAD_REQUEST);
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post('ping/:did')
+  async TrustPing(@Param() params: { did: string }): Promise<string> {
+    try {
+      const sent = await this.commandBus.execute(
+        new SendTrustPingCommand(params.did),
+      );
       if (sent) {
         return 'Message successfully sent';
       }

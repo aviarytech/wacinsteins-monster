@@ -1,0 +1,9 @@
+NAME=aviary-id
+HOST=api.aviary.id
+SERVER_PORT=3000
+DBHOST=mongo
+DBPORT=27017
+DBPASSWORD=passwordaDcjidsada
+DBUSER=monGOD
+DBNAME=waci
+DBAUTHSOURCE=waci
