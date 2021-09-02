@@ -22,7 +22,6 @@ export function newMsg() {
         sender: sha256($user.email)
       }
     chatMsg=''
-    console.log(payloadMsg,fullPayload)
     //saving to the stores
     if(!$msgUSerBackend){
       msgUSerBackend.set([fullPayload])

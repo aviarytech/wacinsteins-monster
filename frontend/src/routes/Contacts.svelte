@@ -35,7 +35,7 @@ function newContactCreation() {
 async function deleteContactApi(id) {
     swal({
       title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this imaginary file!",
+      text: "All previous data will be kept should you add the organization again.",
       icon: "warning",
       buttons: [true,true],
       dangerMode: true,
@@ -51,7 +51,7 @@ async function deleteContactApi(id) {
 
 onMount(async () => {
   const res = await getContacts();
-  console.log(res);
+  //console.log(res);
   if (res.length > 0) {
     availableContacts.set(res);
   }

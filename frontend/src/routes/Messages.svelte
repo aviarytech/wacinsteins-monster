@@ -18,7 +18,7 @@ import { onMount } from "svelte";
 
 onMount(async () => {
   const res = await getContacts();
-  console.log(res);
+  //console.log(res);
   if (res.length > 0) {
     availableContacts.set(res);
   }

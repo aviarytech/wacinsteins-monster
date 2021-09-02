@@ -120,7 +120,6 @@ export class DBService {
   }
 
   async deleteById(id: string){
-    console.log("deleting", id)
     let res = await this.getById(id)
     try {
       await this.client
