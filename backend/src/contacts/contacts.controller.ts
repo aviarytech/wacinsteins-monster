@@ -8,10 +8,12 @@ import {
   Delete,
   HttpException,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ContactsService } from './contacts.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
+@ApiTags('contacts') 
 @Controller('contacts')
 export class ContactsController {
   constructor(private readonly contactsService: ContactsService) {}
@@ -41,5 +43,11 @@ export class ContactsController {
     @Body() updateContactDto: UpdateContactDto,
   ) {
     return this.contactsService.update(id, updateContactDto);
+  }
+  @Delete(':id')
+  async delete(
+    @Param('id') id: string,
+  ) {
+  return await this.contactsService.delete(id);
   }
 }

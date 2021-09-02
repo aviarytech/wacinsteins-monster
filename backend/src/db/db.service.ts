@@ -112,7 +112,7 @@ export class DBService {
     let res = await this.client
       .db(this.dbName)
       .collection(this.collection)
-      .findOne({ '@id': id });
+      .findOne({ 'id': id });
     if (!res) {
       return null;
     }
@@ -120,11 +120,25 @@ export class DBService {
     return res;
   }
 
+  async deleteById(id: string){
+    let res = await this.getById(id)
+    try {
+      await this.client
+        .db(this.dbName)
+        .collection(this.collection)
+        .deleteOne({ 'id': id });
+        return res
+    } catch (e) {
+      console.log(e);
+    }
+    return null
+  }
+
   async getManyById(ids: string[]) {
     const res = await this.client
       .db(this.dbName)
       .collection(this.collection)
-      .find({ '@id': { $in: ids } })
+      .find({ 'id': { $in: ids } })
       .toArray();
     return this.removeIds(res);
   }
@@ -161,10 +175,10 @@ export class DBService {
 
   // upsert by @id or referenceId
   async upsert(obj) {
-    const id = obj['@id'];
+    const id = obj['id'];
     const referenceId = obj['referenceId'];
 
-    const searchParams: any[] = [{ '@id': id }];
+    const searchParams: any[] = [{ 'id': id }];
     if (referenceId) {
       searchParams.push({ referenceId: referenceId });
     }
@@ -207,8 +221,8 @@ export class DBService {
 
   // insert, even if duplicate
   async insert(obj) {
-    if (obj['@id'].length !== 32 || obj['@id'].substr(0, 3) !== 'a51') {
-      this.log.error(`@id of '${obj['@id']}' is invalid`);
+    if (obj['id'].length !== 32 || obj['id'].substr(0, 3) !== 'a51') {
+      this.log.error(`id of '${obj['id']}' is invalid`);
       return null;
     }
     const timestamp = new Date();
@@ -267,7 +281,7 @@ export class DBService {
         .collection(this.collection)
         .findOne({
           $and: [
-            { $where: "this['@id'] == this.owned_by" },
+            { $where: "this['id'] == this.owned_by" },
             { '@type': 'Agent' },
           ],
         });

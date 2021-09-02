@@ -11,4 +11,4 @@ export let classes: string;
   alt="{alt}"
   width="{width}"
   height="{height}"
-  class="{classes}" />
+  class={classes} />
