@@ -65,6 +65,20 @@ objects:
               env:
                 - name: HOST
                   value: ${HOST}
+                - name: SERVER_PORT
+                  value: ${SERVER_PORT}
+                - name: DBHOST
+                  value: ${DBHOST}
+                - name: DBPORT
+                  value: ${DBPORT}
+                - name: DBPASSWORD
+                  value: ${DBPORT}
+                - name: DBUSER
+                  value: ${DBUSER}
+                - name: DBAUTHSOURCE
+                  value: ${DBAUTHSOURCE}
+                - name: DBNAME
+                  value: ${DBNAME}
               resources:
                 requests:
                   cpu: "50m"

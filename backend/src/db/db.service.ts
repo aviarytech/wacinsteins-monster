@@ -13,11 +13,11 @@ export class DBService {
 
   constructor(private log: Logger, private config: ConfigService) {
     const connectOptions = {
-      // authSource: this.config.get('DBAUTHSOURCE'),
-      // auth: {
-      //   user: this.config.get('DBUSER'),
-      //   password: this.config.get('DBPASSWORD'),
-      // },
+      authSource: this.config.get('DBAUTHSOURCE'),
+      auth: {
+        user: this.config.get('DBUSER'),
+        password: this.config.get('DBPASSWORD'),
+      },
       reconnectTries: 15,
       reconnectInterval: 1000,
       connectTimeoutMS: 60000,
