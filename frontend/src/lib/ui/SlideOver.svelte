@@ -3,7 +3,7 @@
 import { fly } from "svelte/transition";
 import { quintOut } from "svelte/easing";
 
-import { slideOverContent, slidePreviewOverContent } from "../stores/ui";
+import { slideOverContent, slidePreviewOverContent } from "../../stores/ui";
 
 
 const closeSlideOver = () => {

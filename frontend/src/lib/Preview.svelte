@@ -1,7 +1,7 @@
 <script lang="ts">
 export let data:object
 //components
-import Button from './Button.svelte'
+import Button from './ui/Button.svelte'
 //api
 import { postNewPresentationRequest } from "../api/presentationAxios";
 // interfaces

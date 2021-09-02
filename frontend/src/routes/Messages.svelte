@@ -3,9 +3,9 @@
 
 <script lang="ts">
 //components import
-import DataTable from "../lib/DataTable.svelte";
-import Text from '../lib/Text.svelte'
-import Image from "../lib/Image.svelte";
+import DataTable from "../lib/table-elements/DataTable.svelte";
+import Text from '../lib/table-elements/Text.svelte'
+import Image from "../lib/table-elements/Image.svelte";
 import Messenger from "../lib/Messenger.svelte";
 //api
 import { getContacts } from "../api/contactsAxios";

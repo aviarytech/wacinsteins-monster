@@ -17,7 +17,7 @@ import { Router, Link, useLocation } from "svelte-navigator";
 import { Routes } from "../stores/routes";
 // stores
 import { mobileSidebarClose } from "../stores/ui";
-import Image from "./Image.svelte";
+import Image from "./table-elements/Image.svelte";
 // const location = useLocation();
 // let currentLocation;
 // location.subscribe((l) => {

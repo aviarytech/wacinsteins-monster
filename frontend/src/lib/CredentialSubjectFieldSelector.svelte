@@ -1,7 +1,7 @@
 <script lang="ts">
 import { camel2Title } from "../utils/camel2Title";
 
-import Tag from "../lib/Tag.svelte";
+import Tag from "./ui/Tag.svelte";
 
 export let credentialSubject: object;
 export let selected: string[];

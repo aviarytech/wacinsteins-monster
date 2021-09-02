@@ -1,5 +1,5 @@
 <script>
-import Image from "./Image.svelte";
+import Image from "./table-elements/Image.svelte";
 
   export let message;
   const messageClass = message.from === message.from ? 'sent' : 'received';

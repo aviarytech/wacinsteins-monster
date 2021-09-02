@@ -1,13 +1,15 @@
 <script lang="ts">
+//component
 import CredentialDetailView from "../lib/CredentialDetailView.svelte";
-import DataTable from "../lib/DataTable.svelte";
-
+import DataTable from "../lib/table-elements/DataTable.svelte";
+import CredentialSubjectFieldSelector from "../lib/CredentialSubjectFieldSelector.svelte";
+import Text from "../lib/table-elements/Text.svelte";
+import ComponentList from "../lib/table-elements/ComponentList.svelte";
+import Button from "../lib/ui/Button.svelte";
+//stores
 import { credentials } from "../stores/credentials";
 import { slideOverContent } from "../stores/ui";
-import CredentialSubjectFieldSelector from "../lib/CredentialSubjectFieldSelector.svelte";
-import Text from "../lib/Text.svelte";
-import ComponentList from "../lib/ComponentList.svelte";
-import Button from "../lib/Button.svelte";
+
 
 const openCredential = (credentialId: string) => {
   const cred = $credentials.find((c) => c["@id"] === credentialId);

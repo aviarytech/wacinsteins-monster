@@ -2,7 +2,9 @@
 </style>
 
 <script lang="ts">
-import Tag from "../lib/Tag.svelte";
+import Tag from "../lib/ui/Tag.svelte";
 </script>
 
-<template> <Tag text="test" /> </template>
+<template> 
+  <Tag text="Welcome to Wacistein monster" /> 
+</template>

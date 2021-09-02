@@ -1,9 +1,9 @@
 <script lang="ts">
-import DataTable from "../lib/DataTable.svelte";
-import Text from "../lib/Text.svelte";
-import ComponentList from "../lib/ComponentList.svelte";
-import Button from "../lib/Button.svelte";
-import Image from "../lib/Image.svelte";
+import DataTable from "../lib/table-elements/DataTable.svelte";
+import Text from "../lib/table-elements/Text.svelte";
+import ComponentList from "../lib/table-elements/ComponentList.svelte";
+import Button from "../lib/ui/Button.svelte";
+import Image from "../lib/table-elements/Image.svelte";
 
 import { onMount } from "svelte";
 

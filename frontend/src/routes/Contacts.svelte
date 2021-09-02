@@ -3,12 +3,12 @@
 
 <script lang="ts">
 //component imports
-import Button from "../lib/Button.svelte";
+import Button from "../lib/ui/Button.svelte";
 import NewContacts from "../lib/NewContacts.svelte";
-import DataTable from "../lib/DataTable.svelte";
-import Text from '../lib/Text.svelte'
-import Image from "../lib/Image.svelte";
-import ComponentList from "../lib/ComponentList.svelte";
+import DataTable from "../lib/table-elements/DataTable.svelte";
+import Text from '../lib/table-elements/Text.svelte'
+import Image from "../lib/table-elements/Image.svelte";
+import ComponentList from "../lib/table-elements/ComponentList.svelte";
 import ContactProfile from "../lib/ContactProfile.svelte";
 // stores
 import { slideOverContent } from "../stores/ui";

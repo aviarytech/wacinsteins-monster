@@ -1,7 +1,7 @@
 <script lang="ts">
-import { camel2Title } from "../utils/camel2Title";
-import ComponentList from "./ComponentList.svelte";
-import Tag from "./Tag.svelte";
+//components
+import ComponentList from "./table-elements/ComponentList.svelte";
+import Tag from "./ui/Tag.svelte";
 
 export let presentation;
 
