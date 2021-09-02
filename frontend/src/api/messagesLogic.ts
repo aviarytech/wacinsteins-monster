@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl: string | boolean = import.meta.env.VITE_API_URL;
+const baseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : `https://api.${window.location.hostname}`
 
 export async function getCurrentConversation(
   payload:Object,                                           

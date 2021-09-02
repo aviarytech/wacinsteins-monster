@@ -1,8 +1,7 @@
 import axios from "axios";
 import { slideOverContent } from "../stores/ui";
 
-const baseUrl: string | boolean = import.meta.env.VITE_API_URL;
-baseUrl ? baseUrl : `https://api.${window.location.hostname}`
+const baseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : `https://api.${window.location.hostname}`
 
 export async function postNewContact(
   payload: Object,
