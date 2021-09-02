@@ -1,6 +1,7 @@
 import axios from "axios";
 import type { PostPresentationPayload } from "src/interfaces";
-const baseUrl: string | boolean = import.meta.env.VITE_API_URL;
+const baseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : `https://api.${window.location.hostname}`
+
 export async function getPresentations(
   endpoint: string = `${baseUrl}/presentations/requests`
 ): Promise<any> {
