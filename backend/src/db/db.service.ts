@@ -8,10 +8,11 @@ export class DBService {
   private client: MongoClient;
   public ready: Promise<boolean>;
   private promiseRetryOptions: object;
-  public readonly collection = 'docs';
+  public collection: string;
   public readonly metaCollection = 'meta';
 
   constructor(private log: Logger, private config: ConfigService) {
+    this.collection = this.config.get('NAME');
     const connectOptions = {
       authSource: this.config.get('DBAUTHSOURCE'),
       auth: {

@@ -5,4 +5,5 @@ DBHOST=mongo
 DBPORT=27017
 DBPASSWORD=passwordaDcjidsada
 DBUSER=monGOD
-DBNAME=aviary-one
+DBNAME=waci
+DBAUTHSOURCE=waci

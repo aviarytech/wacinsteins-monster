@@ -72,7 +72,7 @@ objects:
                 - name: DBPORT
                   value: ${DBPORT}
                 - name: DBPASSWORD
-                  value: ${DBPORT}
+                  value: ${DBPASSWORD}
                 - name: DBUSER
                   value: ${DBUSER}
                 - name: DBAUTHSOURCE
@@ -132,12 +132,9 @@ parameters:
   - name: DBPASSWORD
     displayName: mongo password
     required: true
-  # - name: DBAUTHSOURCE
-  #   displayName: mongo auth source
-  #   required: true
-  # - name: DBPASSWORD
-  #   displayName: mongo admin password
-  #   required: true
+  - name: DBAUTHSOURCE
+    displayName: mongo auth source
+    required: true
   - name: DBNAME
     required: true
   - name: SERVER_PORT
