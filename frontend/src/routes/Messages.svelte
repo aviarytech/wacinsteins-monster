@@ -3,7 +3,6 @@
 
 <script lang="ts">
 //components import
-import Button from "../lib/Button.svelte";
 import DataTable from "../lib/DataTable.svelte";
 import Text from '../lib/Text.svelte'
 import Image from "../lib/Image.svelte";
@@ -12,6 +11,7 @@ import Messenger from "../lib/Messenger.svelte";
 import { getContacts } from "../api/contactsAxios";
 //stores
 import { availableContacts } from "../stores/contacts";
+import { selectedUser } from "../stores/messages";
 import { sha256 } from "../utils/sha256";
 //ecma imports
 import { onMount } from "svelte";
@@ -19,12 +19,20 @@ import { onMount } from "svelte";
 onMount(async () => {
   const res = await getContacts();
   //console.log(res);
-  if (res.length > 0) {
-    availableContacts.set(res);
+
+  //WARN: future point of failure
+  console.log($selectedUser)
+  if (res.length > 0 && !$selectedUser) {
+    selectedUser.set(res[0]['did'])
+
   }
+  availableContacts.set(res);
+
 });
-function openConversation(id) {
-    console.log('click', id)
+function openConversation(id:string) {
+    selectedUser.set(id)
+    //console.log($selectedUser)
+    
   }
 </script>
 
@@ -36,7 +44,7 @@ function openConversation(id) {
         <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last">
           <!-- Start main area-->
           <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8">
-            <Messenger/>
+            <Messenger />
           </div>
           <!-- End main area -->
         </main>
@@ -44,19 +52,20 @@ function openConversation(id) {
           <!-- Start secondary column (hidden on smaller screens) -->
           <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8 overflow-y-auto">
           <DataTable
-            headers={['SHA256', 'Domain', '']}
+            headers={['SHA256', 'Domain']}
             data={$availableContacts.map((p) => {
               return [
                 {
                   component: Image,
                   src: `http://tinygraphs.com/labs/isogrids/hexa16/${sha256(p['id'])}?theme=seascape&numcolors=4`,
-                  alt: p['dids'],
+                  alt: p['did'],
                   width: 32,
                   height: 32,
+                  callback: () => openConversation(p['did'])
                 },
                 {
                   component: Text,
-                  text: p['dids'],
+                  text: p['did'],
                   classes:'truncate'
                 },
               ];

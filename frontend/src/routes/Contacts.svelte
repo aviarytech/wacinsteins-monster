@@ -8,18 +8,28 @@ import NewContacts from "../lib/NewContacts.svelte";
 import DataTable from "../lib/DataTable.svelte";
 import Text from '../lib/Text.svelte'
 import Image from "../lib/Image.svelte";
-
+import ComponentList from "../lib/ComponentList.svelte";
+import ContactProfile from "../lib/ContactProfile.svelte";
 // stores
 import { slideOverContent } from "../stores/ui";
+import { selectedUser } from "../stores/messages";
+import { availableContacts } from "../stores/contacts";
 //ecma imports
 import { onMount } from "svelte";
 import swal from "sweetalert";
+import { useNavigate } from "svelte-navigator";
 //api
 import { getContacts,deleteContact } from "../api/contactsAxios";
-//stores
-import { availableContacts } from "../stores/contacts";
+//utils
 import { sha256 } from "../utils/sha256";
 
+onMount(async () => {
+  const res = await getContacts();
+  //console.log(res);
+  if (res.length > 0) {
+    availableContacts.set(res);
+  }
+});
 let newContactWindowDisplayed:boolean = false
 function newContactCreation() {
   slideOverContent.set({
@@ -32,34 +42,46 @@ function newContactCreation() {
   newContactWindowDisplayed = !newContactWindowDisplayed
 }
 
-async function deleteContactApi(id) {
-    swal({
-      title: "Are you sure?",
-      text: "All previous data will be kept should you add the organization again.",
-      icon: "warning",
-      buttons: [true,true],
-      dangerMode: true,
-    })
-    .then((value) => {
-      if(value){
-        deleteContact(id)     
-        window.location.reload()
-      }
-    })
-    
-  }
+//view button
+let rightPreviewWindowDisplayed:boolean = false
+function viewContactProfile(id:string) {
+  console.log('open click', id)
+  slideOverContent.set({
+    title: `Contact Profile or ${id}`,
+    component: ContactProfile,
+  });
+  if (rightPreviewWindowDisplayed){
+    slideOverContent.set(null)
 
-onMount(async () => {
-  const res = await getContacts();
-  //console.log(res);
-  if (res.length > 0) {
-    availableContacts.set(res);
   }
-});
-function openConversation(id) {
-    console.log('open click', id)
-  }
-//if works close the slider and display a message
+}
+
+//delete Button
+async function deleteContactApi(id) {
+  swal({
+    title: "Are you sure?",
+    text: "All previous data will be kept should you add the organization again.",
+    icon: "warning",
+    buttons: [true,true],
+    dangerMode: true,
+  })
+  .then((value) => {
+    if(value){
+      deleteContact(id)     
+      window.location.reload()
+    }
+  })
+}
+
+//conversation button
+const navigate = useNavigate();
+function openConversation(id:string) {
+  console.log('open click', id)
+  selectedUser.set(id)
+  navigate('/messages')
+}
+
+
 </script>
 
 <template>
@@ -68,40 +90,44 @@ function openConversation(id) {
   </div>
   <!-- TODO: once the user selects a conversation the menu shoudl split in 3-->
   <DataTable
-    headers={['SHA256', 'Domain', 'ID', '', '']}
+    headers={['SHA256', 'Domain', 'ID', '']}
     data={$availableContacts.map((p) => {
       return [
         {
           component: Image,
           src: `http://tinygraphs.com/labs/isogrids/hexa16/${sha256(p['id'])}?theme=seascape&numcolors=4`,
-          alt: p['dids'],
+          alt: p['did'],
           width: 32,
           height: 32,
           dataTableSpecialClass:'',
         },
         {
           component: Text,
-          text: p['dids'],
+          text: p['did'],
         },
         {
           component: Text,
           text: p['id']
         },
-
         {
-          component: Button,
-          label: 'View',
-          callback: () => {
-            openConversation(p['id']);
-          },
-        },
-        {
-          component: Button,
-          label: 'Delete',
-          callback: () => {
-            deleteContactApi(p['id']);
-          },
-          dataTableSpecialClass: ""
+          component: ComponentList,
+          items: [
+            {
+              component: Button,
+              callback: () => viewContactProfile(p['did']),
+              label: 'View',
+            },
+            {
+              component: Button,
+              callback: () => deleteContactApi(p['did']),
+              label: 'Delete',
+            },
+            {
+              component: Button,
+              callback: () => openConversation(p['did']),
+              label: 'Conversation',
+            },
+          ],
         },
       ];
     })} />

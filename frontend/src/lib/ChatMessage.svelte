@@ -2,9 +2,8 @@
 import Image from "./Image.svelte";
 
   export let message;
-  export let sender;
-  const messageClass = message.who === sender ? 'sent' : 'received';
-  const avatar = `https://avatars.dicebear.com/api/initials/${message.who}.svg`;
+  const messageClass = message.from === message.from ? 'sent' : 'received';
+  const avatar = `https://avatars.dicebear.com/api/initials/${message.from}.svg`;
   const ts = new Date(message.when);
 </script>
 
