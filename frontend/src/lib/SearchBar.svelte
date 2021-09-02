@@ -1,5 +1,5 @@
 <script lant="ts">
-  import { user } from "../stores/user";
+//WARN: is this still required?
 </script>
 
 <template>

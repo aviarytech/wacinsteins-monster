@@ -4,7 +4,7 @@
 <script lang="ts">
 //components
 import CredentialSubjectFieldSelector from "./CredentialSubjectFieldSelector.svelte";
-import Button from "../lib/Button.svelte";
+import Button from "../lib/ui/Button.svelte";
 import Preview from "./Preview.svelte";
 //stores
 import { credentials } from "../stores/credentials";

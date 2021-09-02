@@ -10,7 +10,7 @@
 import Sidebar from "./lib/Sidebar.svelte";
 //import SearchBar from "./lib/SearchBar.svelte";
 import Profile from "./lib/Profile.svelte";
-import SlideOver from "./lib/SlideOver.svelte";
+import SlideOver from "./lib/ui/SlideOver.svelte";
 
 import { slideOverContent } from "./stores/ui";
 import Router from "./lib/Router.svelte";

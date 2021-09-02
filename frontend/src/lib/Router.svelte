@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Loading from "../routes/Loading.svelte";
+  //routes
   import Login from "../routes/Login.svelte";
   import Home from "../routes/Home.svelte";
   import Credentials from "../routes/Credentials.svelte";
@@ -8,6 +8,9 @@
   import Contacts from "../routes/Contacts.svelte"
   import Identities from "../routes/Identities.svelte";
   import Logout from "../routes/Logout.svelte";
+  //components
+  import Loading from "./ui/Loading.svelte"
+  
 
   import { Router, Route } from "svelte-navigator";
   import AuthGuard from "./AuthGuard.svelte";
