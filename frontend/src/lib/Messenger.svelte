@@ -48,18 +48,19 @@ const onKeyPress = e => {
 <template>
   <h2 class="block text-sm font-medium text-gray-700 content-center">Conversation with {$selectedUser}</h2>
 
-  <div class='flex absolute bottom-1 space-x-4 '>
+  <div class='flex absolute bottom-1 space-x-4 w-full'>
     <img
-      class="h-8 w-8 rounded-full inline-block mt-1.5"
+      class="h-8 w-8 rounded-full inline-block "
       src="{`http://tinygraphs.com/labs/isogrids/hexa16/${sha256(
         $user.email
       )}?theme=seascape&numcolors=4`}"
       alt={$user.email} />
-    <div class="mt-1">
-      <input 
+
+    <div class="flex-grow max-w-screen-md">
+    <input 
       bind:value={chatMsg}
       on:keypress={onKeyPress}
-      type="text" name="msg-chat" id="msg-chat" class="inline-block shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full sm:text-sm border-gray-300 rounded-md min-w-max" placeholder="Say hello!">
+      type="text" name="msg-chat" id="msg-chat" class="fill-current shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full sm:text-sm border-gray-300 rounded-md min-w-max" placeholder="Say hello!">
     </div>
 
   </div>
