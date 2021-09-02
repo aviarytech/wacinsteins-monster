@@ -12,7 +12,7 @@ export class DBService {
   public readonly metaCollection = 'meta';
 
   constructor(private log: Logger, private config: ConfigService) {
-    this.collection = this.config.get('NAME');
+    this.collection = this.config.get('HOST');
     const connectOptions = {
       authSource: this.config.get('DBAUTHSOURCE'),
       auth: {
