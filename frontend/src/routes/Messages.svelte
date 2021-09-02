@@ -47,7 +47,7 @@ function openConversation(id:string) {
           <!-- Start secondary column (hidden on smaller screens) -->
           <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8 overflow-y-auto">
           <DataTable
-            headers={['SHA256', 'Domain','']}
+            headers={['SHA256', 'Domain']}
             data={$availableContacts.map((p) => {
               return [
                 {
