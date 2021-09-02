@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { IDIDDocument } from '@aviarytech/did-core';
+import { DIDDocument, IDIDDocument } from '@aviarytech/did-core';
+import { JsonWebKey } from '@aviarytech/crypto-core';
 import { Key } from '../kms/entities/key';
-import { JsonWebKey } from '@transmute/json-web-signature';
-import { X25519KeyPair } from '@transmute/x25519-key-pair';
 import { randomBytes } from 'crypto';
 import { encode } from 'b58';
 import { KMSService } from '../kms/kms.service';
-import { DBService } from 'src/db/db.service';
+import { DBService } from '../db/db.service';
+import { generateX25519 } from '../kms/x25519';
 
 @Injectable()
 export class DIDWebService {
@@ -44,14 +44,11 @@ export class DIDWebService {
   async getKey0(): Promise<Key> {
     let key0 = await this.kms.getKey(`${this.did}#key-0`);
     if (!key0) {
-      const keyPair = await JsonWebKey.generate({
-        kty: 'OKP',
-        crv: 'Ed25519',
-      });
-      const { publicKeyJwk, privateKeyJwk } = await keyPair.export({
+      const keyPair = await generateX25519();
+      const { publicKeyJwk, privateKeyJwk } = (await keyPair.export({
         type: 'JsonWebKey2020',
         privateKey: true,
-      });
+      })) as JsonWebKey;
       key0 = await this.kms.createKey({
         id: `${this.did}#key-0`,
         controller: this.did,
@@ -66,11 +63,7 @@ export class DIDWebService {
   async getKey1(): Promise<Key> {
     let key1 = await this.kms.getKey(`${this.did}#key-1`);
     if (!key1) {
-      const keyPair = await X25519KeyPair.generate({
-        secureRandom: () => {
-          return randomBytes(32);
-        },
-      });
+      const keyPair = await generateX25519();
 
       key1 = await this.kms.createKey({
         id: `${this.did}#key-1`,
@@ -113,9 +106,9 @@ export class DIDWebService {
     return keyg2 as Key;
   }
 
-  async getWebDIDDoc(): Promise<IDIDDocument> {
+  async getWebDIDDoc(): Promise<object> {
     const keys = await this.kms.getAllKeys();
-    return {
+    const didDoc = new DIDDocument({
       '@context': [
         'https://www.w3.org/ns/did/v1',
         'https://w3id.org/security/suites/jws-2020/v1',
@@ -146,6 +139,7 @@ export class DIDWebService {
           routingKeys: [this.keys[1].id],
         },
       ],
-    };
+    });
+    return didDoc.document;
   }
 }

@@ -8,16 +8,17 @@ export class DBService {
   private client: MongoClient;
   public ready: Promise<boolean>;
   private promiseRetryOptions: object;
-  public readonly collection = 'docs';
+  public collection: string;
   public readonly metaCollection = 'meta';
 
   constructor(private log: Logger, private config: ConfigService) {
+    this.collection = this.config.get('HOST');
     const connectOptions = {
-      // authSource: this.config.get('DBAUTHSOURCE'),
-      // auth: {
-      //   user: this.config.get('DBUSER'),
-      //   password: this.config.get('DBPASSWORD'),
-      // },
+      authSource: this.config.get('DBAUTHSOURCE'),
+      auth: {
+        user: this.config.get('DBUSER'),
+        password: this.config.get('DBPASSWORD'),
+      },
       reconnectTries: 15,
       reconnectInterval: 1000,
       connectTimeoutMS: 60000,
@@ -120,7 +121,6 @@ export class DBService {
   }
 
   async deleteById(id: string){
-    console.log("deleting", id)
     let res = await this.getById(id)
     try {
       await this.client
@@ -240,12 +240,12 @@ export class DBService {
 
   async create(obj) {
     try {
-      const currentContact = await this.client
+      const currentObj = await this.client
         .db(this.dbName)
         .collection(this.collection)
         .findOne({ id: obj.id });
-      if (currentContact) {
-        throw new Error('Contact already exists');
+      if (currentObj) {
+        throw new Error(`Document with id: ${obj.id} already exists`);
       }
 
       const timestamp = new Date();

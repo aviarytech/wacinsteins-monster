@@ -1,17 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { DIDResolverService } from '../dids/didresolver.service';
 
-import { DBService } from '../db/db.service';
-import { IDIDDocument } from '@aviarytech/did-core';
-import { DIDComm } from '@aviarytech/didcomm-core';
 import {
-  IDIDCommEncryptedMessage,
-  IDIDCommPlaintextPayload,
-} from '@aviarytech/didcomm-core/dist/interfaces';
-import { JsonWebKey } from '@transmute/json-web-signature';
-import { JsonWebKey2020 } from '@transmute/web-crypto-key-pair';
-import { X25519KeyAgreementKey2019 } from '@transmute/x25519-key-pair';
+  DIDComm,
+  DIDCOMM_MESSAGE_MEDIA_TYPE,
+  IDIDCommMessage,
+} from '@aviarytech/didcomm-messaging';
 import { KMSService } from '../kms/kms.service';
+import { DefaultTrustPingResponseMessageHandler } from '@aviarytech/didcomm-protocols.trust-ping';
+import { TrustPingMessageHandler } from './handlers/trust-ping.handler';
+import { ContactsService } from '../contacts/contacts.service';
+import { IJWE } from '@aviarytech/crypto-core';
 
 @Injectable()
 export class DIDCommService {
@@ -19,46 +18,48 @@ export class DIDCommService {
   constructor(
     private didResolver: DIDResolverService,
     private kms: KMSService,
+    private contactsService: ContactsService,
   ) {
-    this.didcomm = new DIDComm();
+    this.didcomm = new DIDComm(
+      [
+        new TrustPingMessageHandler(async (did) => {
+          const exists = await this.contactsService.findByProps({ did: did });
+          if (!exists) {
+            this.contactsService.create({ did });
+          }
+        }),
+        new DefaultTrustPingResponseMessageHandler(),
+        {
+          type: 'BasicMessage',
+          handle: async (m) => {
+            console.log(m);
+            return true;
+          },
+        },
+      ],
+      this.didResolver,
+      this.kms,
+    );
   }
 
-  async createMessage(
-    didDoc: IDIDDocument,
-    msg: IDIDCommPlaintextPayload,
-  ): Promise<IDIDCommEncryptedMessage> {
+  async sendMessage(toDid: string, msg: IDIDCommMessage): Promise<boolean> {
     try {
-      return await this.didcomm.createMessage(didDoc, msg);
+      return await this.didcomm.sendMessage(toDid, msg);
     } catch (e) {
-      throw e;
-    }
-  }
-
-  async sendMessage(
-    didDoc: IDIDDocument,
-    msg: IDIDCommEncryptedMessage,
-  ): Promise<boolean> {
-    try {
-      return await this.didcomm.sendMessage(didDoc, msg);
-    } catch (e) {
-      console.log(e);
       return false;
     }
   }
 
-  async unpackMessage(
-    mediaType: string,
-    msg: IDIDCommEncryptedMessage,
-  ): Promise<IDIDCommPlaintextPayload> {
-    console.log(msg.recipients[0].header);
-    const keyId = DIDComm.getKeyIdFromMessage(msg);
-    const key = await this.kms.getKey(keyId);
-    return await this.didcomm.unpackMessage(
-      mediaType,
-      key as X25519KeyAgreementKey2019,
-      msg,
-    );
+  async receiveMessage(msg: IJWE): Promise<boolean> {
+    try {
+      const resp = await this.didcomm.receiveMessage(
+        msg,
+        DIDCOMM_MESSAGE_MEDIA_TYPE.ENCRYPTED,
+      );
+      return resp;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }
-
-  // handleMessage(message: IDIDCommPlaintextMessage) {}
 }

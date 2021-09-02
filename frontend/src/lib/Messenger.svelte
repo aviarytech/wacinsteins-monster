@@ -28,6 +28,7 @@ async function newMsg() {
       when: new Date()
       }
     chatMsg=''
+
     //console.log(fullPayload)
     //WARN: works but I don't like this because I want real time
 
@@ -35,6 +36,7 @@ async function newMsg() {
     msgUSerBackend.set(await getCurrentConversation($selectedUser))
     
     console.log("localMSg",$msgUSerBackend)
+
   }
 }
 const onKeyPress = e => {

@@ -48,6 +48,6 @@ export class ContactsController {
   async delete(
     @Param('id') id: string,
   ) {
-  return this.contactsService.delete(id);
+  return await this.contactsService.delete(id);
   }
 }

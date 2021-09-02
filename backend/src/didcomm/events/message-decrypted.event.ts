@@ -1,8 +1,8 @@
-import { IDIDCommPlaintextPayload } from '@aviarytech/didcomm-core/dist/interfaces';
+import { IDIDCommPayload } from '@aviarytech/didcomm-core/dist/interfaces';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 
 export class MessageDecryptedEvent {
-  constructor(public readonly message: IDIDCommPlaintextPayload) {}
+  constructor(public readonly message: IDIDCommPayload) {}
 }
 
 @EventsHandler(MessageDecryptedEvent)

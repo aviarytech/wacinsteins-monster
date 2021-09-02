@@ -27,11 +27,19 @@ export class ContactsService {
     }
   }
 
+  async findByProps(props: object) {
+    return await this.db.getByProps({ '@type': 'Contact', ...props });
+  }
+
   async findAll() {
     return await this.db.getAllByType('Contact');
   }
 
   async findOne(id: string) {
+    return await this.db.getById(id);
+  }
+
+  async findOneByProp(id: string) {
     return await this.db.getById(id);
   }
 

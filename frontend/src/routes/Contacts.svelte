@@ -52,6 +52,7 @@ function viewContactProfile(id:string) {
   });
   if (rightPreviewWindowDisplayed){
     slideOverContent.set(null)
+
   }
 }
 
@@ -59,7 +60,7 @@ function viewContactProfile(id:string) {
 async function deleteContactApi(id) {
   swal({
     title: "Are you sure?",
-    text: "Once deleted, you will not be able to recover this imaginary file!",
+    text: "All previous data will be kept should you add the organization again.",
     icon: "warning",
     buttons: [true,true],
     dangerMode: true,
@@ -81,7 +82,6 @@ function openConversation(id:string) {
 }
 
 
-//if works close the slider and display a message
 </script>
 
 <template>

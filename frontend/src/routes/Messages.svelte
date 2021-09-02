@@ -19,10 +19,12 @@ import { onMount } from "svelte";
 onMount(async () => {
   const res = await getContacts();
   //console.log(res);
+
   //WARN: future point of failure
   console.log($selectedUser)
   if (res.length > 0 && !$selectedUser) {
     selectedUser.set(res[0]['did'])
+
   }
   availableContacts.set(res);
 

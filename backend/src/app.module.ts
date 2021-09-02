@@ -6,9 +6,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DBService } from './db/db.service';
 import { CommandHandlers } from './didcomm/commands';
-import { DIDCommService } from './didcomm/didcomm.service';
 import { EventHandlers } from './didcomm/events';
-import { HandleMessageSaga } from './didcomm/handle-message.saga';
+import { DIDCommModule } from './didcomm/didcomm.module';
 import { DIDResolverService } from './dids/didresolver.service';
 import { DIDWebService } from './didweb/didweb.service';
 import { DocumentLoaderService } from './documentLoader/documentLoader.service';
@@ -28,20 +27,19 @@ import { MessagesApiModule } from './messages-api/messages-api.module';
     CredentialsModule,
     ContactsModule,
     MessagesApiModule,
+    DIDCommModule,
   ],
   controllers: [AppController, AdminController],
   providers: [
     AppService,
     DIDWebService,
     DBService,
-    DIDCommService,
     Logger,
     DIDResolverService,
     DocumentLoaderService,
     KMSService,
     ...CommandHandlers,
     ...EventHandlers,
-    HandleMessageSaga,
   ],
 })
 export class AppModule {}
