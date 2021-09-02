@@ -226,12 +226,12 @@ export class DBService {
 
   async create(obj) {
     try {
-      const currentContact = await this.client
+      const currentObj = await this.client
         .db(this.dbName)
         .collection(this.collection)
         .findOne({ id: obj.id });
-      if (currentContact) {
-        throw new Error('Contact already exists');
+      if (currentObj) {
+        throw new Error(`Document with id: ${obj.id} already exists`);
       }
 
       const timestamp = new Date();
