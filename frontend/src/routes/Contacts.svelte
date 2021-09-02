@@ -9,6 +9,7 @@ import DataTable from "../lib/DataTable.svelte";
 import Text from '../lib/Text.svelte'
 import Image from "../lib/Image.svelte";
 import ComponentList from "../lib/ComponentList.svelte";
+import ContactProfile from "../lib/ContactProfile.svelte";
 
 // stores
 import { slideOverContent } from "../stores/ui";
@@ -52,14 +53,27 @@ async function deleteContactApi(id) {
 
 onMount(async () => {
   const res = await getContacts();
-  console.log(res);
+  //console.log(res);
   if (res.length > 0) {
     availableContacts.set(res);
   }
 });
-function openConversation(id) {
+function openConversation(id:string) {
     console.log('open click', id)
   }
+
+let rightPreviewWindowDisplayed:boolean = false
+function viewContactProfile(id:string) {
+  console.log('open click', id)
+  slideOverContent.set({
+    title: `Contact Profile or ${id}`,
+    component: ContactProfile,
+  });
+  if (rightPreviewWindowDisplayed){
+    slideOverContent.set(null)
+  }
+}
+
 //if works close the slider and display a message
 </script>
 
@@ -93,13 +107,18 @@ function openConversation(id) {
           items: [
             {
               component: Button,
-              callback: () => openConversation(p['@id']),
+              callback: () => viewContactProfile(p['did']),
               label: 'View',
             },
             {
               component: Button,
-              callback: () => deleteContactApi(p['id']),
+              callback: () => deleteContactApi(p['did']),
               label: 'Delete',
+            },
+            {
+              component: Button,
+              callback: () => openConversation(p['did']),
+              label: 'Conversation',
             },
           ],
         },
