@@ -9,7 +9,7 @@ export async function getCurrentConversation(
   try {
     const msgResponse = await axios.get(`${endpoint}/conversation/${payload}`);
     if (msgResponse.status == 200) {
-      console.log(msgResponse.data)
+      //console.log(msgResponse.data)
       return msgResponse.data
     }
     return [];
@@ -25,7 +25,7 @@ export async function postNewMsg2Conversation(
   try {
     const msgResponse = await axios.post(endpoint,payload);
     if (msgResponse.status == 200) {
-      console.log(msgResponse.data)
+      //console.log(msgResponse.data)
       return msgResponse.data
     }
     return [];

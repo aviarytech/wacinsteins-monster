@@ -28,9 +28,10 @@ async function newMsg() {
       when: new Date()
       }
     chatMsg=''
-    console.log(fullPayload)
+    //console.log(fullPayload)
+    //WARN: works but I don't like this because I want real time
+
     await postNewMsg2Conversation(fullPayload)
-    //works but I don't like this because I want real time
     msgUSerBackend.set(await getCurrentConversation($selectedUser))
     
     console.log("localMSg",$msgUSerBackend)
