@@ -12,6 +12,8 @@ import Text from "../lib/table-elements/Text.svelte";
 import Button from "../lib/ui/Button.svelte";
 import ComponentList from "../lib/table-elements/ComponentList.svelte"
 import Tag from "../lib/ui/Tag.svelte";
+import QRcode from "../lib/QRcode.svelte";
+
 //js imports
 import { onMount } from "svelte";
 //stores
@@ -19,7 +21,13 @@ import { presentations } from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
 ;
 
-
+onMount(async () => {
+  const res = await getPresentations();
+  console.log(res);
+  if (res.length > 0) {
+    presentations.set(res);
+  }
+})
 const openPresentationRequest = (presentationId) => {
   const singleRow = $presentations.find((c) => c["@id"] === presentationId);
   slideOverContent.set({
@@ -41,13 +49,16 @@ const newPresentationRequest = () => {
   }
   rightPreviewWindowDisplayed = !rightPreviewWindowDisplayed
 };
-onMount(async () => {
-  const res = await getPresentations();
-  console.log(res);
-  if (res.length > 0) {
-    presentations.set(res);
+
+//BUG: the X to close the window doesn't show up.
+function qrCodeDisplay(id){
+  slideOverContent.set({
+    title: `QR Code for ${id}`,
+    component: QRcode,
+    presentationSubject: [],
+  });
   }
-});
+
 </script>
 
 <template>
@@ -86,12 +97,24 @@ onMount(async () => {
             ),
           },
           {
-            component: Button,
-            label: 'View',
-            callback: () => {
-              openPresentationRequest(p['@id']);
+          component: ComponentList,
+          items: [
+            {
+              component: Button,
+              label: 'View',
+              callback: () => {
+                openPresentationRequest(p['@id']);
+              },
             },
-          },
+            {
+              component: Button,
+              label: 'QR code',
+              callback: () => {
+                qrCodeDisplay(p['@id']);
+              }
+            }
+          ]
+          }
         ];
       })} />
   {/if}
