@@ -4,7 +4,7 @@
 <script lang="ts">
 //components import
 import DataTable from "../lib/DataTable.svelte";
-import Text from '../lib/Text.svelte'
+import Text from "../lib/Text.svelte";
 import Image from "../lib/Image.svelte";
 import Messenger from "../lib/Messenger.svelte";
 //api
@@ -21,19 +21,16 @@ onMount(async () => {
   //console.log(res);
 
   //WARN: future point of failure
-  console.log($selectedUser)
+  console.log($selectedUser);
   if (res.length > 0 && !$selectedUser) {
-    selectedUser.set(res[0]['did'])
-
+    selectedUser.set(res[0]["did"]);
   }
   availableContacts.set(res);
-
 });
-function openConversation(id:string) {
-    selectedUser.set(id)
-    //console.log($selectedUser)
-    
-  }
+function openConversation(id: string) {
+  selectedUser.set(id);
+  //console.log($selectedUser)
+}
 </script>
 
 <template>
@@ -41,35 +38,40 @@ function openConversation(id:string) {
     <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
     <div class="flex flex-col min-w-0 flex-1 overflow-hidden">
       <div class="flex-1 relative z-0 flex overflow-hidden">
-        <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last">
+        <main
+          class="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last">
           <!-- Start main area-->
           <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8">
             <Messenger />
           </div>
           <!-- End main area -->
         </main>
-        <aside class="hidden relative xl:order-first xl:flex xl:flex-col flex-shrink-0 w-96 border-r border-gray-200">
+        <aside
+          class="hidden relative xl:order-first xl:flex xl:flex-col flex-shrink-0 w-96 border-r border-gray-200">
           <!-- Start secondary column (hidden on smaller screens) -->
-          <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8 overflow-y-auto">
-          <DataTable
-            headers={['SHA256', 'Domain']}
-            data={$availableContacts.map((p) => {
-              return [
-                {
-                  component: Image,
-                  src: `http://tinygraphs.com/labs/isogrids/hexa16/${sha256(p['id'])}?theme=seascape&numcolors=4`,
-                  alt: p['did'],
-                  width: 32,
-                  height: 32,
-                  callback: () => openConversation(p['did'])
-                },
-                {
-                  component: Text,
-                  text: p['did'],
-                  classes:'truncate'
-                },
-              ];
-            })} />
+          <div
+            class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8 overflow-y-auto">
+            <DataTable
+              headers="{['SHA256', 'Domain']}"
+              data="{$availableContacts.map((p) => {
+                return [
+                  {
+                    component: Image,
+                    src: `https://www.tinygraphs.com/labs/isogrids/hexa16/${sha256(
+                      p['id']
+                    )}?theme=seascape&numcolors=4`,
+                    alt: p['did'],
+                    width: 32,
+                    height: 32,
+                    callback: () => openConversation(p['did']),
+                  },
+                  {
+                    component: Text,
+                    text: p['did'],
+                    classes: 'truncate',
+                  },
+                ];
+              })}" />
           </div>
           <!-- End secondary column -->
         </aside>
@@ -78,4 +80,3 @@ function openConversation(id:string) {
   </div>
 </template>
 <!-- clickable: "http://localhost:3000/" -->
-

@@ -95,7 +95,7 @@ function openConversation(id:string) {
       return [
         {
           component: Image,
-          src: `http://tinygraphs.com/labs/isogrids/hexa16/${sha256(p['id'])}?theme=seascape&numcolors=4`,
+          src: `https://www.tinygraphs.com/labs/isogrids/hexa16/${sha256(p['id'])}?theme=seascape&numcolors=4`,
           alt: p['did'],
           width: 32,
           height: 32,

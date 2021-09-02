@@ -31,7 +31,7 @@ onMount(async () => {
     {
       email: $user.email,
       id: sha256($user.email),
-      avatar: `http://tinygraphs.com/labs/isogrids/hexa16/${sha256(
+      avatar: `https://www.tinygraphs.com/labs/isogrids/hexa16/${sha256(
         $user.email
       )}?theme=seascape&numcolors=4`,
     },

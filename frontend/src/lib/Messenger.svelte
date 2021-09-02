@@ -53,7 +53,7 @@ const onKeyPress = e => {
   <div class='flex absolute bottom-1 space-x-4 '>
     <img
       class="h-8 w-8 rounded-full inline-block mt-1.5"
-      src="{`http://tinygraphs.com/labs/isogrids/hexa16/${sha256(
+      src="{`https://www.tinygraphs.com/labs/isogrids/hexa16/${sha256(
         $user.email
       )}?theme=seascape&numcolors=4`}"
       alt={$user.email} />
