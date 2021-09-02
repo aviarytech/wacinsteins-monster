@@ -25,8 +25,9 @@ onMount(async () => {
   }
 });
 function openConversation(id:string) {
-    selectedUser.set(id[0])
-    console.log($selectedUser)
+    selectedUser.set(id)
+    //console.log($selectedUser)
+    
   }
 </script>
 
