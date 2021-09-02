@@ -46,24 +46,26 @@ const onKeyPress = e => {
 </script>
 
 <template>
+  <h2 class="block text-sm font-medium text-gray-700 content-center">Conversation with {$selectedUser}</h2>
 
-  <div class=''>
-    <label for="email" class="block text-sm font-medium text-gray-700">Message</label>
-    <div class="mt-1">
-      <input 
-      bind:value={chatMsg}
-      on:keypress={onKeyPress}
-      type="text" name="msg-chat" id="msg-chat" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="...">
-    </div>
+  <div class='flex absolute bottom-1 space-x-4 '>
     <img
-      class="h-8 w-8 rounded-full"
+      class="h-8 w-8 rounded-full inline-block mt-1.5"
       src="{`http://tinygraphs.com/labs/isogrids/hexa16/${sha256(
         $user.email
       )}?theme=seascape&numcolors=4`}"
       alt={$user.email} />
+    <div class="mt-1">
+      <input 
+      bind:value={chatMsg}
+      on:keypress={onKeyPress}
+      type="text" name="msg-chat" id="msg-chat" class="inline-block shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full sm:text-sm border-gray-300 rounded-md min-w-max" placeholder="Say hello!">
+    </div>
+
   </div>
-  <!--TODO: check that the chat is showing -->
+  <!--TODO: surround the entire chat -->
   
+  <div class="inset-0 border-2 border-gray-200 border-dashed bg-gray-100 rounded-lg overflow-y-auto">
 
   {#if $msgUSerBackend}
     {#each $msgUSerBackend as message}
@@ -73,4 +75,5 @@ const onKeyPress = e => {
   <!--BUG: not working in all situations  -->
     <svelte:component this={ChatMessage} message={{from:"Aviary Tech",to:'placeholder', data:"This is the start of a new conversation", when: new Date()}}/>
   {/if}
+  </div>
 </template>
