@@ -19,10 +19,12 @@ import { onMount } from "svelte";
 onMount(async () => {
   const res = await getContacts();
   //console.log(res);
-  if (res.length > 0) {
-    availableContacts.set(res);
+  //WARN: future point of failure
+  if (res.length > 0 && !$selectedUser) {
     selectedUser.set(res[0]['did'][0])
   }
+  availableContacts.set(res);
+
 });
 function openConversation(id:string) {
     selectedUser.set(id)

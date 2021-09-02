@@ -10,18 +10,26 @@ import Text from '../lib/Text.svelte'
 import Image from "../lib/Image.svelte";
 import ComponentList from "../lib/ComponentList.svelte";
 import ContactProfile from "../lib/ContactProfile.svelte";
-
 // stores
 import { slideOverContent } from "../stores/ui";
+import { selectedUser } from "../stores/messages";
+import { availableContacts } from "../stores/contacts";
 //ecma imports
 import { onMount } from "svelte";
 import swal from "sweetalert";
+import { useNavigate } from "svelte-navigator";
 //api
 import { getContacts,deleteContact } from "../api/contactsAxios";
-//stores
-import { availableContacts } from "../stores/contacts";
+//utils
 import { sha256 } from "../utils/sha256";
 
+onMount(async () => {
+  const res = await getContacts();
+  //console.log(res);
+  if (res.length > 0) {
+    availableContacts.set(res);
+  }
+});
 let newContactWindowDisplayed:boolean = false
 function newContactCreation() {
   slideOverContent.set({
@@ -34,34 +42,7 @@ function newContactCreation() {
   newContactWindowDisplayed = !newContactWindowDisplayed
 }
 
-async function deleteContactApi(id) {
-    swal({
-      title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this imaginary file!",
-      icon: "warning",
-      buttons: [true,true],
-      dangerMode: true,
-    })
-    .then((value) => {
-      if(value){
-        deleteContact(id)     
-        window.location.reload()
-      }
-    })
-    
-  }
-
-onMount(async () => {
-  const res = await getContacts();
-  //console.log(res);
-  if (res.length > 0) {
-    availableContacts.set(res);
-  }
-});
-function openConversation(id:string) {
-    console.log('open click', id)
-  }
-
+//view button
 let rightPreviewWindowDisplayed:boolean = false
 function viewContactProfile(id:string) {
   console.log('open click', id)
@@ -73,6 +54,32 @@ function viewContactProfile(id:string) {
     slideOverContent.set(null)
   }
 }
+
+//delete Button
+async function deleteContactApi(id) {
+  swal({
+    title: "Are you sure?",
+    text: "Once deleted, you will not be able to recover this imaginary file!",
+    icon: "warning",
+    buttons: [true,true],
+    dangerMode: true,
+  })
+  .then((value) => {
+    if(value){
+      deleteContact(id)     
+      window.location.reload()
+    }
+  })
+}
+
+//conversation button
+const navigate = useNavigate();
+function openConversation(id:string) {
+  console.log('open click', id)
+  selectedUser.set(id)
+  navigate('/messages')
+}
+
 
 //if works close the slider and display a message
 </script>
