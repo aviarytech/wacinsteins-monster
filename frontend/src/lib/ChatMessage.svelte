@@ -2,18 +2,10 @@
 //component imports 
 import Image from "./table-elements/Image.svelte";
 
-export let message:Object;
+export let message
+const baseUrl = import.meta.env.VITE_ENV_TYPE === 'dev' ? `did:web:localhost:3100` : `did:web:${window.location.host}`
+const messageClass = message.from === baseUrl ? 'sent':'received' ;
 
-//WARN: because the way it is implemented we need to know whether we are in production or dev(localhost) otherwise the css isn't generated proprely.
-const production:boolean = true
-//console.log(`did:web:${window.location.host}`)
-
-let messageClass:string
-if (production) {
-messageClass = message.from === `did:web:${window.location.host}` ? 'sent':'received' ;
-} else {
-messageClass = message.from === `did:web:localhost:3100` ? 'sent':'received' ;
-}
 //TODO: change the avatars because the initials are all DW
 const avatar = `https://avatars.dicebear.com/api/initials/${message.from}.svg`;
 const ts = new Date(message.when);
