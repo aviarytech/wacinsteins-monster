@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   HttpException,
+  Sse,
 } from '@nestjs/common';
 import { MessagesApiService } from './messages-api.service';
 import { CreateMessagesApiDto } from './dto/create-messages-api.dto';
@@ -16,6 +17,10 @@ import { sha256 } from '../utils/sha256';
 import { DIDWebService } from '../didweb/didweb.service';
 import { DIDCommService } from '../didcomm/didcomm.service';
 import { BASIC_MESSAGE_TYPE } from '@aviarytech/didcomm-protocols.basic-message';
+import { map, merge, Observable } from 'rxjs';
+import { SingleMessageInterface } from './interfaces/message-api.interface';
+import { EventBus, ofType } from '@nestjs/cqrs';
+import { MessageCreatedEvent } from './events/message-created.event';
 
 @ApiTags('messages-api')
 @Controller('messages-api')
@@ -24,6 +29,7 @@ export class MessagesApiController {
     private readonly messagesApiService: MessagesApiService,
     private readonly didwebService: DIDWebService,
     private readonly didcomm: DIDCommService,
+    private readonly eventBus: EventBus,
   ) {}
 
   @Post()
@@ -63,6 +69,17 @@ export class MessagesApiController {
   @Get('conversation/:to')
   findConversation(@Param('to') to: string) {
     return this.messagesApiService.findConversation(this.didwebService.did, to);
+  }
+
+  @Sse('subscribe')
+  sse(): Observable<SingleMessageInterface> {
+    return merge(this.eventBus.pipe()).pipe(
+      ofType(MessageCreatedEvent),
+      map((evt: MessageCreatedEvent) => {
+        console.log(evt);
+        return evt.message;
+      }),
+    );
   }
   //   @Patch(':id')
   //   update(@Param('id') id: string, @Body() updateMessagesApiDto: UpdateMessagesApiDto) {

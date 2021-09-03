@@ -4,11 +4,17 @@ import { DBService } from '../db/db.service';
 import { CreateMessagesApiDto } from './dto/create-messages-api.dto';
 import { DIDWebService } from 'src/didweb/didweb.service';
 import { SingleMessageInterface } from './interfaces/message-api.interface';
+import { EventBus } from '@nestjs/cqrs';
+import { MessageCreatedEvent } from './events/message-created.event';
 
 // import { UpdateMessagesApiDto } from './dto/update-messages-api.dto';
 @Injectable()
 export class MessagesApiService {
-  constructor(private db: DBService, private didWebService: DIDWebService) {}
+  constructor(
+    private db: DBService,
+    private didWebService: DIDWebService,
+    private eventBus: EventBus,
+  ) {}
 
   async create(
     message: SingleMessageInterface,
@@ -20,6 +26,7 @@ export class MessagesApiService {
         id: message.id,
         msg: { ...message },
       });
+      await this.eventBus.publish(new MessageCreatedEvent(newMsg.msg));
       return newMsg;
     } catch (e) {
       return null;
