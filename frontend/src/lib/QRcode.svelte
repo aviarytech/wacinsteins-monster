@@ -11,11 +11,48 @@
 <script lang="ts">
 
   //import QrCode from "svelte-qrcode"
-  export let name: string;
   let  WxH:number = 400
+  import QRious from 'qrious';
+  import { onMount } from 'svelte';
+
+  const QRcode = new QRious();
+
+  export let errorCorrection = "L";
+  export let background = "#fff";
+  export let color = "#000";
+  export let size = "200";
+  export let value = "";
+  export let padding = 0;
+  export let className = "qrcode";
+
+  let image = '';
+
+  function generateQrCode() {
+    QRcode.set({
+      background,
+      foreground: color,
+      level: errorCorrection,
+      padding,
+      size,
+      value,
+    });
+    
+    image = QRcode.toDataURL('image/jpeg');
+  }
+
+  $: {
+    if(value) {
+      generateQrCode();
+    }
+  }
+
+  onMount(() => {
+    generateQrCode();
+  });
 </script>
 
 <template>
+  <img src={image} alt={value} class={className}/>
 <!--
   <div class="relative">
     <QrCode value="https://github.com/JonasJs/svelte-qrcode/blob/master/src/lib/qrcode/index.js" errorCorrection="H" size={WxH} class="relative"/>
