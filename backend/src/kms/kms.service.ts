@@ -9,6 +9,7 @@ export class KMSService {
   constructor(private readonly dbService: DBService) {}
 
   async createKey(key: Key) {
+    console.log(key);
     return await this.dbService.create({
       '@type': 'Key',
       '@id': sha256(key.id),
@@ -17,7 +18,7 @@ export class KMSService {
   }
 
   async getKey(id: string): Promise<Key> {
-    return await this.dbService.getById(sha256(id));
+    return await this.dbService.getById(id);
   }
 
   async getAllKeys(): Promise<Key[]> {
