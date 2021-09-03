@@ -13,16 +13,18 @@ export class DBService {
 
   constructor(private log: Logger, private config: ConfigService) {
     this.collection = this.config.get('HOST');
-    const connectOptions = {
-      authSource: this.config.get('DBAUTHSOURCE'),
-      auth: {
-        user: this.config.get('DBUSER'),
-        password: this.config.get('DBPASSWORD'),
-      },
+    let connectOptions = {
       reconnectTries: 15,
       reconnectInterval: 1000,
       connectTimeoutMS: 60000,
     };
+    if (this.config.get('DBAUTHSOURCE')) {
+      connectOptions['authSource'] = this.config.get('DBAUTHSOURCE');
+      connectOptions['auth'] = {
+        user: this.config.get('DBUSER'),
+        password: this.config.get('DBPASSWORD'),
+      };
+    }
     this.promiseRetryOptions = {
       retries: connectOptions.reconnectTries,
       factor: 1.5,
@@ -112,7 +114,7 @@ export class DBService {
     let res = await this.client
       .db(this.dbName)
       .collection(this.collection)
-      .findOne({ 'id': id });
+      .findOne({ id: id });
     if (!res) {
       return null;
     }
@@ -120,25 +122,25 @@ export class DBService {
     return res;
   }
 
-  async deleteById(id: string){
-    let res = await this.getById(id)
+  async deleteById(id: string) {
+    let res = await this.getById(id);
     try {
       await this.client
         .db(this.dbName)
         .collection(this.collection)
-        .deleteOne({ 'id': id });
-        return res
+        .deleteOne({ id: id });
+      return res;
     } catch (e) {
       console.log(e);
     }
-    return null
+    return null;
   }
 
   async getManyById(ids: string[]) {
     const res = await this.client
       .db(this.dbName)
       .collection(this.collection)
-      .find({ 'id': { $in: ids } })
+      .find({ id: { $in: ids } })
       .toArray();
     return this.removeIds(res);
   }
@@ -178,7 +180,7 @@ export class DBService {
     const id = obj['id'];
     const referenceId = obj['referenceId'];
 
-    const searchParams: any[] = [{ 'id': id }];
+    const searchParams: any[] = [{ id: id }];
     if (referenceId) {
       searchParams.push({ referenceId: referenceId });
     }

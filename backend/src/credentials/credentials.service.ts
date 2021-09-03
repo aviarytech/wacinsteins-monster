@@ -18,6 +18,7 @@ export class CredentialsService implements OnApplicationBootstrap {
     return await this.db.create({
       '@type': 'Credential',
       '@id': credential.id,
+      id: credential.id,
       data: credential,
     });
   }
