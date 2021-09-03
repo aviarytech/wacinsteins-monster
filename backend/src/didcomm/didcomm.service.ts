@@ -50,6 +50,7 @@ export class DIDCommService {
 
   async sendMessage(toDid: string, msg: IDIDCommMessage): Promise<boolean> {
     try {
+      console.log(`Sending ${msg.payload.type} to ${toDid}`);
       return await this.didcomm.sendMessage(toDid, msg);
     } catch (e) {
       return false;

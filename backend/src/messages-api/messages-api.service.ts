@@ -10,7 +10,9 @@ import { SingleMessageInterface } from './interfaces/message-api.interface';
 export class MessagesApiService {
   constructor(private db: DBService, private didWebService: DIDWebService) {}
 
-  async create(message: SingleMessageInterface): Promise<SingleMessageInterface> {
+  async create(
+    message: SingleMessageInterface,
+  ): Promise<{ '@type': string; id: string; msg: SingleMessageInterface }> {
     //specific msg id
     try {
       const newMsg = await this.db.create({

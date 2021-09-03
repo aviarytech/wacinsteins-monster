@@ -37,14 +37,14 @@ export class MessagesApiController {
     if (!msg) {
       throw new HttpException('Error creating msg', 400);
     }
-    const sendResult = await this.didcomm.sendMessage(msg.to, {
+    const sendResult = await this.didcomm.sendMessage(msg.msg.to, {
       payload: {
         id,
         type: BASIC_MESSAGE_TYPE,
         from: this.didwebService.did,
-        to: [msg.to],
-        created_time: msg.when,
-        body: { content: msg.data },
+        to: [msg.msg.to],
+        created_time: msg.msg.when,
+        body: { content: msg.msg.data },
       },
       repudiable: false,
     });
