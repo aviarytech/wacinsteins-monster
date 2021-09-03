@@ -108,6 +108,7 @@ export class DIDWebService {
 
   async getWebDIDDoc(): Promise<object> {
     const keys = await this.kms.getAllKeys();
+
     const didDoc = new DIDDocument({
       '@context': [
         'https://www.w3.org/ns/did/v1',
@@ -126,9 +127,9 @@ export class DIDWebService {
               publicKeyBase58: key.publicKeyBase58,
             };
       }),
-      authentication: [this.keys[0].id],
-      assertionMethod: [this.keys[0].id],
-      keyAgreement: [this.keys[1].id],
+      authentication: [keys[0].id],
+      assertionMethod: [keys[0].id],
+      keyAgreement: [keys[1].id],
       service: [
         {
           id: `${this.did}#didcomm`,
@@ -136,7 +137,7 @@ export class DIDWebService {
           serviceEndpoint: `${this.serviceProtocol}://${this.configService.get(
             'HOST',
           )}/didcomm`,
-          routingKeys: [this.keys[1].id],
+          routingKeys: [keys[1].id],
         },
       ],
     });

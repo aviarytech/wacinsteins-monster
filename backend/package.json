@@ -11,7 +11,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "node dist/main.js",
     "start:dev": "nest start --watch",
-    "start:dev2": "cross-env HOST=localhost:3200 SERVER_PORT=3200 DBNAME=waci2 nest start --watch",
+    "start:dev2": "cross-env DBNAME=dev2 HOST=localhost:3200 SERVER_PORT=3200 nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

@@ -26,6 +26,7 @@ export class KMSService {
 
   async resolve(id: string): Promise<ISecret> {
     const key = await this.getKey(id);
+    console.log(id);
     return new Secret(key);
   }
 }

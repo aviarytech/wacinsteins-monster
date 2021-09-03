@@ -1,1 +1,5 @@
-{}
+{
+  "dependencies": {
+    "@aviarytech/didcomm-protocols.basic-message": "^0.1.24"
+  }
+}

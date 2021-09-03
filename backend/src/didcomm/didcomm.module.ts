@@ -11,6 +11,7 @@ import { CommandHandlers } from './commands';
 import { DIDWebService } from 'src/didweb/didweb.service';
 import { Sagas } from './sagas';
 import { ContactsService } from 'src/contacts/contacts.service';
+import { MessagesApiService } from 'src/messages-api/messages-api.service';
 
 @Module({
   imports: [CqrsModule],
@@ -27,6 +28,7 @@ import { ContactsService } from 'src/contacts/contacts.service';
     DBService,
     DIDWebService,
     ContactsService,
+    MessagesApiService,
   ],
   exports: [DIDCommService],
 })

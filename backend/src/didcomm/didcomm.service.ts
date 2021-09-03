@@ -11,6 +11,8 @@ import { DefaultTrustPingResponseMessageHandler } from '@aviarytech/didcomm-prot
 import { TrustPingMessageHandler } from './handlers/trust-ping.handler';
 import { ContactsService } from '../contacts/contacts.service';
 import { IJWE } from '@aviarytech/crypto-core';
+import { BasicMessageHandler } from './handlers/basic-message.handler';
+import { MessagesApiService } from '../messages-api/messages-api.service';
 
 @Injectable()
 export class DIDCommService {
@@ -19,9 +21,20 @@ export class DIDCommService {
     private didResolver: DIDResolverService,
     private kms: KMSService,
     private contactsService: ContactsService,
+    private messagesService: MessagesApiService,
   ) {
     this.didcomm = new DIDComm(
       [
+        new BasicMessageHandler(async (m) => {
+          const message = await this.messagesService.create({
+            id: m.id,
+            from: m.from,
+            to: m.to[0],
+            data: m.body.content,
+            when: m.created_time,
+          });
+          return message;
+        }),
         new TrustPingMessageHandler(async (did) => {
           const exists = await this.contactsService.findByProps({ did: did });
           if (!exists) {
@@ -29,13 +42,6 @@ export class DIDCommService {
           }
         }),
         new DefaultTrustPingResponseMessageHandler(),
-        {
-          type: 'BasicMessage',
-          handle: async (m) => {
-            console.log(m);
-            return true;
-          },
-        },
       ],
       this.didResolver,
       this.kms,
