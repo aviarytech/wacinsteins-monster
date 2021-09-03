@@ -9,12 +9,14 @@
 </style>
 
 <script lang="ts">
+  //stores
   import { qrCodeIdValue } from "../stores/presentation";
+  //ecma imports
   import QRious from 'qrious';
   import { onMount } from 'svelte';
 
   const QRcode = new QRious();
-
+  //qr default parameters
   export let errorCorrection = "H";
   export let background = "#fff";
   export let color = "#000";
@@ -25,7 +27,7 @@
 
   let image = '';
   let  WxH:number = 400
-
+  //creation and assignement of the qrCode to img
   function generateQrCode() {
     QRcode.set({
       background,
