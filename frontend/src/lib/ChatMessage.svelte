@@ -1,10 +1,22 @@
-<script>
+<script lang="ts">
+//component imports 
 import Image from "./table-elements/Image.svelte";
 
-  export let message;
-  const messageClass = message.from === message.from ? 'sent' : 'received';
-  const avatar = `https://avatars.dicebear.com/api/initials/${message.from}.svg`;
-  const ts = new Date(message.when);
+export let message:Object;
+
+//WARN: because the way it is implemented we need to know whether we are in production or dev(localhost) otherwise the css isn't generated proprely.
+const production:boolean = true
+//console.log(`did:web:${window.location.host}`)
+
+let messageClass:string
+if (production) {
+messageClass = message.from === `did:web:${window.location.host}` ? 'sent':'received' ;
+} else {
+messageClass = message.from === `did:web:localhost:3100` ? 'sent':'received' ;
+}
+//TODO: change the avatars because the initials are all DW
+const avatar = `https://avatars.dicebear.com/api/initials/${message.from}.svg`;
+const ts = new Date(message.when);
 </script>
 
 <div class={`message ${messageClass}`}>
