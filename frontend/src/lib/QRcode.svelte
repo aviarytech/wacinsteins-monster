@@ -1,6 +1,6 @@
 <style global lang="postcss">
   .qrcode {
-    position:relative
+    position:relative;
     }
   .scale-20 {
       --tw-scale-x: .2;
@@ -9,23 +9,22 @@
 </style>
 
 <script lang="ts">
-
-  //import QrCode from "svelte-qrcode"
-  let  WxH:number = 400
+  import { qrCodeIdValue } from "../stores/presentation";
   import QRious from 'qrious';
   import { onMount } from 'svelte';
 
   const QRcode = new QRious();
 
-  export let errorCorrection = "L";
+  export let errorCorrection = "H";
   export let background = "#fff";
   export let color = "#000";
-  export let size = "200";
+  export let size = "";
   export let value = "";
   export let padding = 0;
-  export let className = "qrcode";
+  export let className = "qrcode items-center";
 
   let image = '';
+  let  WxH:number = 400
 
   function generateQrCode() {
     QRcode.set({
@@ -33,11 +32,11 @@
       foreground: color,
       level: errorCorrection,
       padding,
-      size,
-      value,
+      size:WxH,
+      value:$qrCodeIdValue,
     });
     
-    image = QRcode.toDataURL('image/jpeg');
+    image = QRcode.toDataURL($qrCodeIdValue);
   }
 
   $: {
@@ -52,14 +51,12 @@
 </script>
 
 <template>
-  <img src={image} alt={value} class={className}/>
-<!--
   <div class="relative">
-    <QrCode value="https://github.com/JonasJs/svelte-qrcode/blob/master/src/lib/qrcode/index.js" errorCorrection="H" size={WxH} class="relative"/>
-    <img src="../favicon.png" alt="" width={WxH} height ={WxH} class="absolute inset-0 transform scale-20"/>
+    <img src={image} alt={value} class={className}/>
+    <!-- <div class="rounded-full absolute inset-0 transform scale-20 bg-red-400"></div> -->
+      <img src="./favicon.ico" alt="" width={WxH} height ={WxH} class="absolute inset-0 transform scale-20"/>
   </div>
-  -->
+
 </template>
-    <!-- <div class="square relative"></div> -->
-    <!-- <div class="circle absolute inset-0 transform scale-20"></div> -->
+
 
