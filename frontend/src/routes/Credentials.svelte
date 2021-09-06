@@ -10,7 +10,6 @@ import Button from "../lib/ui/Button.svelte";
 import { credentials } from "../stores/credentials";
 import { slideOverContent } from "../stores/ui";
 
-
 const openCredential = (credentialId: string) => {
   const cred = $credentials.find((c) => c["@id"] === credentialId);
   slideOverContent.set({
@@ -32,13 +31,13 @@ const openNewPresentation = (credentialId: string) => {
 
 <template>
   <DataTable
-    headers="{['ID', 'Issuance Date', 'Issuer', 'Name', '']}"
+    headers="{['Name', 'Issuer', 'Issuance Date', '']}"
     data="{$credentials.map((c) => {
       return [
-        { component: Text, text: c['data'].id },
-        { component: Text, text: c['data'].issuanceDate },
-        { component: Text, text: c['data'].issuer.id },
+        // { component: Text, text: c['data'].id },
         { component: Text, text: c['data'].name },
+        { component: Text, text: c['data'].issuer.id },
+        { component: Text, text: c['data'].issuanceDate },
         {
           component: ComponentList,
           items: [

@@ -10,67 +10,63 @@ import Preview from "./Preview.svelte";
 import { credentials } from "../stores/credentials";
 import { slideOverContent, slidePreviewOverContent } from "../stores/ui";
 //js imports
-import swal from 'sweetalert';
-import inputDescriptionBuilder from '../utils/frameBuilder'
+import swal from "sweetalert";
+import inputDescriptionBuilder from "../utils/frameBuilder";
 
-
-let unique = {} // every {} is unique, {} === {} evaluates to false
-let selectedSchemaFields:string[]
+let unique = {}; // every {} is unique, {} === {} evaluates to false
+let selectedSchemaFields: string[];
 function clearSelection() {
-   unique = {}
+  unique = {};
 }
 
-let credentialsChosen: any
+let credentialsChosen: any;
 
-function presentationPreview(){
+async function presentationPreview() {
+  let inputDescriptor: Object = {
+    credentialSubject: inputDescriptionBuilder(
+      selectedSchemaFields,
+      credentialsChosen
+    ),
+  };
+  inputDescriptor["type"] = credentialsChosen["data"]["type"];
+  inputDescriptor["@context"] = credentialsChosen["data"]["@context"];
 
-  let inputDescriptor: Object = {"credentialSubject":inputDescriptionBuilder(selectedSchemaFields,credentialsChosen)}
-  inputDescriptor["type"] = credentialsChosen['data']['type']
-  inputDescriptor["@context"] = credentialsChosen['data']['@context']
-
-  if (Object.keys(inputDescriptor).length === 0){
-    
+  if (Object.keys(inputDescriptor).length === 0) {
     swal({
-        title: "Empty selection",
-        text: "Please select the credential fields you want presented",
-        icon: "error",
-      })
+      title: "Empty selection",
+      text: "Please select the credential fields you want presented",
+      icon: "error",
+    });
   } else {
-
     slidePreviewOverContent.set($slideOverContent);
     slideOverContent.set({
-        title:"review",
-        component:Preview,
-        data:[inputDescriptor,selectedSchemaFields]
-
-      })
-    //console.log(inputDescriptor)
+      title: "review",
+      component: Preview,
+      data: [inputDescriptor, selectedSchemaFields],
+    });
   }
 }
-
 </script>
 
 <template>
-  <h2>Schema builder</h2>
   <form>
-    <h3 id="cy-name">Name</h3>
-    <input type="text" placeholder="my name is..." id="cy-name-hook-input" />
     <h3 id="cy-schema">Schema</h3>
     <select
-      bind:value={credentialsChosen}
-      on:change={() => clearSelection()}
+      bind:value="{credentialsChosen}"
+      on:change="{() => clearSelection()}"
       id="cy-schema-hook-select">
-  
       {#each $credentials as item}
-        <option value={item}>
-          {item['data'].name}
+        <option value="{item}">
+          {item["data"].name}
         </option>
       {/each}
     </select>
-    <h3>Fields</h3>
-    {#if credentialsChosen }
+    <div class="text-md font-semibold text-gray-500 mt-2">Select Fields</div>
+    {#if credentialsChosen}
       {#key unique}
-        <CredentialSubjectFieldSelector credentialSubject={credentialsChosen['data'].credentialSubject} bind:selected={selectedSchemaFields}/>
+        <CredentialSubjectFieldSelector
+          credentialSubject="{credentialsChosen['data'].credentialSubject}"
+          bind:selected="{selectedSchemaFields}" />
       {/key}
     {:else}
       <h2 id="cy-error-msg" class="bg-yellow-500 rounded-lg max-w-prose">
@@ -78,5 +74,5 @@ function presentationPreview(){
       </h2>
     {/if}
   </form>
-  <Button callback={presentationPreview} type="submit" label='Review'/>
+  <Button callback="{presentationPreview}" type="submit" label="Review" />
 </template>

@@ -13,9 +13,9 @@
 
 <script lang="ts">
 export let label: string;
-export let callback: () => {};
-export let type: string;
-export let additionalClasses: string;
+export let callback: () => Promise<void>;
+export let type = "button";
+export let additionalClasses = "";
 </script>
 
 <button

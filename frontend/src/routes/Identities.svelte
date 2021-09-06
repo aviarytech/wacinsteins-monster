@@ -42,9 +42,8 @@ onMount(async () => {
 <!-- <pre>{JSON.stringify($identities, null, 2)}</pre> -->
 {#if $identities}
   <DataTable
-    headers="{['', 'ID', 'Email', '']}"
+    headers="{['', 'Email', '']}"
     data="{$identities.map((i) => {
-      console.log(i);
       return [
         {
           component: Image,
@@ -55,7 +54,7 @@ onMount(async () => {
           dataTableSpecialClass:
             'pl-4 whitespace-nowrap text-sm font-medium text-gray-900 truncate max-w-xs',
         },
-        { component: Text, text: i.id, classes: 'max-w-xs' },
+        // { component: Text, text: i.id, classes: 'max-w-xs' },
         { component: Text, text: i.email },
         {
           component: ComponentList,

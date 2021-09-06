@@ -1,4 +1,7 @@
 <style lang="postcss">
+.name {
+  color: red;
+}
 </style>
 
 <script lang="ts">
@@ -10,7 +13,7 @@ import DataTable from "../lib/table-elements/DataTable.svelte";
 import PresentationDetailedView from "../lib/PresentationDetailedView.svelte";
 import Text from "../lib/table-elements/Text.svelte";
 import Button from "../lib/ui/Button.svelte";
-import ComponentList from "../lib/table-elements/ComponentList.svelte"
+import ComponentList from "../lib/table-elements/ComponentList.svelte";
 import Tag from "../lib/ui/Tag.svelte";
 import QRcode from "../lib/QRcode.svelte";
 //js imports
@@ -18,15 +21,13 @@ import { onMount } from "svelte";
 //stores
 import { presentations, qrCodeIdValue } from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
-;
-
 onMount(async () => {
   const res = await getPresentations();
   console.log(res);
   if (res.length > 0) {
     presentations.set(res);
   }
-})
+});
 
 const openPresentationRequest = (presentationId) => {
   const singleRow = $presentations.find((c) => c["@id"] === presentationId);
@@ -37,30 +38,29 @@ const openPresentationRequest = (presentationId) => {
   });
 };
 
-let rightPreviewWindowDisplayed:boolean = false
+let rightPreviewWindowDisplayed: boolean = false;
 const newPresentationRequest = () => {
   slideOverContent.set({
     title: "New Presentation Request",
     component: SchemaBuilder,
     presentationSubject: [],
   });
-  if (rightPreviewWindowDisplayed){
-    slideOverContent.set(null)
+  if (rightPreviewWindowDisplayed) {
+    slideOverContent.set(null);
   }
-  rightPreviewWindowDisplayed = !rightPreviewWindowDisplayed
+  rightPreviewWindowDisplayed = !rightPreviewWindowDisplayed;
 };
 
 //BUG: the X to close the window doesn't show up.
-function qrCodeDisplay(id){
-  qrCodeIdValue.set(id[0])
-  console.log(id)
+function qrCodeDisplay(id) {
+  qrCodeIdValue.set(id[0]);
+  console.log(id);
   slideOverContent.set({
     title: `QR Code for ${id[1]}`,
     component: QRcode,
     presentationSubject: [],
   });
-  }
-
+}
 </script>
 
 <template>
@@ -74,14 +74,13 @@ function qrCodeDisplay(id){
   </div>
   {#if $presentations}
     <DataTable
-      headers={['ID', 'Name', 'Schema', 'Constraints', '']}
-      data={$presentations.map((p) => {
-        console.log(p.definition.input_descriptors[0].constraints);
+      headers="{['Name', 'Schema', 'Constraints', '']}"
+      data="{$presentations.map((p) => {
         return [
-          {
-            component: Text,
-            text: p['@id'],
-          },
+          // {
+          //   component: Text,
+          //   text: p['@id'],
+          // },
           {
             component: Text,
             text: p.definition.input_descriptors[0].name,
@@ -99,25 +98,28 @@ function qrCodeDisplay(id){
             ),
           },
           {
-          component: ComponentList,
-          items: [
-            {
-              component: Button,
-              label: 'View',
-              callback: () => {
-                openPresentationRequest(p['@id']);
+            component: ComponentList,
+            items: [
+              {
+                component: Button,
+                label: 'View',
+                callback: () => {
+                  openPresentationRequest(p['@id']);
+                },
               },
-            },
-            {
-              component: Button,
-              label: 'QR code',
-              callback: () => {
-                qrCodeDisplay([p['@id'],p.definition.input_descriptors[0].name]);
-              }
-            }
-          ]
-          }
+              {
+                component: Button,
+                label: 'QR code',
+                callback: () => {
+                  qrCodeDisplay([
+                    p['@id'],
+                    p.definition.input_descriptors[0].name,
+                  ]);
+                },
+              },
+            ],
+          },
         ];
-      })} />
+      })}" />
   {/if}
 </template>

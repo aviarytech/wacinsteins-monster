@@ -26,7 +26,6 @@ export class PresentationsService {
   async create(
     createPresentationDto: CreatePresentationDto,
   ): Promise<Presentation> {
-
     // todo
     return null;
   }
@@ -42,7 +41,8 @@ export class PresentationsService {
   async createDefinition(
     createPresentationDefinitionDto: CreatePresentationDefinitionDto,
   ) {
-    const { name, schema, paths } = createPresentationDefinitionDto;
+    const { schema, paths } = createPresentationDefinitionDto;
+    const name = sha256(nanoid());
     // const frame = descriptors2Frame(schema, paths);
     const frame = {};
     const id = sha256(nanoid());
@@ -55,7 +55,6 @@ export class PresentationsService {
         new InputConstraint(
           paths.map((p) => new InputField([p], new InputFilter('string'))),
         ),
-
       ),
     ]);
 
@@ -67,11 +66,9 @@ export class PresentationsService {
     });
 
     return await this.db.create({
-
       '@type': 'PresentationDefinition',
       '@id': id,
       ...JSON.parse(JSON.stringify(definition)),
-
     });
   }
 
@@ -82,7 +79,6 @@ export class PresentationsService {
   async findAllDefinitions() {
     return await this.db.getAllByType('PresentationDefinition');
   }
-
 
   async createRequest(
     createPresentationRequestDto: CreatePresentationRequestDto,
@@ -110,7 +106,6 @@ export class PresentationsService {
     );
 
     await validateOrReject(presReq, {
-
       validationError: { target: false },
     }).catch((e) => {
       this.log.error('validation failed. errors: ', e);
@@ -118,7 +113,6 @@ export class PresentationsService {
     });
 
     return await this.db.create({
-
       '@type': 'PresentationRequest',
       '@id': id,
       ...JSON.parse(JSON.stringify(presReq)),

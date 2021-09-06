@@ -61,14 +61,6 @@ import { sha256 } from "../utils/sha256";
               role="menuitem"
               to="identities"
               id="user-menu-item-0">Identities</Link>
-
-            <!-- <a
-            class="block px-4 py-2 text-sm text-gray-700"
-            role="menuitem"
-            tabindex="-1"
-            id="user-menu-item-1">Settings</a
-          > -->
-
             <Link
               to="logout"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-gray-500"

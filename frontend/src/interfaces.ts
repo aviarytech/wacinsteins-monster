@@ -1,6 +1,6 @@
 import type { Writable } from "svelte/store";
 
-export interface routeHooks { 
+export interface routeHooks {
   routeName: string;
   routeUrl: string;
   heroIcon?: string;
@@ -13,7 +13,6 @@ export interface NameSchema {
 }
 // api
 export interface PostPresentationPayload {
-  name: string;
   schema: string;
   paths: string[];
 }
