@@ -26,7 +26,8 @@
   export let className = "qrcode items-center";
 
   let image = '';
-  let  WxH:number = 400
+  //if bigger than 360 white padding appears in the picture
+  let  WxH:number = 360
   //creation and assignement of the qrCode to img
   function generateQrCode() {
     QRcode.set({
@@ -55,7 +56,6 @@
 <template>
   <div class="relative">
     <img src={image} alt={value} class={className}/>
-    <!-- <div class="rounded-full absolute inset-0 transform scale-20 bg-red-400"></div> -->
       <img src="./favicon.ico" alt="" width={WxH} height ={WxH} class="absolute inset-0 transform scale-20"/>
   </div>
 

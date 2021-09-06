@@ -1,10 +1,14 @@
-<script>
+<script lang="ts">
+//component imports 
 import Image from "./table-elements/Image.svelte";
 
-  export let message;
-  const messageClass = message.from === message.from ? 'sent' : 'received';
-  const avatar = `https://avatars.dicebear.com/api/initials/${message.from}.svg`;
-  const ts = new Date(message.when);
+export let message
+const baseUrl = import.meta.env.VITE_ENV_TYPE === 'dev' ? `did:web:localhost:3100` : `did:web:${window.location.host}`
+const messageClass = message.from === baseUrl ? 'sent':'received' ;
+
+//TODO: change the avatars because the initials are all DW
+const avatar = `https://avatars.dicebear.com/api/initials/${message.from}.svg`;
+const ts = new Date(message.when);
 </script>
 
 <div class={`message ${messageClass}`}>

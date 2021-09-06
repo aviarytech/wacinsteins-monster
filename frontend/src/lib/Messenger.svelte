@@ -31,7 +31,6 @@ async function newMsg() {
 
     //console.log(fullPayload)
     //WARN: works but I don't like this because I want real time
-
     await postNewMsg2Conversation(fullPayload)
     msgUSerBackend.set(await getCurrentConversation($selectedUser))
     
