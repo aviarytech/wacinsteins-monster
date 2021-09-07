@@ -3,11 +3,10 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   HttpException,
   Sse,
+  Header,
 } from '@nestjs/common';
 import { MessagesApiService } from './messages-api.service';
 import { CreateMessagesApiDto } from './dto/create-messages-api.dto';
@@ -72,6 +71,7 @@ export class MessagesApiController {
   }
 
   @Sse('subscribe')
+  @Header('content-type', 'text/event-stream')
   sse(): Observable<SingleMessageInterface> {
     return merge(this.eventBus.pipe()).pipe(
       ofType(MessageCreatedEvent),

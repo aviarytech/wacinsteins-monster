@@ -26,11 +26,9 @@ onMount(async () => {
       `${baseUrl}/messages-api/subscribe`,
       {}
     );
-    console.log(eventSource);
-    /* eventSource.onmessage = ({ data }) => { */
-    /*   const msg = JSON.parse(data).body; */
-    /*   console.log(msg); */
-    /* }; */
+    eventSource.onmessage = ({ data }) => {
+      console.log("New message", JSON.parse(data));
+    };
   }
 });
 //because ${storename} only grabs the current value we need to introduce reactivity by subscribing (probably exists a way to use $: (value))
@@ -49,14 +47,8 @@ async function newMsg() {
       when: new Date(),
     };
     chatMsg = "";
-
-    //console.log(fullPayload)
-    //WARN: works but I don't like this because I want real time
     await postNewMsg2Conversation(fullPayload);
-    // to remove once subscription works
-    //msgUSerBackend.set(await getCurrentConversation($selectedUser))
-
-    console.log("localMSg", $msgUSerBackend);
+    //console.log("localMSg", $msgUSerBackend);
   }
 }
 const onKeyPress = (e) => {

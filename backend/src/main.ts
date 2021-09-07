@@ -13,7 +13,7 @@ async function bootstrap() {
 
   server.addContentTypeParser(
     'application/didcomm-encrypted+json',
-    function (request, payload, done) {
+    function(request, payload, done) {
       var data = '';
       payload.on('data', (chunk) => {
         data += chunk;
@@ -23,11 +23,12 @@ async function bootstrap() {
       });
     },
   );
+  const app = await NestFactory.create(AppModule);
+  // const app = await NestFactory.create<NestFastifyApplication>(
+  //   AppModule,
+  //   new FastifyAdapter(server),
+  // );
 
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter(server),
-  );
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors()
 
