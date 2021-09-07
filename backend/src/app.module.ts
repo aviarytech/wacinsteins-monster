@@ -17,6 +17,7 @@ import { PresentationsModule } from './presentations/presentations.module';
 import { CredentialsModule } from './credentials/credentials.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { MessagesApiModule } from './messages-api/messages-api.module';
+import { MessageWebsocketGateway } from './message-websocket.gateway';
 
 @Module({
   imports: [
@@ -38,8 +39,9 @@ import { MessagesApiModule } from './messages-api/messages-api.module';
     DIDResolverService,
     DocumentLoaderService,
     KMSService,
+    MessageWebsocketGateway,
     ...CommandHandlers,
     ...EventHandlers,
   ],
 })
-export class AppModule {}
+export class AppModule { }

@@ -7,6 +7,7 @@ import {
 import fastify from 'fastify';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+// import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const server = fastify({ ignoreTrailingSlash: true });
@@ -23,12 +24,11 @@ async function bootstrap() {
       });
     },
   );
-  const app = await NestFactory.create(AppModule);
-  // const app = await NestFactory.create<NestFastifyApplication>(
-  //   AppModule,
-  //   new FastifyAdapter(server),
-  // );
-
+  // const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(server),
+  );
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors()
 

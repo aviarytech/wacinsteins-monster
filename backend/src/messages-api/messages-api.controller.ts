@@ -11,7 +11,7 @@ import {
 import { MessagesApiService } from './messages-api.service';
 import { CreateMessagesApiDto } from './dto/create-messages-api.dto';
 //import { UpdateMessagesApiDto } from './dto/update-messages-api.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
 import { sha256 } from '../utils/sha256';
 import { DIDWebService } from '../didweb/didweb.service';
 import { DIDCommService } from '../didcomm/didcomm.service';
@@ -69,9 +69,9 @@ export class MessagesApiController {
   findConversation(@Param('to') to: string) {
     return this.messagesApiService.findConversation(this.didwebService.did, to);
   }
-
   @Sse('subscribe')
   @Header('content-type', 'text/event-stream')
+  @Header('content-length', '0')
   sse(): Observable<SingleMessageInterface> {
     return merge(this.eventBus.pipe()).pipe(
       ofType(MessageCreatedEvent),

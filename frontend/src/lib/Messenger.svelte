@@ -21,14 +21,6 @@ onMount(async () => {
   if ($selectedUser) {
     // INFO: this is where the subscription needs to happen
     msgUSerBackend.set(await getCurrentConversation($selectedUser));
-
-    const eventSource = new EventSource(
-      `${baseUrl}/messages-api/subscribe`,
-      {}
-    );
-    eventSource.onmessage = ({ data }) => {
-      console.log("New message", JSON.parse(data));
-    };
   }
 });
 //because ${storename} only grabs the current value we need to introduce reactivity by subscribing (probably exists a way to use $: (value))

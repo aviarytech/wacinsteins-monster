@@ -32,9 +32,10 @@
     "@nestjs/config": "^1.0.1",
     "@nestjs/core": "^8.0.6",
     "@nestjs/cqrs": "^8.0.0",
-    "@nestjs/platform-express": "^8.0.6",
     "@nestjs/platform-fastify": "^8.0.6",
+    "@nestjs/platform-socket.io": "^8.0.6",
     "@nestjs/swagger": "^5.0.9",
+    "@nestjs/websockets": "^8.0.6",
     "@stablelib/sha256": "^1.0.1",
     "@transmute/jsonld-document-loader": "^0.2.0",
     "@transmute/web-crypto-key-pair": "^0.7.0-unstable.3",
@@ -51,8 +52,7 @@
     "promise-retry": "^2.0.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.3.0",
-    "swagger-ui-express": "^4.1.6"
+    "rxjs": "^7.3.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.1.1",
