@@ -30,7 +30,7 @@ export class MessagesApiController {
     private readonly didwebService: DIDWebService,
     private readonly didcomm: DIDCommService,
     private readonly eventBus: EventBus,
-  ) {}
+  ) { }
 
   @Post()
   async create(@Body() createMessagesApiDto: CreateMessagesApiDto) {

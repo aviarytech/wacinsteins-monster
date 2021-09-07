@@ -36,17 +36,19 @@ export async function postNewMsg2Conversation(
   }
 }
 
-export async function sseSubscription(
-  endpoint: string = `${baseUrl}/messages-api/subscribe`
-): Promise<any> {
-  try {
-    const msgResponse = await axios.get(endpoint);
-    if (msgResponse.status == 200) {
-      //console.log(msgResponse.data)
-      return msgResponse.data
-    }
-    return [];
-  } catch (error) {
-    console.error(error);
-  }
-}
+// export async function sseSubscription(
+//   endpoint: string = `${baseUrl}/messages-api/subscribe`
+// ): Promise<any> {
+//   try {
+//     axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
+//     const msgResponse = await axios.get(endpoint);
+//     if (msgResponse.status == 200) {
+//       //console.log(msgResponse.data)
+//       return msgResponse.data
+//     }
+//     return [];
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
+

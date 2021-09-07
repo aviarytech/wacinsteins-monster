@@ -1,22 +1,36 @@
 <script lang="ts">
-//stores
+//components
 import ChatMessage from "./ChatMessage.svelte";
+//stores
 import { user } from "../stores/user";
 import { sha256 } from "../utils/sha256";
 import { msgUSerBackend, selectedUser } from "../stores/messages";
+//ECMA imports
 import { onMount } from "svelte";
+//api
 import {
   getCurrentConversation,
   postNewMsg2Conversation,
-  sseSubscription,
 } from "../api/messagesLogic";
+//env
+const baseUrl = import.meta.env.VITE_API_URL
+  ? import.meta.env.VITE_API_URL
+  : `https://api.${window.location.hostname}`;
 
 onMount(async () => {
   if ($selectedUser) {
     // INFO: this is where the subscription needs to happen
     msgUSerBackend.set(await getCurrentConversation($selectedUser));
-    let subscription = await sseSubscription();
-    console.log(subscription);
+
+    const eventSource = new EventSource(
+      `${baseUrl}/messages-api/subscribe`,
+      {}
+    );
+    console.log(eventSource);
+    /* eventSource.onmessage = ({ data }) => { */
+    /*   const msg = JSON.parse(data).body; */
+    /*   console.log(msg); */
+    /* }; */
   }
 });
 //because ${storename} only grabs the current value we need to introduce reactivity by subscribing (probably exists a way to use $: (value))
