@@ -1,5 +1,0 @@
-{
-  "dependencies": {
-    "svelte-websocket-store": "^1.1.14"
-  }
-}
