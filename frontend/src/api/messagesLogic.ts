@@ -37,7 +37,7 @@ export async function postNewMsg2Conversation(
 }
 
 export async function sseSubscription(
-  endpoint: string = `${baseUrl}/subscribe`
+  endpoint: string = `${baseUrl}/messages-api/subscribe`
 ): Promise<any> {
   try {
     const msgResponse = await axios.get(endpoint);

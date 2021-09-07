@@ -15,7 +15,8 @@ onMount(async () => {
   if ($selectedUser) {
     // INFO: this is where the subscription needs to happen
     msgUSerBackend.set(await getCurrentConversation($selectedUser));
-    await sseSubscription();
+    let subscription = await sseSubscription();
+    console.log(subscription);
   }
 });
 //because ${storename} only grabs the current value we need to introduce reactivity by subscribing (probably exists a way to use $: (value))
