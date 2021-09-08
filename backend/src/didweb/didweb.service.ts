@@ -13,6 +13,7 @@ import { generateX25519 } from '../kms/x25519';
 export class DIDWebService {
   keys: Key[];
   did: string;
+  basePath: string;
 
   constructor(
     private kms: KMSService,
@@ -24,12 +25,11 @@ export class DIDWebService {
     }
     this.did = `did:web:${this.configService.get('HOST')}`;
     this.getKeys();
-  }
-
-  get serviceProtocol(): string {
-    return this.configService.get('HOST').indexOf('localhost') >= 0
-      ? 'http'
-      : 'https';
+    const protocol =
+      this.configService.get('HOST').indexOf('localhost') >= 0
+        ? 'http'
+        : 'https';
+    this.basePath = `${protocol}://${this.configService.get('HOST')}`;
   }
 
   async getKeys() {
@@ -134,9 +134,7 @@ export class DIDWebService {
         {
           id: `${this.did}#didcomm`,
           type: 'DIDCommMessaging',
-          serviceEndpoint: `${this.serviceProtocol}://${this.configService.get(
-            'HOST',
-          )}/didcomm`,
+          serviceEndpoint: `${this.basePath}/didcomm`,
           routingKeys: [keys[1].id],
         },
       ],

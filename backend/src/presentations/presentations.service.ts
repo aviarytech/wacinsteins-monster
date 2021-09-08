@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { validateOrReject } from 'class-validator';
 import { nanoid } from 'nanoid';
 import { DBService } from 'src/db/db.service';
+import { InvitationMessage } from '@aviarytech/didcomm-protocols.out-of-band';
 import { mapValidationErrorsToMessages } from 'src/utils/errors';
 import { sha256 } from 'src/utils/sha256';
 import { CreatePresentationDefinitionDto } from './dto/create-presentation-definition.dto';
@@ -18,10 +19,16 @@ import {
   PresentationDefinition,
   PresentationRequest,
 } from './entities/presentation.entity';
+import { DIDWebService } from 'src/didweb/didweb.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PresentationsService {
-  constructor(private db: DBService, private log: Logger) {}
+  constructor(
+    private db: DBService,
+    private log: Logger,
+    private didWeb: DIDWebService,
+  ) {}
 
   async create(
     createPresentationDto: CreatePresentationDto,
@@ -92,8 +99,13 @@ export class PresentationsService {
         `Presentation Definition ${presentationDefinitionId} not found`,
       );
     }
+    const invitation = new InvitationMessage(
+      this.didWeb.did,
+      this.didWeb.basePath + '/invitation',
+      'streamlined-vp',
+    );
     const id = sha256(nanoid());
-    const url = 'REPLACE ME';
+    const url = invitation.url;
     const domain = 'REPLACE ME';
     const frame = {};
 
