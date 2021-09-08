@@ -6,12 +6,12 @@ import {
   DIDCOMM_MESSAGE_MEDIA_TYPE,
   IDIDCommMessage,
 } from '@aviarytech/didcomm-messaging';
+import { BasicMessageHandler } from '@aviarytech/didcomm-protocols.basic-message';
 import { KMSService } from '../kms/kms.service';
 import { DefaultTrustPingResponseMessageHandler } from '@aviarytech/didcomm-protocols.trust-ping';
 import { TrustPingMessageHandler } from './handlers/trust-ping.handler';
 import { ContactsService } from '../contacts/contacts.service';
 import { IJWE } from '@aviarytech/crypto-core';
-import { BasicMessageHandler } from './handlers/basic-message.handler';
 import { MessagesApiService } from '../messages-api/messages-api.service';
 
 @Injectable()
@@ -27,13 +27,12 @@ export class DIDCommService {
       [
         new BasicMessageHandler(async (m) => {
           const message = await this.messagesService.create({
-            id: m.id,
-            from: m.from,
-            to: m.to[0],
-            data: m.body.content,
-            when: m.created_time,
+            id: m.payload.id,
+            from: m.payload.from,
+            to: m.payload.to[0],
+            data: m.payload.body.content,
+            when: m.payload.created_time,
           });
-          return message;
         }),
         new TrustPingMessageHandler(async (did) => {
           const exists = await this.contactsService.findByProps({ did: did });

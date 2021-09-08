@@ -10,6 +10,10 @@ import { Link, Router } from "svelte-navigator";
 import { profileDropMenu } from "../stores/ui";
 import { user } from "../stores/user";
 import { sha256 } from "../utils/sha256";
+
+function handleNav() {
+  profileDropMenu.set(!$profileDropMenu);
+}
 </script>
 
 <template>
@@ -23,9 +27,7 @@ import { sha256 } from "../utils/sha256";
           id="user-menu-button"
           aria-expanded="false"
           aria-haspopup="true"
-          on:click="{() => {
-            profileDropMenu.set(!$profileDropMenu);
-          }}">
+          on:click="{handleNav}">
           <span class="sr-only">Open user menu</span>
           <img
             class="h-8 w-8 rounded-full"
@@ -56,11 +58,22 @@ import { sha256 } from "../utils/sha256";
           tabindex="-1">
           <!-- Active: "bg-gray-100", Not Active: "" -->
           <Router>
-            <Link
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-gray-500"
-              role="menuitem"
-              to="identities"
-              id="user-menu-item-0">Identities</Link>
+            <div class="flex items-stretch">
+              <div on:click="{handleNav}">
+                <Link
+                  class="px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-gray-500"
+                  role="menuitem"
+                  to="identities"
+                  id="user-menu-item-0">Identities</Link>
+              </div>
+              <div on:click="{handleNav}">
+                <Link
+                  class="py-2 text-sm text-white hover:text-gray-200"
+                  role="menuitem"
+                  to="reset"
+                  id="user-menu-item-3">⟳</Link>
+              </div>
+            </div>
             <Link
               to="logout"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-gray-500"

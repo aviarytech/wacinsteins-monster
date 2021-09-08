@@ -10,7 +10,6 @@
   margin: 0;
   word-wrap: break-word;
 }
-
 .received {
   align-items: flex-start;
 }
@@ -31,6 +30,8 @@
 </style>
 
 <script lang="ts">
+import { sha256 } from "../utils/sha256";
+
 //component imports
 import Image from "./table-elements/Image.svelte";
 
@@ -41,8 +42,9 @@ const baseUrl =
     : `did:web:api.${window.location.host}`;
 const messageClass = message.from === baseUrl ? "sent" : "received";
 
-//TODO: change the avatars because the initials are all DW
-const avatar = `https://avatars.dicebear.com/api/initials/${message.from}.svg`;
+const avatar = `https://www.tinygraphs.com/labs/isogrids/hexa16/${sha256(
+  message.from
+)}?theme=seascape&numcolors=4`;
 const ts = new Date(message.when);
 </script>
 

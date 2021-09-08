@@ -15,7 +15,10 @@ import { ApiTags } from '@nestjs/swagger';
 import { sha256 } from '../utils/sha256';
 import { DIDWebService } from '../didweb/didweb.service';
 import { DIDCommService } from '../didcomm/didcomm.service';
-import { BASIC_MESSAGE_TYPE } from '@aviarytech/didcomm-protocols.basic-message';
+import {
+  BasicMessage,
+  BASIC_MESSAGE_TYPE,
+} from '@aviarytech/didcomm-protocols.basic-message';
 
 @ApiTags('messages-api')
 @Controller('messages-api')
@@ -28,26 +31,26 @@ export class MessagesApiController {
 
   @Post()
   async create(@Body() createMessagesApiDto: CreateMessagesApiDto) {
-    let id = sha256(JSON.stringify(createMessagesApiDto));
+    const basicMessage = new BasicMessage(
+      this.didwebService.did,
+      [createMessagesApiDto.to],
+      createMessagesApiDto.data,
+    );
     const msg = await this.messagesApiService.create({
-      ...createMessagesApiDto,
-      id,
-      from: this.didwebService.did,
+      id: basicMessage.payload.id,
+      from: basicMessage.payload.from,
+      to: basicMessage.payload.to[0],
+      data: basicMessage.payload.body.content,
+      when: basicMessage.payload.created_time,
     });
     if (!msg) {
       throw new HttpException('Error creating msg', 400);
     }
-    const sendResult = await this.didcomm.sendMessage(msg.msg.to, {
-      payload: {
-        id,
-        type: BASIC_MESSAGE_TYPE,
-        from: this.didwebService.did,
-        to: [msg.msg.to],
-        created_time: msg.msg.when,
-        body: { content: msg.msg.data },
-      },
-      repudiable: false,
-    });
+
+    const sendResult = await this.didcomm.sendMessage(
+      basicMessage.payload.to[0],
+      basicMessage,
+    );
     return msg;
   }
 

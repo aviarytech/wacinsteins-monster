@@ -1,20 +1,19 @@
 <script lang="ts">
-  //routes
-  import Login from "../routes/Login.svelte";
-  import Home from "../routes/Home.svelte";
-  import Credentials from "../routes/Credentials.svelte";
-  import Presentations from "../routes/Presentations.svelte";
-  import Messages from "../routes/Messages.svelte";
-  import Contacts from "../routes/Contacts.svelte"
-  import Identities from "../routes/Identities.svelte";
-  import Logout from "../routes/Logout.svelte";
-  //components
-  import Loading from "./ui/Loading.svelte"
-  
+//routes
+import Login from "../routes/Login.svelte";
+import Home from "../routes/Home.svelte";
+import Credentials from "../routes/Credentials.svelte";
+import Presentations from "../routes/Presentations.svelte";
+import Messages from "../routes/Messages.svelte";
+import Contacts from "../routes/Contacts.svelte";
+import Identities from "../routes/Identities.svelte";
+import Logout from "../routes/Logout.svelte";
+import Reset from "../routes/Reset.svelte";
+//components
+import Loading from "./ui/Loading.svelte";
 
-  import { Router, Route } from "svelte-navigator";
-  import AuthGuard from "./AuthGuard.svelte";
-
+import { Router, Route } from "svelte-navigator";
+import AuthGuard from "./AuthGuard.svelte";
 </script>
 
 <AuthGuard>
@@ -53,6 +52,9 @@
 
     <Route path="identities">
       <Identities />
+    </Route>
+    <Route path="reset">
+      <Reset />
     </Route>
 
     <Route path="logout">
