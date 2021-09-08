@@ -21,6 +21,7 @@ import {
 } from './entities/presentation.entity';
 import { DIDWebService } from 'src/didweb/didweb.service';
 import { ConfigService } from '@nestjs/config';
+import { UpdatePresentationDto } from './dto/update-presentation.dto';
 
 @Injectable()
 export class PresentationsService {
@@ -115,6 +116,7 @@ export class PresentationsService {
       sha256(nanoid()),
       domain,
       presentationDefinition,
+      invitation.payload.id,
     );
 
     await validateOrReject(presReq, {
@@ -137,5 +139,25 @@ export class PresentationsService {
 
   async findAllRequests() {
     return await this.db.getAllByType('PresentationRequest');
+  }
+
+  async findOneRequestByInvitationId(id: string) {
+    return await this.db.getByProps({
+      '@type': 'PresentationRequest',
+      invitationId: id,
+    });
+  }
+
+  async updatePresentationRequest(
+    id: string,
+    updatePresentation: UpdatePresentationDto,
+  ) {
+    console.log(`here: ${id}`);
+    const presentationRequest = await this.db.getById(id);
+    return await this.db.upsert({
+      id,
+      ...updatePresentation,
+      ...presentationRequest,
+    });
   }
 }
