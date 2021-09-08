@@ -22,7 +22,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@aviarytech/crypto-core": "^0.0.26",
+    "@aviarytech/crypto-core": "^0.0.29",
     "@aviarytech/did-core": "^0.1.13",
     "@aviarytech/did-secrets": "^0.1.14",
     "@aviarytech/didcomm-messaging": "^0.1.22",

@@ -32,7 +32,7 @@ onMount(async () => {
 const openPresentationRequest = (presentationId) => {
   const singleRow = $presentations.find((c) => c["@id"] === presentationId);
   slideOverContent.set({
-    title: `Presentation of credentials requested from ${singleRow.definition.input_descriptors[0].name}`,
+    title: `Presentation Request`,
     component: PresentationDetailedView,
     presentation: singleRow,
   });
@@ -56,7 +56,7 @@ function qrCodeDisplay(id) {
   qrCodeIdValue.set(id[0]);
   console.log(id);
   slideOverContent.set({
-    title: `QR Code for ${id[1]}`,
+    title: ``,
     component: QRcode,
     presentationSubject: [],
   });
@@ -74,21 +74,21 @@ function qrCodeDisplay(id) {
   </div>
   {#if $presentations}
     <DataTable
-      headers="{['Name', 'Schema', 'Constraints', '']}"
+      headers="{['Constraints', '']}"
       data="{$presentations.map((p) => {
         return [
           // {
           //   component: Text,
           //   text: p['@id'],
           // },
-          {
-            component: Text,
-            text: p.definition.input_descriptors[0].name,
-          },
-          {
-            component: Text,
-            text: p.definition.input_descriptors[0].schema,
-          },
+          // {
+          //   component: Text,
+          //   text: p.definition.input_descriptors[0].name,
+          // },
+          // {
+          //   component: Text,
+          //   text: p.definition.input_descriptors[0].schema,
+          // },
           {
             component: ComponentList,
             items: p.definition.input_descriptors[0].constraints.fields.map(

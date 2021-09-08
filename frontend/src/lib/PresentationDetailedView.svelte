@@ -1,7 +1,10 @@
 <script lang="ts">
 //components
+import QRcode from "./QRcode.svelte";
 import ComponentList from "./table-elements/ComponentList.svelte";
 import Tag from "./ui/Tag.svelte";
+import { qrCodeIdValue } from "../stores/presentation";
+import { slideOverContent } from "../stores/ui";
 
 export let presentation;
 
@@ -26,6 +29,20 @@ $: if (Object.entries(subjects).length > 0) {
             class="text-gray-900 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
             aria-current="page">
             Definition
+          </button>
+          <button
+            on:click="{() => {
+              qrCodeIdValue.set('hi');
+              slideOverContent.set({
+                title: ``,
+                component: QRcode,
+                presentationSubject: [],
+              });
+            }}"
+            class:border-pink-500="{visibleSubjectIndex === 1}"
+            class="text-gray-900 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+            aria-current="page">
+            QR
           </button>
         </nav>
       </div>
