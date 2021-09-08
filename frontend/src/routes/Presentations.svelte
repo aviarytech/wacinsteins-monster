@@ -112,7 +112,7 @@ function qrCodeDisplay(id) {
                 label: 'QR code',
                 callback: () => {
                   qrCodeDisplay([
-                    p['@id'],
+                    p['url'],
                     p.definition.input_descriptors[0].name,
                   ]);
                 },
