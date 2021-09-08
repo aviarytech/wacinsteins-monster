@@ -11,10 +11,15 @@
 <script lang="ts">
 //stores
 import { qrCodeIdValue } from "../stores/presentation";
+//component
+import Button from "./ui/Button.svelte";
 //ecma imports
 import QRious from "qrious";
 import { onMount } from "svelte";
+import CopyToClipboard from "svelte-copy-to-clipboard";
+import swal from "sweetalert";
 
+//default init
 const QRcode = new QRious();
 //qr default parameters
 export let errorCorrection = "H";
@@ -51,10 +56,37 @@ $: {
 onMount(() => {
   generateQrCode();
 });
+//copying function
+
+function copyTest() {
+  console.log($qrCodeIdValue);
+}
 </script>
 
 <template>
-  <div class="">
+  <CopyToClipboard
+    text="{$qrCodeIdValue}"
+    on:copy="{() => {
+      swal({
+        title: 'Success',
+        text: `you have copied url: ${$qrCodeIdValue}`,
+        icon: 'success',
+        button: 'Aww yiss!',
+      });
+    }}"
+    on:fail="{() => {
+      swal({
+        title: 'Something went wrong',
+        text: `Unable to copy text. try the QRcode`,
+        icon: 'error',
+        button: ':(',
+      });
+    }}"
+    let:copy>
+    <button class="button" on:click="{copy}">Copy to clipboard</button>
+  </CopyToClipboard>
+  <!--<div id="clipboard">{$qrCodeIdValue}</div>-->
+  <div class="relative">
     <img src="{image}" alt="{value}" class="{className}" />
     <img
       src="./favicon.ico"

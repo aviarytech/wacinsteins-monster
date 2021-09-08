@@ -56,6 +56,7 @@
     "magic-sdk": "^4.4.1",
     "qrious": "^4.0.2",
     "schema-dts": "^0.10.0",
+    "svelte-copy-to-clipboard": "^0.2.5",
     "svelte-jester": "^1.7.0",
     "svelte-navigator": "^3.1.5",
     "sweetalert": "^2.1.2"

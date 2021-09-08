@@ -1,4 +1,4 @@
-<style lang="postcss">
+<style global lang="postcss">
 .button {
   @apply inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white;
 }
