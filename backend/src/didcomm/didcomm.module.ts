@@ -12,9 +12,12 @@ import { DIDWebService } from 'src/didweb/didweb.service';
 import { Sagas } from './sagas';
 import { ContactsService } from 'src/contacts/contacts.service';
 import { MessagesApiService } from 'src/messages-api/messages-api.service';
+import { DIDCommController } from './didcomm.controller';
+import { PresentationsService } from 'src/presentations/presentations.service';
 
 @Module({
   imports: [CqrsModule],
+  controllers: [DIDCommController],
   providers: [
     DIDCommService,
     Logger,
@@ -29,6 +32,7 @@ import { MessagesApiService } from 'src/messages-api/messages-api.service';
     DIDWebService,
     ContactsService,
     MessagesApiService,
+    PresentationsService,
   ],
   exports: [DIDCommService],
 })

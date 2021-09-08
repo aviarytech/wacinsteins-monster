@@ -1,6 +1,7 @@
 import {
   isArray,
   IsArray,
+  IsEnum,
   IsNotEmpty,
   IsNotEmptyObject,
   IsObject,
@@ -8,6 +9,13 @@ import {
   MinLength,
   ValidateNested,
 } from 'class-validator';
+
+export enum PRESENTATION_STATUSES {
+  CREATED = 'created',
+  PROPOSED = 'proposed',
+  REQUESTED = 'requested',
+  SUBMITTED = 'submitted',
+}
 
 export class InputFilter {
   @IsNotEmpty()
@@ -113,19 +121,29 @@ export class PresentationRequest {
   @ValidateNested()
   definition: PresentationDefinition;
 
+  @IsNotEmpty()
+  @IsString()
+  invitationId: string;
+
   constructor(
     id: string,
     url: string,
     challenge: string,
     domain: string,
     definition: PresentationDefinition,
+    invitationId: string,
   ) {
     this.id = id;
     this.url = url;
     this.challenge = challenge;
     this.domain = domain;
     this.definition = definition;
+    this.invitationId = invitationId;
   }
+}
+
+export class PresentationProposal {
+  from: string;
 }
 
 export class Presentation {
@@ -136,8 +154,14 @@ export class Presentation {
   @ValidateNested()
   request: PresentationRequest;
 
+  proposal?: PresentationProposal;
+
+  @IsEnum(PRESENTATION_STATUSES)
+  status: PRESENTATION_STATUSES;
+
   constructor(id: string, request: PresentationRequest) {
     this.id = id;
     this.request = request;
+    this.status = PRESENTATION_STATUSES.CREATED;
   }
 }
