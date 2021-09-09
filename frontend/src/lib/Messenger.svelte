@@ -4,16 +4,38 @@ import ChatMessage from "./ChatMessage.svelte";
 import { user } from "../stores/user";
 import { sha256 } from "../utils/sha256";
 import { msgUSerBackend, selectedUser } from "../stores/messages";
+//ECAM imports
+import { io } from "socket.io-client";
 import { onMount } from "svelte";
+//api
 import {
   getCurrentConversation,
   postNewMsg2Conversation,
 } from "../api/messagesLogic";
-
+//declaring to remove later errors
+let socket;
 onMount(async () => {
   if ($selectedUser) {
+    //loading all messages at the beginning
     msgUSerBackend.set(await getCurrentConversation($selectedUser));
   }
+  socket = io("http://localhost:3100/chat", {
+    secure: false,
+    reconnect: true,
+    rejectUnauthorized: false,
+    transports: ["websocket"],
+  });
+  socket.on("connect", () => {
+    console.log("websocket connected");
+  });
+  socket.on("disconnect", () => {
+    console.log("webscoket disconnected");
+  });
+  socket.on("error", console.error);
+  //TODO: same with backend. How do we ensure that when the other user send a msg that it is sent to the other user
+  socket.on("msgToClient", (msg) => {
+    //receiveMessage(msg);
+  });
 });
 //because ${storename} only grabs the current value we need to introduce reactivity by subscribing (probably exists a way to use $: (value))
 //svelte is weird but the best so far
@@ -30,14 +52,13 @@ async function newMsg() {
       data: chatMsg,
       when: new Date(),
     };
-    chatMsg = "";
-
-    //console.log(fullPayload)
-    //WARN: works but I don't like this because I want real time
+    console.log(`send ${chatMsg}`);
+    socket.emit("msgToServer", chatMsg);
+    //saving the msg to the db(for user history)
     await postNewMsg2Conversation(fullPayload);
-    msgUSerBackend.set(await getCurrentConversation($selectedUser));
-
+    //msgUSerBackend.set(await getCurrentConversation($selectedUser));
     console.log("localMSg", $msgUSerBackend);
+    chatMsg = "";
   }
 }
 const onKeyPress = (e) => {

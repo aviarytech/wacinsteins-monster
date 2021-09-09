@@ -19,7 +19,7 @@ export class MsgGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected ${client.id}`)
   }
-
+  //TODO: how do we ensure only the two persons in chat communicate one another?
   @SubscribeMessage('msgToServer')
   handleMessage(client: Socket, payload: string): void { //: WsResponse<string> {
     // not type safe
