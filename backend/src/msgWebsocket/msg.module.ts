@@ -4,5 +4,5 @@ import { MsgGateway } from './msg.gateway';
 @Module({
   providers: [MsgGateway],
 })
-export class MsgGatewatModule { }
+export class MsgGatewayModule { }
 
