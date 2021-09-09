@@ -17,7 +17,6 @@ import { PresentationsModule } from './presentations/presentations.module';
 import { CredentialsModule } from './credentials/credentials.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { MessagesApiModule } from './messages-api/messages-api.module';
-import { MessageWebsocketGateway } from './message-websocket.gateway';
 
 @Module({
   imports: [
@@ -39,7 +38,6 @@ import { MessageWebsocketGateway } from './message-websocket.gateway';
     DIDResolverService,
     DocumentLoaderService,
     KMSService,
-    MessageWebsocketGateway,
     ...CommandHandlers,
     ...EventHandlers,
   ],
