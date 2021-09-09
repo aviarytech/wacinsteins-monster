@@ -17,6 +17,7 @@ import { PresentationsModule } from './presentations/presentations.module';
 import { CredentialsModule } from './credentials/credentials.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { MessagesApiModule } from './messages-api/messages-api.module';
+import { MsgGatewayModule } from './msgWebsocket/msg.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { MessagesApiModule } from './messages-api/messages-api.module';
     ContactsModule,
     MessagesApiModule,
     DIDCommModule,
+    MsgGatewayModule
   ],
   controllers: [AppController, AdminController],
   providers: [
