@@ -19,13 +19,26 @@ export class MsgGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected ${client.id}`)
   }
-  //TODO: how do we ensure only the two persons in chat communicate one another?
-  @SubscribeMessage('msgToServer')
-  handleMessage(client: Socket, payload: string): void { //: WsResponse<string> {
-    // not type safe
-    //this.server.emit('msgToClient', payload)
-    this.logger.log(`The client sent the following message to the server ${payload}`)
-    //client.emit('msgToClient', payload)
-    //return { event: 'msgToClient', data: payload };
+
+  @SubscribeMessage('chatToServer')
+  handleMessage(client: Socket, message: { sender: string, room: string, message: string }) {
+    this.logger.log(`Received msg from Client: ${client.id} in ${message.room}; msg: ${message.message}`)
+    this.server.to(message.room).emit('chatToClient', message);
+    this.logger.log(`Server is emitting to ${message.room}; msg: ${message.message} originally from ${client.id}`)
+
+  }
+
+  @SubscribeMessage('joinRoom')
+  handleRoomJoin(client: Socket, room: string) {
+    this.logger.log(`Client: ${client.id} joined ${room}`)
+    client.join(room);
+    client.emit('joinedRoom', room);
+  }
+
+  @SubscribeMessage('leaveRoom')
+  handleRoomLeave(client: Socket, room: string) {
+    this.logger.log(`Client: ${client.id} left ${room}`)
+    client.leave(room);
+    client.emit('leftRoom', room);
   }
 }

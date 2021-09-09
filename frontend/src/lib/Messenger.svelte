@@ -13,64 +13,88 @@ import {
   postNewMsg2Conversation,
 } from "../api/messagesLogic";
 //declaring to remove later errors
-let socket;
+let socket = io("http://localhost:3100/chat", {
+  secure: false,
+  reconnect: true,
+  rejectUnauthorized: false,
+  transports: ["websocket"],
+});
 onMount(async () => {
   if ($selectedUser) {
     //loading all messages at the beginning
     msgUSerBackend.set(await getCurrentConversation($selectedUser));
+    //we need to get the did domain from the selectedUser and ours (don't know how)
+    console.log($selectedUser);
+    console.log($msgUSerBackend);
   }
+  //socket logic
   socket = io("http://localhost:3100/chat", {
     secure: false,
     reconnect: true,
     rejectUnauthorized: false,
     transports: ["websocket"],
   });
+
   socket.on("connect", () => {
     console.log("websocket connected");
   });
+
   socket.on("disconnect", () => {
     console.log("webscoket disconnected");
   });
+
   socket.on("error", console.error);
-  //TODO: same with backend. How do we ensure that when the other user send a msg that it is sent to the other user
-  socket.on("msgToClient", (msg) => {
-    //receiveMessage(msg);
+  //all events
+  const listener = (eventName, ...args) => {
+    console.log(eventName, args);
+  };
+
+  socket.onAny(listener);
+  //specific
+  socket.on("chatToClient", (data) => {
+    console.log(data);
   });
 });
+
 //because ${storename} only grabs the current value we need to introduce reactivity by subscribing (probably exists a way to use $: (value))
 //svelte is weird but the best so far
 selectedUser.subscribe(async (v) => {
   msgUSerBackend.set(await getCurrentConversation($selectedUser));
 });
 
+//input dom handling
 let chatMsg: string;
-async function newMsg() {
-  if (chatMsg) {
-    //building the new entry
-    const fullPayload: Object = {
-      to: $selectedUser,
-      data: chatMsg,
-      when: new Date(),
-    };
-    console.log(`send ${chatMsg}`);
-    socket.emit("msgToServer", chatMsg);
-    //saving the msg to the db(for user history)
-    await postNewMsg2Conversation(fullPayload);
-    //msgUSerBackend.set(await getCurrentConversation($selectedUser));
-    console.log("localMSg", $msgUSerBackend);
-    chatMsg = "";
-  }
-}
 const onKeyPress = (e) => {
   if (e.charCode === 13) {
     newMsg();
   }
 };
+async function newMsg() {
+  if (chatMsg) {
+    //building the new entry for the mongo db
+    const fullPayload: Object = {
+      to: $selectedUser,
+      data: chatMsg,
+      when: new Date(),
+    };
+
+    //saving the data to the mongo db
+    await postNewMsg2Conversation(fullPayload);
+
+    //websocket new entry
+    socket.emit("chatToServer", {
+      sender: $user,
+      room: $selectedUser,
+      message: chatMsg,
+    });
+    chatMsg = "";
+  }
+}
 </script>
 
 <template>
   <!--TODO: surround the entire chat -->
-
+  <h1>you are connected with domain:<bold>{$selectedUser}</bold></h1>
   <div
     class="inset-0 border-2 border-gray-200 border-dashed bg-gray-100 rounded-lg overflow-y-auto">
     {#if $msgUSerBackend}

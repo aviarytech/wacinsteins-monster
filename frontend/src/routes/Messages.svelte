@@ -4,7 +4,7 @@
 <script lang="ts">
 //components import
 import DataTable from "../lib/table-elements/DataTable.svelte";
-import Text from '../lib/table-elements/Text.svelte'
+import Text from "../lib/table-elements/Text.svelte";
 import Image from "../lib/table-elements/Image.svelte";
 import Messenger from "../lib/Messenger.svelte";
 //api
@@ -15,21 +15,31 @@ import { selectedUser } from "../stores/messages";
 import { sha256 } from "../utils/sha256";
 //ecma imports
 import { onMount } from "svelte";
+import { io } from "socket.io-client";
 
+//TODO: move all of the socket logic in a separate ts or store file.
+let socket;
 onMount(async () => {
   const res = await getContacts();
+  socket = io("http://localhost:3100/chat", {
+    secure: false,
+    reconnect: true,
+    rejectUnauthorized: false,
+    transports: ["websocket"],
+  });
   //console.log(res);
 
   //WARN: future point of failure
-  console.log($selectedUser);
   if (res.length > 0 && !$selectedUser) {
     selectedUser.set(res[0]["did"]);
+    socket.emit("joinRoom", $selectedUser);
   }
   availableContacts.set(res);
 });
 function openConversation(id: string) {
+  socket.emit("leaveRoom", $selectedUser);
   selectedUser.set(id);
-  //console.log($selectedUser)
+  socket.emit("joinRoom", $selectedUser);
 }
 </script>
 
