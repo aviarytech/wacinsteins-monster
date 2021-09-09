@@ -1,20 +1,22 @@
 import {
-  isArray,
   IsArray,
   IsEnum,
   IsNotEmpty,
-  IsNotEmptyObject,
   IsObject,
   IsString,
-  MinLength,
   ValidateNested,
 } from 'class-validator';
 
-export enum PRESENTATION_STATUSES {
+export enum PRESENTATION_REQUEST_STATUSES {
   CREATED = 'created',
   PROPOSED = 'proposed',
   REQUESTED = 'requested',
   SUBMITTED = 'submitted',
+}
+
+export enum PRESENTATION_REQUEST_ROLES {
+  PROVER = 'prover',
+  VERIFIER = 'verifier',
 }
 
 export class InputFilter {
@@ -100,6 +102,10 @@ export class PresentationDefinition {
   }
 }
 
+export class PresentationProposal {
+  from: string;
+}
+
 export class PresentationRequest {
   @IsNotEmpty()
   @IsString()
@@ -125,6 +131,14 @@ export class PresentationRequest {
   @IsString()
   invitationId: string;
 
+  proposal?: PresentationProposal;
+
+  @IsEnum(PRESENTATION_REQUEST_STATUSES)
+  status: PRESENTATION_REQUEST_STATUSES;
+
+  @IsEnum(PRESENTATION_REQUEST_ROLES)
+  role: PRESENTATION_REQUEST_ROLES;
+
   constructor(
     id: string,
     url: string,
@@ -132,6 +146,7 @@ export class PresentationRequest {
     domain: string,
     definition: PresentationDefinition,
     invitationId: string,
+    role: PRESENTATION_REQUEST_ROLES,
   ) {
     this.id = id;
     this.url = url;
@@ -139,29 +154,7 @@ export class PresentationRequest {
     this.domain = domain;
     this.definition = definition;
     this.invitationId = invitationId;
-  }
-}
-
-export class PresentationProposal {
-  from: string;
-}
-
-export class Presentation {
-  @IsNotEmpty()
-  id: string;
-
-  @IsNotEmpty()
-  @ValidateNested()
-  request: PresentationRequest;
-
-  proposal?: PresentationProposal;
-
-  @IsEnum(PRESENTATION_STATUSES)
-  status: PRESENTATION_STATUSES;
-
-  constructor(id: string, request: PresentationRequest) {
-    this.id = id;
-    this.request = request;
-    this.status = PRESENTATION_STATUSES.CREATED;
+    this.status = PRESENTATION_REQUEST_STATUSES.CREATED;
+    this.role = role;
   }
 }

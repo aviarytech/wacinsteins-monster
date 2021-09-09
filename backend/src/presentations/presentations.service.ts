@@ -9,19 +9,18 @@ import { CreatePresentationDefinitionDto } from './dto/create-presentation-defin
 
 import { CreatePresentationRequestDto } from './dto/create-presentation-request.dto';
 
-import { CreatePresentationDto } from './dto/create-presentation.dto';
 import {
   InputConstraint,
   InputDescriptor,
   InputField,
   InputFilter,
-  Presentation,
   PresentationDefinition,
   PresentationRequest,
+  PRESENTATION_REQUEST_ROLES,
 } from './entities/presentation.entity';
 import { DIDWebService } from 'src/didweb/didweb.service';
+import { UpdatePresentationRequestDto } from './dto/update-presentation-request.dto';
 import { ConfigService } from '@nestjs/config';
-import { UpdatePresentationDto } from './dto/update-presentation.dto';
 
 @Injectable()
 export class PresentationsService {
@@ -29,42 +28,19 @@ export class PresentationsService {
     private db: DBService,
     private log: Logger,
     private didWeb: DIDWebService,
+    private config: ConfigService,
   ) {}
 
-  async create(
-    createPresentationDto: CreatePresentationDto,
-  ): Promise<Presentation> {
-    // todo
-    return null;
-  }
-
-  async findAll(): Promise<Presentation[]> {
-    return await this.db.getAllByType('Presentation');
-  }
-
-  async findOne(id: string): Promise<Presentation> {
-    return await this.db.getById(id);
-  }
-
   async createDefinition(
-    createPresentationDefinitionDto: CreatePresentationDefinitionDto,
+    createPresentationDefinitionDto: {
+      input_descriptors: InputDescriptor[];
+      frame: object;
+    },
+    id?: string,
   ) {
-    const { schema, paths } = createPresentationDefinitionDto;
-    const name = sha256(nanoid());
-    // const frame = descriptors2Frame(schema, paths);
-    const frame = {};
-    const id = sha256(nanoid());
-
-    const definition = new PresentationDefinition(id, frame, [
-      new InputDescriptor(
-        sha256(nanoid()),
-        name,
-        schema,
-        new InputConstraint(
-          paths.map((p) => new InputField([p], new InputFilter('string'))),
-        ),
-      ),
-    ]);
+    const { input_descriptors, frame } = createPresentationDefinitionDto;
+    id = id ?? sha256(nanoid());
+    const definition = new PresentationDefinition(id, frame, input_descriptors);
 
     await validateOrReject(definition, {
       validationError: { target: false },
@@ -88,18 +64,11 @@ export class PresentationsService {
     return await this.db.getAllByType('PresentationDefinition');
   }
 
-  async createRequest(
-    createPresentationRequestDto: CreatePresentationRequestDto,
-  ): Promise<PresentationRequest> {
-    const { presentationDefinitionId } = createPresentationRequestDto;
-    const presentationDefinition = await this.db.getById(
-      presentationDefinitionId,
-    );
-    if (!presentationDefinition) {
-      throw new Error(
-        `Presentation Definition ${presentationDefinitionId} not found`,
-      );
-    }
+  async createRequest(createRequest: {
+    definition: PresentationDefinition;
+    role: PRESENTATION_REQUEST_ROLES;
+  }): Promise<PresentationRequest> {
+    const { definition, role } = createRequest;
     const invitation = new InvitationMessage(
       this.didWeb.did,
       this.didWeb.basePath + '/invitation',
@@ -107,16 +76,16 @@ export class PresentationsService {
     );
     const id = sha256(nanoid());
     const url = invitation.url;
-    const domain = 'REPLACE ME';
-    const frame = {};
+    const domain = this.config.get('HOST');
 
     const presReq = new PresentationRequest(
       id,
       url,
       sha256(nanoid()),
       domain,
-      presentationDefinition,
+      definition,
       invitation.payload.id,
+      role,
     );
 
     await validateOrReject(presReq, {
@@ -141,7 +110,7 @@ export class PresentationsService {
     return await this.db.getAllByType('PresentationRequest');
   }
 
-  async findOneRequestByInvitationId(id: string) {
+  async findOneRequestByInvitationId(id: string): Promise<PresentationRequest> {
     return await this.db.getByProps({
       '@type': 'PresentationRequest',
       invitationId: id,
@@ -150,14 +119,13 @@ export class PresentationsService {
 
   async updatePresentationRequest(
     id: string,
-    updatePresentation: UpdatePresentationDto,
-  ) {
-    console.log(`here: ${id}`);
-    const presentationRequest = await this.db.getById(id);
+    updatePresentationRequest: UpdatePresentationRequestDto,
+  ): Promise<PresentationRequest> {
+    const request = await this.db.getById(id);
     return await this.db.upsert({
       id,
-      ...updatePresentation,
-      ...presentationRequest,
+      ...request,
+      ...updatePresentationRequest,
     });
   }
 }

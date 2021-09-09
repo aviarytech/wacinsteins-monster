@@ -28,7 +28,7 @@
     "@aviarytech/didcomm-messaging": "^0.1.33",
     "@aviarytech/didcomm-protocols.basic-message": "^0.1.33",
     "@aviarytech/didcomm-protocols.out-of-band": "^0.1.33",
-    "@aviarytech/didcomm-protocols.present-proof": "^0.1.33",
+    "@aviarytech/didcomm-protocols.present-proof": "^0.1.36",
     "@aviarytech/didcomm-protocols.trust-ping": "^0.1.33",
     "@nestjs/common": "^8.0.6",
     "@nestjs/config": "^1.0.1",
