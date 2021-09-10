@@ -26,7 +26,6 @@ onMount(async () => {
   const res = await getPresentations();
   if (res) {
     presentations.set(res);
-    console.log(res);
   }
 });
 
