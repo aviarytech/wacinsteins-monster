@@ -42,4 +42,5 @@ import { Link } from "svelte-navigator";
         </div>
       </div>
     </div>
-  </main></template>
+  </main>
+</template>

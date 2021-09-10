@@ -13,7 +13,7 @@
 
 <script lang="ts">
 // js imports
-import { Router, Link, useLocation } from "svelte-navigator";
+import { Router, Link, useLocation, navigate } from "svelte-navigator";
 import { Routes } from "../stores/routes";
 // stores
 import { mobileSidebarClose } from "../stores/ui";
@@ -83,13 +83,15 @@ import Image from "./table-elements/Image.svelte";
         </button>
       </div>
 
-      <div class="flex-shrink-0 flex items-center px-4">
+      <button
+        on:click="{() => navigate('/', { replace: true })}"
+        class="flex-shrink-0 flex items-center px-4">
         <img
           class="h-8 w-auto"
           src="https://media.bitcoinfiles.org/18a10cb9df7102cbb58af3bb653e6d1c4fe4b70d1f039d9e3bb19e4e877578cc"
           alt="av1" />
-        <a href="/" class="px-2 font-bold">aviary.one</a>
-      </div>
+        <h1 class="px-2 font-bold">aviary.one</h1>
+      </button>
       <div class="mt-5 flex-1 h-0 overflow-y-auto">
         <nav class="px-2 space-y-1">
           <Router>
@@ -126,13 +128,15 @@ import Image from "./table-elements/Image.svelte";
       <div
         class="flex flex-col flex-grow border-r border-gray-200 pt-3 pb-4 bg-white overflow-y-auto">
         <div class="flex-grow flex flex-col">
-          <div class="flex items-center flex-shrink-0 px-4 pb-3">
+          <button
+            on:click="{() => navigate('/', { replace: true })}"
+            class="flex items-center flex-shrink-0 px-4 pb-3 rounded-md">
             <img
-              class="h-10 w-auto"
+              class="h-8 w-auto"
               src="https://media.bitcoinfiles.org/18a10cb9df7102cbb58af3bb653e6d1c4fe4b70d1f039d9e3bb19e4e877578cc"
               alt="av1" />
-            <a href="/" class="px-2 font-bold">aviary.one</a>
-          </div>
+            <h1 class="px-2 font-bold">aviary.one</h1>
+          </button>
           <div class="inset-0 flex items-center" aria-hidden="true">
             <div class="w-full border-t border-gray-300"></div>
           </div>
@@ -140,7 +144,6 @@ import Image from "./table-elements/Image.svelte";
             <nav class="flex-1 px-2 py-3 bg-white space-y-1">
               {#each Routes as route}
                 {#if route.heroIcon !== ""}
-
                   <Link
                     to="{route.routeUrl}"
                     class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
