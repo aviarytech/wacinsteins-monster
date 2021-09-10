@@ -109,7 +109,7 @@ function tailwingBgColorizer(value: string): string | void {
   </div>
   {#if $presentations}
     <DataTable
-      headers="{['', 'role', 'status', 'Constraints', '']}"
+      headers="{['', 'Role', 'Status', 'Constraints', '']}"
       data="{$presentations.map((p) => {
         return [
           {
