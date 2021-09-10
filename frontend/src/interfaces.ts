@@ -15,6 +15,7 @@ export interface NameSchema {
 export interface PostPresentationPayload {
   schema: string;
   paths: string[];
+  frame: object;
 }
 
 export interface Credential {

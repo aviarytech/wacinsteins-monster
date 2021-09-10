@@ -20,6 +20,7 @@ async function presentationPostRequest() {
     schema: "https://w3id.org/vaccination#VaccinationCertificate",
     // TODO: make it more generic //grab context from credentialsChosen
     paths: data[1], //selected schema fields
+    frame: data[0],
   };
   await postNewPresentationRequest(postPayload);
   const res = await getPresentations();

@@ -6,4 +6,7 @@ export class CreatePresentationDefinitionDto {
 
   @ApiProperty()
   paths: string[]; // assuming type string for now
+
+  @ApiProperty()
+  frame: object;
 }
