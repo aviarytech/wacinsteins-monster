@@ -33,7 +33,7 @@ export async function acceptInvitation(
     const response = await axios.post(endpoint, payload);
     console.log(response);
     // success
-    if (response.status == 201) {
+    if (response.status == 201 || 200) {
       // test for status you want, etc
       console.log(response.status);
       return response.data;
