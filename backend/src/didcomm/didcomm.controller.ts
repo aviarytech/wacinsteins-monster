@@ -19,7 +19,7 @@ export class DIDCommController {
   constructor(
     private readonly DIDComm: DIDCommService,
     private readonly didWeb: DIDWebService,
-  ) {}
+  ) { }
 
   @Post('/')
   async ReceiveDIDCommMessage(

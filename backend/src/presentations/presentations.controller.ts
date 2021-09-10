@@ -23,11 +23,15 @@ import { ApiTags } from '@nestjs/swagger';
 import { nanoid } from 'nanoid';
 import { base64url, sha256 } from '@aviarytech/crypto-core';
 import { AcceptInvitationDto } from './dto/accept-invitation.dto';
+import { DIDCommService } from 'src/didcomm/didcomm.service';
 
 @ApiTags('presentations')
 @Controller('presentations')
 export class PresentationsController {
-  constructor(private readonly presentationsService: PresentationsService) { }
+  constructor(
+    private readonly presentationsService: PresentationsService,
+    private readonly didCommService: DIDCommService
+  ) { }
 
   @Post('requests')
   async create(
@@ -107,17 +111,12 @@ export class PresentationsController {
 
   @Post('acceptInvitation')
   async acceptInvitation(@Body() acceptInvitationDto: AcceptInvitationDto) {
-    //WARN: regrexs way (not for the faint of hearts)
-    // const regrexs = /(?<==).*/gmi
-    // let res = regrexs.exec(acceptInvitationDto.url)[0]
-    //return (base64url.decode(res))
-
     const url = new URL(acceptInvitationDto.url)
     let params = new URLSearchParams(url.search)
-    console.log(params)
-    console.log(base64url.decode(params.get('_oob')).toString())
-    return base64url.decode(params.get('_oob')).toString()
-    //return await this.presentationsService.acceptInvitation(url)
+    let decodedBase64Data = base64url.decode(params.get('_oob')).toString()
+    //console.log(decodedBase64Data)
+    await this.didCommService.receiveMessage(JSON.parse(decodedBase64Data))
+    return 'Success'
   }
 
 }

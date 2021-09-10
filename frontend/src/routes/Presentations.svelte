@@ -41,6 +41,11 @@ const openPresentationRequest = (presentationId) => {
 };
 
 let rightPreviewWindowDisplayed: boolean = false;
+$: if ($slideOverContent) {
+  rightPreviewWindowDisplayed = true;
+} else {
+  rightPreviewWindowDisplayed = false;
+}
 const newPresentationRequest = () => {
   slideOverContent.set({
     title: "New Presentation Request",
@@ -55,7 +60,7 @@ const newPresentationRequest = () => {
 
 function submitUrl() {
   slideOverContent.set({
-    title: "Submit url",
+    title: "",
     component: SubmitCredentials,
     presentationSubject: [],
   });
