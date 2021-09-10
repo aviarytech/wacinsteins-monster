@@ -5,11 +5,14 @@
 </style>
 
 <script lang="ts">
+import { wellKnown } from "../stores/well-known";
+
 //stores
 import { Link, Router } from "svelte-navigator";
 import { profileDropMenu } from "../stores/ui";
 import { user } from "../stores/user";
 import { sha256 } from "../utils/sha256";
+import Avatar from "./Avatar.svelte";
 
 function handleNav() {
   profileDropMenu.set(!$profileDropMenu);
@@ -29,12 +32,7 @@ function handleNav() {
           aria-haspopup="true"
           on:click="{handleNav}">
           <span class="sr-only">Open user menu</span>
-          <img
-            class="h-8 w-8 rounded-full"
-            src="{`https://www.tinygraphs.com/labs/isogrids/hexa16/${sha256(
-              $user.email
-            )}?theme=seascape&numcolors=4`}"
-            alt="" />
+          <Avatar value="{$wellKnown.id}" />
         </button>
       </div>
 

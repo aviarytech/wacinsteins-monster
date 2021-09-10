@@ -6,9 +6,14 @@ export let data: object;
 //components
 import Button from "./ui/Button.svelte";
 //api
-import { postNewPresentationRequest } from "../api/presentationAxios";
+import {
+  getPresentations,
+  postNewPresentationRequest,
+} from "../api/presentationAxios";
 // interfaces
 import type { PostPresentationPayload } from "../interfaces";
+import { presentations } from "../stores/presentation";
+import { slideOverContent } from "../stores/ui";
 
 async function presentationPostRequest() {
   let postPayload: PostPresentationPayload = {
@@ -16,8 +21,12 @@ async function presentationPostRequest() {
     // TODO: make it more generic //grab context from credentialsChosen
     paths: data[1], //selected schema fields
   };
-  let res = await postNewPresentationRequest(postPayload);
-  window.location.reload();
+  await postNewPresentationRequest(postPayload);
+  const res = await getPresentations();
+  if (res) {
+    presentations.set(res);
+  }
+  slideOverContent.set(null);
 }
 </script>
 
