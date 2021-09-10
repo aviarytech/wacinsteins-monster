@@ -17,11 +17,13 @@ import ComponentList from "../lib/table-elements/ComponentList.svelte";
 import Tag from "../lib/ui/Tag.svelte";
 import QRcode from "../lib/QRcode.svelte";
 import Avatar from "../lib/Avatar.svelte";
-//js imports
+import SubmitCredentials from "../lib/slideOverComponents/submitCredentials.svelte";
+//ECMA imports
 import { onMount } from "svelte";
 //stores
 import { presentations, qrCodeIdValue } from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
+
 onMount(async () => {
   const res = await getPresentations();
   if (res) {
@@ -51,7 +53,17 @@ const newPresentationRequest = () => {
   rightPreviewWindowDisplayed = !rightPreviewWindowDisplayed;
 };
 
-//BUG: the X to close the window doesn't show up.
+function submitUrl() {
+  slideOverContent.set({
+    title: "Submit url",
+    component: SubmitCredentials,
+    presentationSubject: [],
+  });
+  if (rightPreviewWindowDisplayed) {
+    slideOverContent.set(null);
+  }
+  rightPreviewWindowDisplayed = !rightPreviewWindowDisplayed;
+}
 function qrCodeDisplay(id) {
   qrCodeIdValue.set(id[0]);
   console.log(id);
@@ -65,12 +77,8 @@ function qrCodeDisplay(id) {
 
 <template>
   <div class="py-2">
-    <button
-      on:click="{() => newPresentationRequest()}"
-      type="button"
-      class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-      New
-    </button>
+    <Button label="New" callback="{() => newPresentationRequest()}" />
+    <Button label="Submit" callback="{() => submitUrl()}" />
   </div>
   {#if $presentations}
     <DataTable

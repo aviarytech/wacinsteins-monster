@@ -21,12 +21,13 @@ import { CreatePresentationDefinitionDto } from './dto/create-presentation-defin
 import { CreatePresentationRequestDto } from './dto/create-presentation-request.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { nanoid } from 'nanoid';
-import { sha256 } from '@aviarytech/crypto-core';
+import { base64url, sha256 } from '@aviarytech/crypto-core';
+import { AcceptInvitationDto } from './dto/accept-invitation.dto';
 
 @ApiTags('presentations')
 @Controller('presentations')
 export class PresentationsController {
-  constructor(private readonly presentationsService: PresentationsService) {}
+  constructor(private readonly presentationsService: PresentationsService) { }
 
   @Post('requests')
   async create(
@@ -103,4 +104,20 @@ export class PresentationsController {
   async findAllDefinitions() {
     return await this.presentationsService.findAllDefinitions();
   }
+
+  @Post('acceptInvitation')
+  async acceptInvitation(@Body() acceptInvitationDto: AcceptInvitationDto) {
+    //WARN: regrexs way (not for the faint of hearts)
+    // const regrexs = /(?<==).*/gmi
+    // let res = regrexs.exec(acceptInvitationDto.url)[0]
+    //return (base64url.decode(res))
+
+    const url = new URL(acceptInvitationDto.url)
+    let params = new URLSearchParams(url.search)
+    console.log(params)
+    console.log(base64url.decode(params.get('_oob')).toString())
+    return base64url.decode(params.get('_oob')).toString()
+    //return await this.presentationsService.acceptInvitation(url)
+  }
+
 }

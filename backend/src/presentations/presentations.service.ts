@@ -29,7 +29,7 @@ export class PresentationsService {
     private log: Logger,
     private didWeb: DIDWebService,
     private config: ConfigService,
-  ) {}
+  ) { }
 
   async createDefinition(
     createPresentationDefinitionDto: {
@@ -127,5 +127,11 @@ export class PresentationsService {
       ...request,
       ...updatePresentationRequest,
     });
+  }
+
+  async acceptInvitation(url: any): Promise<any> {
+    const regrex = /(?<==).*/gmi
+    let sha64 = regrex.exec(url)
+    return await sha64
   }
 }
