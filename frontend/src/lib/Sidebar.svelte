@@ -130,7 +130,7 @@ import Image from "./table-elements/Image.svelte";
         <div class="flex-grow flex flex-col">
           <button
             on:click="{() => navigate('/', { replace: true })}"
-            class="flex items-center flex-shrink-0 px-4 pb-3 rounded-md">
+            class="flex items-center flex-shrink-0 px-4 pb-5 rounded-md">
             <img
               class="h-8 w-auto"
               src="https://media.bitcoinfiles.org/18a10cb9df7102cbb58af3bb653e6d1c4fe4b70d1f039d9e3bb19e4e877578cc"
