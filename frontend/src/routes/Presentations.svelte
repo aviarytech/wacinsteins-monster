@@ -17,6 +17,7 @@ import ComponentList from "../lib/table-elements/ComponentList.svelte";
 import Tag from "../lib/ui/Tag.svelte";
 import QRcode from "../lib/QRcode.svelte";
 import Avatar from "../lib/Avatar.svelte";
+import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestSelector.svelte";
 import AcceptInvitation from "../lib/slideOverComponents/acceptInvitation.svelte";
 //ECMA imports
 import { onMount } from "svelte";
@@ -70,6 +71,13 @@ function submitUrl() {
   rightPreviewWindowDisplayed = !rightPreviewWindowDisplayed;
 }
 
+function openSubmitPresentation(id: string) {
+  slideOverContent.set({
+    title: "Submit Presentation",
+    component: SubmitPresentationRequestSelector,
+  });
+}
+
 function qrCodeDisplay(id) {
   qrCodeIdValue.set(id[0]);
   slideOverContent.set({
@@ -119,8 +127,8 @@ function tailwingBgColorizer(value: string): string | void {
 
 <template>
   <div class="py-2">
-    <Button label="New" callback="{() => newPresentationRequest()}" />
-    <Button label="Submit" callback="{() => submitUrl()}" />
+    <Button label="New" callback="{async () => newPresentationRequest()}" />
+    <Button label="Accept Invitation" callback="{async () => submitUrl()}" />
   </div>
   {#if $presentations}
     <DataTable
@@ -134,11 +142,13 @@ function tailwingBgColorizer(value: string): string | void {
           {
             component: Tag,
             text: p['role'],
+            fontColor: 'text-white',
             bgCol: tailwingBgColorizer(p['role']),
           },
           {
             component: Tag,
             text: p['status'],
+            fontColor: 'text-white',
             bgCol: tailwingBgColorizer(p['status']),
           },
           {
@@ -159,17 +169,28 @@ function tailwingBgColorizer(value: string): string | void {
                   openPresentationRequest(p['@id']);
                 },
               },
-              {
-                component: Button,
-                label: 'QR code',
-                callback: () => {
-                  qrCodeDisplay([
-                    p['url'],
-                    p.definition.input_descriptors[0].name,
-                  ]);
-                },
-              },
-            ],
+              p['role'] === 'verifier'
+                ? {
+                    component: Button,
+                    label: 'QR code',
+                    callback: () => {
+                      qrCodeDisplay([
+                        p['url'],
+                        p.definition.input_descriptors[0].name,
+                      ]);
+                    },
+                  }
+                : null,
+              p['role'] === 'prover'
+                ? {
+                    component: Button,
+                    label: 'Submit',
+                    callback: () => {
+                      openSubmitPresentation(p['id']);
+                    },
+                  }
+                : null,
+            ].filter((i) => i),
           },
         ];
       })}" />

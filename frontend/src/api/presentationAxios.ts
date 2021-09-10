@@ -40,13 +40,12 @@ export async function acceptInvitation(
     }
     // not successfull
     console.log(response.status);
-    return [];
+    return null;
   } catch (error) {
     console.error(error);
     return;
   }
 }
-
 
 export async function postNewPresentationRequest(
   payload: PostPresentationPayload,
@@ -71,5 +70,24 @@ export async function postNewPresentationRequest(
     return [];
   } catch (error) {
     console.error(error);
+  }
+}
+
+export async function submitPresentationRequestPresentation(
+  presentationRequestId: string,
+  payload: any
+): Promise<any> {
+  const endpoint = `${baseUrl}/presentations/requests/${presentationRequestId}/submit`;
+  try {
+    const response = await axios.post(endpoint, payload);
+    // success
+    if (response.status == 201 || 200) {
+      return response.data;
+    }
+    // not successful
+    return null;
+  } catch (error) {
+    console.error(error);
+    return;
   }
 }

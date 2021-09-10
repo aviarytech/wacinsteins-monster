@@ -7,10 +7,11 @@
 <script lang="ts">
 export let text: string;
 export let removeCallback: () => void = undefined;
-export let bgCol: string;
+export let bgCol: string = "bg-blue-100";
+export let fontColor: string = "text-black";
 </script>
 
-<div class="{bgCol ? `default ${bgCol}` : 'default bg-blue-100'}">
+<div class="{`default ${bgCol} ${fontColor}`}">
   <span class="mx-2 leading-relaxed truncate max-w-xs">{text}</span>
   {#if removeCallback}
     <button

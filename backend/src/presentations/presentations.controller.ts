@@ -76,7 +76,7 @@ export class PresentationsController {
     return await this.presentationsService.findOneRequest(id);
   }
 
-  @Post('requests/:id/derive')
+  @Post('requests/:id/submit')
   async submitPresentation(
     @Param('id') id: string,
     @Body() body: SubmitCredentialForPresentationDto,
@@ -86,11 +86,6 @@ export class PresentationsController {
     if (!presentation) {
       throw new HttpException('Presentation not found', HttpStatus.NOT_FOUND);
     }
-    // const
-    // const vc = await this.credentialsService.deriveCredential(
-    //   body.credentialId,
-    //   presentation.definition.frame,
-    // );
 
     presentation = await this.presentationsService.updatePresentationRequest(
       presentation.id,
