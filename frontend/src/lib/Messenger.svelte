@@ -12,8 +12,15 @@ import {
   getCurrentConversation,
   postNewMsg2Conversation,
 } from "../api/messagesLogic";
+//env
+
+const userDomain =
+  import.meta.env.VITE_ENV_TYPE === "dev"
+    ? `did:web:localhost:3100`
+    : `did:web:api.${window.location.host}`;
+
 //declaring to remove later errors
-export let socket
+export let socket;
 onMount(async () => {
   if ($selectedUser) {
     //loading all messages at the beginning
@@ -25,14 +32,36 @@ onMount(async () => {
 
   socket.on("error", console.error);
   //all events
-  const listener = (eventName, ...args) => {
-    console.log(eventName, args);
-  };
 
-  socket.onAny(listener);
   //specific
   socket.on("chatToClient", (data) => {
     console.log(data);
+    if (data.sender === userDomain) {
+      msgUSerBackend.set([
+        ...$msgUSerBackend,
+        {
+          msg: {
+            data: data.message,
+            from: data.sender,
+            to: data.room,
+            when: new Date(),
+          },
+        },
+      ]);
+    } else {
+      msgUSerBackend.set([
+        ...$msgUSerBackend,
+        {
+          msg: {
+            data: data.message,
+            to: data.sender,
+            from: data.room,
+            when: new Date(),
+          },
+        },
+      ]);
+    }
+    console.log($msgUSerBackend);
   });
 });
 
@@ -41,6 +70,7 @@ onMount(async () => {
 selectedUser.subscribe(async (v) => {
   msgUSerBackend.set(await getCurrentConversation($selectedUser));
 });
+$: msgUSerBackend;
 
 //input dom handling
 let chatMsg: string;
@@ -63,7 +93,7 @@ async function newMsg() {
 
     //websocket new entry
     socket.emit("chatToServer", {
-      sender: $user,
+      sender: userDomain,
       room: $selectedUser,
       message: chatMsg,
     });
