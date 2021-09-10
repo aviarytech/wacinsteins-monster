@@ -19,6 +19,7 @@ import { io } from "socket.io-client";
 
 //TODO: move all of the socket logic in a separate ts or store file.
 let socket;
+let initMessenger = false;
 onMount(async () => {
   const res = await getContacts();
   socket = io("http://localhost:3100/chat", {
@@ -35,6 +36,7 @@ onMount(async () => {
     socket.emit("joinRoom", $selectedUser);
   }
   availableContacts.set(res);
+  initMessenger = true;
 });
 function openConversation(id: string) {
   socket.emit("leaveRoom", $selectedUser);
@@ -52,7 +54,9 @@ function openConversation(id: string) {
           class="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last">
           <!-- Start main area-->
           <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8">
-            <Messenger />
+            {#if initMessenger}
+              <Messenger socket={socket} />
+            {/if}
           </div>
           <!-- End main area -->
         </main>
@@ -62,7 +66,7 @@ function openConversation(id: string) {
           <div
             class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8 overflow-y-auto">
             <DataTable
-              headers="{['SHA256', 'Domain']}"
+              headers="{['', 'Domain']}"
               data="{$availableContacts.map((p) => {
                 return [
                   {

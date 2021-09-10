@@ -13,12 +13,7 @@ import {
   postNewMsg2Conversation,
 } from "../api/messagesLogic";
 //declaring to remove later errors
-let socket = io("http://localhost:3100/chat", {
-  secure: false,
-  reconnect: true,
-  rejectUnauthorized: false,
-  transports: ["websocket"],
-});
+export let socket
 onMount(async () => {
   if ($selectedUser) {
     //loading all messages at the beginning
@@ -27,21 +22,6 @@ onMount(async () => {
     console.log($selectedUser);
     console.log($msgUSerBackend);
   }
-  //socket logic
-  socket = io("http://localhost:3100/chat", {
-    secure: false,
-    reconnect: true,
-    rejectUnauthorized: false,
-    transports: ["websocket"],
-  });
-
-  socket.on("connect", () => {
-    console.log("websocket connected");
-  });
-
-  socket.on("disconnect", () => {
-    console.log("webscoket disconnected");
-  });
 
   socket.on("error", console.error);
   //all events

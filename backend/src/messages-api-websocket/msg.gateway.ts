@@ -21,7 +21,7 @@ export class MsgGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   }
 
   @SubscribeMessage('chatToServer')
-  handleMessage(client: Socket, message: { sender: string, room: string, message: string }) {
+handleMessage(client: Socket, message: { sender: string, room: string, message: string }) {
     this.logger.log(`Received msg from Client: ${client.id} in ${message.room}; msg: ${message.message}`)
     this.server.to(message.room).emit('chatToClient', message);
     this.logger.log(`Server is emitting to ${message.room}; msg: ${message.message} originally from ${client.id}`)
