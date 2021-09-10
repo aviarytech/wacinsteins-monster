@@ -68,7 +68,9 @@ onMount(() => {
           text: `you have copied url: ${$qrCodeIdValue}`,
           icon: 'success',
           button: 'Great!',
-        }).then(slideOverContent.set(null));
+        }).then(async () => {
+          await slideOverContent.set(null);
+        });
       }}"
       on:fail="{() => {
         swal({

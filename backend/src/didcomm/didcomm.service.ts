@@ -69,7 +69,6 @@ export class DIDCommService {
               });
               const updated =
                 await this.presentations.updatePresentationRequest(request.id, {
-                  id: request.id,
                   status: PRESENTATION_REQUEST_STATUSES.REQUESTED,
                 });
             } else {
@@ -87,7 +86,6 @@ export class DIDCommService {
           }
           const updatedPresentationRequest =
             await this.presentations.updatePresentationRequest(request.id, {
-              id: request.id,
               status: PRESENTATION_REQUEST_STATUSES.PROPOSED,
               proposal: { from: proposal.payload.from },
             });
@@ -131,7 +129,6 @@ export class DIDCommService {
             await this.presentations.updatePresentationRequest(
               updatedPresentationRequest.id,
               {
-                id: updatedPresentationRequest.id,
                 status: PRESENTATION_REQUEST_STATUSES.REQUESTED,
               },
             );

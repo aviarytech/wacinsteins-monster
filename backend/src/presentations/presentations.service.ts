@@ -102,7 +102,7 @@ export class PresentationsService {
     });
   }
 
-  async findOneRequest(id: string) {
+  async findOneRequest(id: string): Promise<PresentationRequest> {
     return await this.db.getById(id);
   }
 

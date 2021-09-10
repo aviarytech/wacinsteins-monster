@@ -9,8 +9,10 @@ import { DIDCommService } from 'src/didcomm/didcomm.service';
 import { DIDResolverService } from 'src/dids/didresolver.service';
 import { ContactsService } from 'src/contacts/contacts.service';
 import { MessagesApiService } from 'src/messages-api/messages-api.service';
-import { DocumentLoaderService } from 'src/documentLoader/documentLoader.service';
 import { CommandBus, EventBus } from '@nestjs/cqrs';
+import { CredentialsService } from 'src/credentials/credentials.service';
+import { DocumentLoaderService } from 'src/documentLoader/documentLoader.service';
+import { DIDKeyService } from 'src/didkey/didkey.service';
 
 @Module({
   controllers: [PresentationsController],
@@ -20,9 +22,17 @@ import { CommandBus, EventBus } from '@nestjs/cqrs';
     Logger,
     ConfigService,
     DIDWebService,
+    DIDKeyService,
     KMSService,
     DIDCommService,
-    DIDResolverService, ContactsService, MessagesApiService, DocumentLoaderService, EventBus, CommandBus
+    DIDResolverService,
+    ContactsService,
+    MessagesApiService,
+    DocumentLoaderService,
+    EventBus,
+    CommandBus,
+    CredentialsService,
+    DocumentLoaderService,
   ],
 })
-export class PresentationsModule { }
+export class PresentationsModule {}

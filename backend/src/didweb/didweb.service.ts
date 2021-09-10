@@ -8,6 +8,7 @@ import { encode } from 'b58';
 import { KMSService } from '../kms/kms.service';
 import { DBService } from '../db/db.service';
 import { generateX25519 } from '../kms/x25519';
+import axios from 'axios';
 
 @Injectable()
 export class DIDWebService {
@@ -140,5 +141,19 @@ export class DIDWebService {
       ],
     });
     return didDoc.document;
+  }
+
+  async resolve(iri: string) {
+    const [_, method, id, ...extras] = iri.split(':');
+    let domain = id.split('#').length > 1 ? id.split('#')[0] : id;
+    if (id.indexOf('localhost') >= 0) {
+      domain += `:${extras}`;
+    }
+    const resp = await axios.get(
+      `http${
+        id.indexOf('localhost') >= 0 ? null : 's'
+      }://${domain}/.well-known/did.json`,
+    );
+    return resp.data;
   }
 }

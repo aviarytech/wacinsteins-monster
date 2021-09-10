@@ -2,7 +2,7 @@
 import { camel2Title } from "../utils/camel2Title";
 
 export let credential: object;
-const credentialTypes = credential["data"].type.filter(
+const credentialTypes = credential["verifiableCredential"].type.filter(
   (t) => t !== "VerifiableCredential"
 );
 let subjects = {};
@@ -11,10 +11,6 @@ let visible = [];
 $: if (Object.entries(subjects).length > 0) {
   visible = Object.values(Object.entries(subjects)[visibleSubjectIndex][1]);
 }
-
-const clicked = (e) => {
-  console.log(e);
-};
 </script>
 
 <template>
@@ -61,36 +57,44 @@ const clicked = (e) => {
       </div>
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">ID</dt>
-        <dd class="mt-1 text-sm text-gray-900">{credential["data"].id}</dd>
+        <dd class="mt-1 text-sm text-gray-900">
+          {credential["verifiableCredential"].id}
+        </dd>
       </div>
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Description</dt>
         <dd class="mt-1 text-sm text-gray-900">
-          {credential["data"].description}
+          {credential["verifiableCredential"].description}
         </dd>
       </div>
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Issuer</dt>
         <dd class="mt-1 text-sm text-gray-900 truncate">
-          {credential["data"].issuer.id}
+          {credential["verifiableCredential"].issuer.id}
         </dd>
       </div>
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Issuance Date</dt>
         <dd class="mt-1 text-sm text-gray-900">
-          {credential["data"].issuanceDate}
+          {credential["verifiableCredential"].issuanceDate}
         </dd>
       </div>
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Expiration Date</dt>
         <dd class="mt-1 text-sm text-gray-900 truncate">
-          {credential["data"].expirationDate}
+          {credential["verifiableCredential"].expirationDate}
+        </dd>
+      </div>
+      <div class="sm:col-span-1">
+        <dt class="text-sm font-medium text-gray-500">Derived Credentials</dt>
+        <dd class="mt-1 text-sm text-gray-900 truncate">
+          {credential["derivedCredentials"].length}
         </dd>
       </div>
     </dl>
   {:else if visibleSubjectIndex === 1}
     <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-      {#each Object.entries(credential["data"].credentialSubject) as prop}
+      {#each Object.entries(credential["verifiableCredential"].credentialSubject) as prop}
         {#if typeof prop[1] === "object"}
           <div
             class="border-t-2  sm:col-span-2 pt-3 grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
@@ -125,31 +129,31 @@ const clicked = (e) => {
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Type</dt>
         <dd class="mt-1 text-sm text-gray-900 truncate">
-          {credential["data"].proof.type}
+          {credential["verifiableCredential"].proof.type}
         </dd>
       </div>
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Verification Method</dt>
         <dd class="mt-1 text-sm text-gray-900 truncate">
-          {credential["data"].proof.verificationMethod}
+          {credential["verifiableCredential"].proof.verificationMethod}
         </dd>
       </div>
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Purpose</dt>
         <dd class="mt-1 text-sm text-gray-900 truncate">
-          {credential["data"].proof.proofPurpose}
+          {credential["verifiableCredential"].proof.proofPurpose}
         </dd>
       </div>
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Value</dt>
         <dd class="mt-1 text-sm text-gray-900 truncate">
-          {credential["data"].proof.proofValue}
+          {credential["verifiableCredential"].proof.proofValue}
         </dd>
       </div>
       <div class="sm:col-span-1">
         <dt class="text-sm font-medium text-gray-500">Created Date</dt>
         <dd class="mt-1 text-sm text-gray-900 truncate">
-          {credential["data"].proof.created}
+          {credential["verifiableCredential"].proof.created}
         </dd>
       </div>
     </dl>
