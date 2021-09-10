@@ -6,12 +6,16 @@ export class CredentialsService implements OnApplicationBootstrap {
 
   async onApplicationBootstrap(): Promise<void> {
     setTimeout(async () => {
-      const vc1 = require('../../__fixtures__/vc-1.json');
-      if (!(await this.db.getById(vc1.id))) {
-        await this.create(vc1);
-        console.log(`created ${vc1.id} credential`);
-      }
+      this.reset();
     }, 500);
+  }
+
+  async reset() {
+    const vc1 = require('../../__fixtures__/vc-1.json');
+    if (!(await this.db.getById(vc1.id))) {
+      await this.create(vc1);
+      console.log(`created ${vc1.id} credential`);
+    }
   }
 
   async create(credential: Credential): Promise<Credential> {

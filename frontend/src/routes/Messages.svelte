@@ -7,6 +7,7 @@ import DataTable from "../lib/table-elements/DataTable.svelte";
 import Text from "../lib/table-elements/Text.svelte";
 import Image from "../lib/table-elements/Image.svelte";
 import Messenger from "../lib/Messenger.svelte";
+ import Avatar from "../lib/Avatar.svelte";
 //api
 import { getContacts } from "../api/contactsAxios";
 //stores
@@ -20,6 +21,9 @@ import { io } from "socket.io-client";
 const backendUrl = import.meta.env.VITE_API_URL
   ? import.meta.env.VITE_API_URL
   : `https://api.${window.location.hostname}`;
+
+
+
 
 //TODO: move all of the socket logic in a separate ts or store file.
 
@@ -75,14 +79,11 @@ function openConversation(id: string) {
               data="{$availableContacts.map((p) => {
                 return [
                   {
-                    component: Image,
-                    src: `https://www.tinygraphs.com/labs/isogrids/hexa16/${sha256(
-                      p['id']
-                    )}?theme=seascape&numcolors=4`,
-                    alt: p['did'],
-                    width: 32,
-                    height: 32,
-                    callback: () => openConversation(p['did']),
+                    component: Avatar,
+                    value: p['did'],
+                    callback: () => {
+                      openConversation(p['did']);
+                    },
                   },
                   {
                     component: Text,

@@ -8,6 +8,6 @@ const navigate = useNavigate();
 
 onMount(async () => {
   await reset();
-  navigate("/");
+  navigate("/home");
 });
 </script>

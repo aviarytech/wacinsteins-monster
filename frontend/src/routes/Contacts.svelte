@@ -22,6 +22,7 @@ import { useNavigate } from "svelte-navigator";
 import { getContacts, deleteContact } from "../api/contactsAxios";
 //utils
 import { sha256 } from "../utils/sha256";
+import Avatar from "../lib/Avatar.svelte";
 
 onMount(async () => {
   const res = await getContacts();
@@ -33,7 +34,6 @@ onMount(async () => {
 let newContactWindowDisplayed: boolean = false;
 async function newContactCreation() {
   slideOverContent.set({
-    title: "New Contact",
     component: NewContacts,
   });
   if (newContactWindowDisplayed) {
@@ -63,10 +63,14 @@ async function deleteContactApi(id) {
     icon: "warning",
     buttons: [true, true],
     dangerMode: true,
-  }).then((value) => {
+  }).then(async (value) => {
     if (value) {
-      deleteContact(id);
-      window.location.reload();
+      await deleteContact(id);
+      const res = await getContacts();
+      //console.log(res);
+      if (res) {
+        availableContacts.set(res);
+      }
     }
   });
 }
@@ -89,17 +93,10 @@ function openConversation(id: string) {
   <DataTable
     headers="{['', 'Domain', 'Created', '']}"
     data="{$availableContacts.map((p) => {
-      console.log(p);
       return [
         {
-          component: Image,
-          src: `https://www.tinygraphs.com/labs/isogrids/hexa16/${sha256(
-            p['id']
-          )}?theme=seascape&numcolors=4`,
-          alt: p['did'],
-          width: 32,
-          height: 32,
-          dataTableSpecialClass: '',
+          component: Avatar,
+          value: p['did'],
         },
         {
           component: Text,
@@ -119,7 +116,7 @@ function openConversation(id: string) {
             },
             {
               component: Button,
-              callback: () => deleteContactApi(p['did']),
+              callback: () => deleteContactApi(p['id']),
               label: 'Delete',
             },
             {

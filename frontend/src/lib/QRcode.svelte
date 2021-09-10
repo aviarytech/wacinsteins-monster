@@ -2,9 +2,8 @@
 .qrcode {
   position: relative;
 }
-.scale-20 {
-  --tw-scale-x: 0.2;
-  --tw-scale-y: 0.2;
+.qr-wrapper {
+  height: 510px;
 }
 </style>
 
@@ -28,7 +27,6 @@ export let color = "#000";
 export let size = "";
 export let value = "";
 export let padding = 0;
-export let className = "qrcode items-center";
 
 let image = "";
 //if bigger than 360 white padding appears in the picture
@@ -64,35 +62,34 @@ function copyTest() {
 </script>
 
 <template>
-  <CopyToClipboard
-    text="{$qrCodeIdValue}"
-    on:copy="{() => {
-      swal({
-        title: 'Success',
-        text: `you have copied url: ${$qrCodeIdValue}`,
-        icon: 'success',
-        button: 'Aww yiss!',
-      });
-    }}"
-    on:fail="{() => {
-      swal({
-        title: 'Something went wrong',
-        text: `Unable to copy text. try the QRcode`,
-        icon: 'error',
-        button: ':(',
-      });
-    }}"
-    let:copy>
-    <button class="button" on:click="{copy}">Copy to clipboard</button>
-  </CopyToClipboard>
-  <!--<div id="clipboard">{$qrCodeIdValue}</div>-->
-  <div class="relative">
-    <img src="{image}" alt="{value}" class="{className}" />
-    <img
-      src="./favicon.ico"
-      alt=""
-      width="{WxH}"
-      height="{WxH}"
-      class="absolute inset-0 transform scale-20 ml-6" />
+  <div class="grid justify-items-center">
+    <CopyToClipboard
+      text="{$qrCodeIdValue}"
+      on:copy="{() => {
+        swal({
+          title: 'Success',
+          text: `you have copied url: ${$qrCodeIdValue}`,
+          icon: 'success',
+          button: 'Great!',
+        });
+      }}"
+      on:fail="{() => {
+        swal({
+          title: 'Something went wrong',
+          text: `Unable to copy text`,
+          icon: 'error',
+          button: ':(',
+        });
+      }}"
+      let:copy>
+      <button class="button mb-5" on:click="{copy}">Copy to clipboard</button>
+    </CopyToClipboard>
   </div>
-</template>
+  <!--<div id="clipboard">{$qrCodeIdValue}</div>-->
+  <div class="absolute grid justify-items-center bg-red qr-wrapper">
+    <img src="{image}" alt="{value}" class="qrcode" />
+    <img
+      src="./assets/cube.png"
+      alt=""
+      class="absolute inset-x-0 w-1/4 mx-auto inset-y-1/3" />
+  </div></template>

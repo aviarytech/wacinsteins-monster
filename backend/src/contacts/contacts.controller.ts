@@ -13,7 +13,7 @@ import { ContactsService } from './contacts.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
-@ApiTags('contacts') 
+@ApiTags('contacts')
 @Controller('contacts')
 export class ContactsController {
   constructor(private readonly contactsService: ContactsService) {}
@@ -45,9 +45,7 @@ export class ContactsController {
     return this.contactsService.update(id, updateContactDto);
   }
   @Delete(':id')
-  async delete(
-    @Param('id') id: string,
-  ) {
-  return await this.contactsService.delete(id);
+  async delete(@Param('id') id: string) {
+    return await this.contactsService.delete(id);
   }
 }

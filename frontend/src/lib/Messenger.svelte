@@ -1,6 +1,7 @@
 <script lang="ts">
 //stores
 import ChatMessage from "./ChatMessage.svelte";
+import Avatar from "./Avatar.svelte";
 import { user } from "../stores/user";
 import { sha256 } from "../utils/sha256";
 import { msgUSerBackend, selectedUser } from "../stores/messages";
@@ -124,13 +125,7 @@ async function newMsg() {
     {/if}
   </div>
   <div class="flex bottom-1 space-x-4 w-full">
-    <img
-      class="h-8 w-8 rounded-full inline-block mt-1.5"
-      src="{`https://www.tinygraphs.com/labs/isogrids/hexa16/${sha256(
-        $user.email
-      )}?theme=seascape&numcolors=4`}"
-      alt="{$user.email}" />
-
+    <!-- <Avatar value="{$user.email}" /> -->
     <div class="flex-grow max-w-screen-md">
       <input
         bind:value="{chatMsg}"

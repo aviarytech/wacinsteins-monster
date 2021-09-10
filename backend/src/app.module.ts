@@ -18,6 +18,7 @@ import { CredentialsModule } from './credentials/credentials.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { MessagesApiModule } from './messages-api/messages-api.module';
 import { MsgGatewayModule } from './messages-api-websocket/msg.module';
+import { CredentialsService } from './credentials/credentials.service';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { MsgGatewayModule } from './messages-api-websocket/msg.module';
     KMSService,
     ...CommandHandlers,
     ...EventHandlers,
+    CredentialsService,
   ],
 })
 export class AppModule { }

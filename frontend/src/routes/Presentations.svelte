@@ -16,6 +16,7 @@ import Button from "../lib/ui/Button.svelte";
 import ComponentList from "../lib/table-elements/ComponentList.svelte";
 import Tag from "../lib/ui/Tag.svelte";
 import QRcode from "../lib/QRcode.svelte";
+import Avatar from "../lib/Avatar.svelte";
 //js imports
 import { onMount } from "svelte";
 //stores
@@ -23,8 +24,7 @@ import { presentations, qrCodeIdValue } from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
 onMount(async () => {
   const res = await getPresentations();
-  console.log(res);
-  if (res.length > 0) {
+  if (res) {
     presentations.set(res);
   }
 });
@@ -74,13 +74,13 @@ function qrCodeDisplay(id) {
   </div>
   {#if $presentations}
     <DataTable
-      headers="{['Constraints', '']}"
+      headers="{['', 'Constraints', '']}"
       data="{$presentations.map((p) => {
         return [
-          // {
-          //   component: Text,
-          //   text: p['@id'],
-          // },
+          {
+            component: Avatar,
+            value: p['id'],
+          },
           // {
           //   component: Text,
           //   text: p.definition.input_descriptors[0].name,

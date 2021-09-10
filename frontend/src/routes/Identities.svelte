@@ -11,58 +11,44 @@ import { identities } from "../stores/identities";
 import { slideOverContent } from "../stores/ui";
 import { user } from "../stores/user";
 import { sha256 } from "../utils/sha256";
+import Avatar from "../lib/Avatar.svelte";
+import { getAllIdentities } from "../api/identities";
 
-const openIdentity = (email: string) => {
+const openIdentity = (value: string) => {
   slideOverContent.set({
-    component: Text,
-    text: email,
-    title: `email: ${email}`,
+    component: Avatar,
+    title: value,
+    value: value,
   });
 };
 
 onMount(async () => {
-  // TODO
-  // const resp = await getAllIdentities();
-  // if (resp.length > 0) {
-  //  identities.set(resp);
-  //}
-  // TEMP pull users add to identities
-  identities.set([
-    {
-      email: $user.email,
-      id: sha256($user.email),
-      avatar: `https://www.tinygraphs.com/labs/isogrids/hexa16/${sha256(
-        $user.email
-      )}?theme=seascape&numcolors=4`,
-    },
-  ]);
+  const resp = await getAllIdentities([$user.email]);
+  if (resp.length > 0) {
+    identities.set(resp);
+  }
 });
 </script>
 
 <!-- <pre>{JSON.stringify($identities, null, 2)}</pre> -->
 {#if $identities}
   <DataTable
-    headers="{['', 'Email', '']}"
+    headers="{['', 'Identifier', '']}"
     data="{$identities.map((i) => {
       return [
         {
-          component: Image,
-          src: i.avatar,
-          alt: i.avatar,
-          width: 32,
-          height: 32,
-          dataTableSpecialClass:
-            'pl-4 whitespace-nowrap text-sm font-medium text-gray-900 truncate max-w-xs',
+          component: Avatar,
+          value: i,
         },
         // { component: Text, text: i.id, classes: 'max-w-xs' },
-        { component: Text, text: i.email },
+        { component: Text, text: i },
         {
           component: ComponentList,
           items: [
             {
               component: Button,
               callback: () => {
-                openIdentity(i.email);
+                openIdentity(i);
               },
               label: 'View',
             },
