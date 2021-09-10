@@ -110,7 +110,7 @@ function tailwingBgColorizer(value: string): string | void {
   </div>
   {#if $presentations}
     <DataTable
-      headers="{['', 'status', 'Constraints', '']}"
+      headers="{['', 'role', 'status', 'Constraints', '']}"
       data="{$presentations.map((p) => {
         return [
           {
@@ -118,19 +118,14 @@ function tailwingBgColorizer(value: string): string | void {
             value: p['id'],
           },
           {
-            component: ComponentList,
-            items: [
-              {
-                component: Tag,
-                text: p['status'],
-                bgCol: tailwingBgColorizer(p['status']),
-              },
-              {
-                component: Tag,
-                text: p['role'],
-                bgCol: tailwingBgColorizer(p['role']),
-              },
-            ],
+            component: Tag,
+            text: p['role'],
+            bgCol: tailwingBgColorizer(p['role']),
+          },
+          {
+            component: Tag,
+            text: p['status'],
+            bgCol: tailwingBgColorizer(p['status']),
           },
           {
             component: ComponentList,
