@@ -21,12 +21,17 @@ import { CreatePresentationDefinitionDto } from './dto/create-presentation-defin
 import { CreatePresentationRequestDto } from './dto/create-presentation-request.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { nanoid } from 'nanoid';
-import { sha256 } from '@aviarytech/crypto-core';
+import { base64url, sha256 } from '@aviarytech/crypto-core';
+import { AcceptInvitationDto } from './dto/accept-invitation.dto';
+import { DIDCommService } from 'src/didcomm/didcomm.service';
 
 @ApiTags('presentations')
 @Controller('presentations')
 export class PresentationsController {
-  constructor(private readonly presentationsService: PresentationsService) {}
+  constructor(
+    private readonly presentationsService: PresentationsService,
+    private readonly didCommService: DIDCommService
+  ) { }
 
   @Post('requests')
   async create(
@@ -103,4 +108,15 @@ export class PresentationsController {
   async findAllDefinitions() {
     return await this.presentationsService.findAllDefinitions();
   }
+
+  @Post('acceptInvitation')
+  async acceptInvitation(@Body() acceptInvitationDto: AcceptInvitationDto) {
+    const url = new URL(acceptInvitationDto.url)
+    let params = new URLSearchParams(url.search)
+    let decodedBase64Data = base64url.decode(params.get('_oob')).toString()
+    //console.log(decodedBase64Data)
+    await this.didCommService.receiveMessage(JSON.parse(decodedBase64Data))
+    return 'Success'
+  }
+
 }

@@ -29,7 +29,7 @@ export class PresentationsService {
     private log: Logger,
     private didWeb: DIDWebService,
     private config: ConfigService,
-  ) {}
+  ) { }
 
   async createDefinition(
     createPresentationDefinitionDto: {

@@ -10,6 +10,8 @@
 <script lang="ts">
 //stores
 import { qrCodeIdValue } from "../stores/presentation";
+import { slideOverContent } from "../stores/ui";
+
 //component
 import Button from "./ui/Button.svelte";
 //ecma imports
@@ -54,11 +56,6 @@ $: {
 onMount(() => {
   generateQrCode();
 });
-//copying function
-
-function copyTest() {
-  console.log($qrCodeIdValue);
-}
 </script>
 
 <template>
@@ -71,7 +68,7 @@ function copyTest() {
           text: `you have copied url: ${$qrCodeIdValue}`,
           icon: 'success',
           button: 'Great!',
-        });
+        }).then(slideOverContent.set(null));
       }}"
       on:fail="{() => {
         swal({
