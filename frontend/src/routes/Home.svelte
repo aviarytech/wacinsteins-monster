@@ -6,7 +6,7 @@ import { Link } from "svelte-navigator";
 </script>
 
 <template>
-  <main class="bg-white py-20 mt-2 mx-auto max-w-7xl px-4 rounded-lg shadow-md">
+  <main class="bg-white py-16 mt-2 mx-auto max-w-7xl px-4 rounded-lg shadow-md">
     <div class="hero-text">
       <div class="text-center">
         <h1
@@ -18,7 +18,7 @@ import { Link } from "svelte-navigator";
         </h1>
       </div>
     </div>
-    <div class="bg-white mt-16 mx-auto max-w-7xl px-4 sm:mt-24 text-center ">
+    <div class="bg-white mx-auto max-w-7xl px-4 sm:mt-24 text-center ">
       <div class="container mx-auto w-1/2">
         <img
           src="./assets/wacinstein-who.jpeg"
