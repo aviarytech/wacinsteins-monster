@@ -1,9 +1,16 @@
+<style lang="postcss">
+.default {
+  @apply inline-flex items-center text-sm rounded mt-2 mr-1;
+}
+</style>
+
 <script lang="ts">
 export let text: string;
 export let removeCallback: () => void = undefined;
+export let bgCol: string;
 </script>
 
-<div class="bg-blue-100 inline-flex items-center text-sm rounded mt-2 mr-1">
+<div class="{bgCol ? `default ${bgCol}` : 'default bg-blue-100'}">
   <span class="mx-2 leading-relaxed truncate max-w-xs">{text}</span>
   {#if removeCallback}
     <button

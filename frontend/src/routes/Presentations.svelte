@@ -69,15 +69,52 @@ function submitUrl() {
   }
   rightPreviewWindowDisplayed = !rightPreviewWindowDisplayed;
 }
+
 function qrCodeDisplay(id) {
   qrCodeIdValue.set(id[0]);
-  console.log(id);
   slideOverContent.set({
     title: ``,
     component: QRcode,
     presentationSubject: [],
   });
 }
+function tailwingBgColorizer(value: string): string | void {
+  let bgCol: string;
+  switch (value) {
+    //roles
+    case "verifier":
+      bgCol = "bg-purple-400";
+      break;
+
+    case "prover":
+      bgCol = "bg-pink-600";
+      break;
+
+    //status colors
+    case "created":
+      bgCol = "bg-gray-400";
+      break;
+
+    case "proposed":
+      bgCol = "bg-yellow-600";
+      break;
+
+    case "requested":
+      bgCol = "bg-yellow-600";
+      break;
+
+    case "submitted":
+      bgCol = "bg-yellow-400";
+      break;
+
+    default:
+      break;
+  }
+  return bgCol;
+}
+
+//prover - verifier
+//statuses created(blue), proposed(orang), requested(oran), submitted(y)
 </script>
 
 <template>
@@ -87,21 +124,23 @@ function qrCodeDisplay(id) {
   </div>
   {#if $presentations}
     <DataTable
-      headers="{['', 'Constraints', '']}"
+      headers="{['', 'Role', 'Status', 'Constraints', '']}"
       data="{$presentations.map((p) => {
         return [
           {
             component: Avatar,
             value: p['id'],
           },
-          // {
-          //   component: Text,
-          //   text: p.definition.input_descriptors[0].name,
-          // },
-          // {
-          //   component: Text,
-          //   text: p.definition.input_descriptors[0].schema,
-          // },
+          {
+            component: Tag,
+            text: p['role'],
+            bgCol: tailwingBgColorizer(p['role']),
+          },
+          {
+            component: Tag,
+            text: p['status'],
+            bgCol: tailwingBgColorizer(p['status']),
+          },
           {
             component: ComponentList,
             items: p.definition.input_descriptors[0].constraints.fields.map(
