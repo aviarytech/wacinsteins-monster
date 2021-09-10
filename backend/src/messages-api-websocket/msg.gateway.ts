@@ -21,16 +21,16 @@ export class MsgGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   }
 
   @SubscribeMessage('chatToServer')
-handleMessage(client: Socket, message: { sender: string, room: string, message: string }) {
-    this.logger.log(`Received msg from Client: ${client.id} in ${message.room}; msg: ${message.message}`)
+  handleMessage(client: Socket, message: { sender: string, room: string, message: string }) {
+    //this.logger.log(`Received msg from Client: ${client.id} in ${message.room}; msg: ${message.message}`)
     this.server.to(message.room).emit('chatToClient', message);
-    this.logger.log(`Server is emitting to ${message.room}; msg: ${message.message} originally from ${client.id}`)
+    //this.logger.log(`Server is emitting to ${message.room}; msg: ${message.message} originally from ${client.id}`)
 
   }
 
   @SubscribeMessage('joinRoom')
   handleRoomJoin(client: Socket, room: string) {
-    this.logger.log(`Client: ${client.id} joined ${room}`)
+    this.logger.log(`Client: ${client.id} joined room: ${room}`)
     client.join(room);
     client.emit('joinedRoom', room);
   }
