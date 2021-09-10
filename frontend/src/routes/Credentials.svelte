@@ -2,7 +2,6 @@
 //component
 import CredentialDetailView from "../lib/CredentialDetailView.svelte";
 import DataTable from "../lib/table-elements/DataTable.svelte";
-import CredentialSubjectFieldSelector from "../lib/CredentialSubjectFieldSelector.svelte";
 import Text from "../lib/table-elements/Text.svelte";
 import ComponentList from "../lib/table-elements/ComponentList.svelte";
 import Avatar from "../lib/Avatar.svelte";
@@ -12,51 +11,58 @@ import { credentials } from "../stores/credentials";
 import { slideOverContent } from "../stores/ui";
 import { onMount } from "svelte";
 import { getAllCredentials } from "../api/credentials";
+import CredentialDeriver from "../lib/CredentialDeriver.svelte";
 
 const openCredential = (credentialId: string) => {
-  const cred = $credentials.find((c) => c["@id"] === credentialId);
+  const cred = $credentials.find((c) => c["id"] === credentialId);
   slideOverContent.set({
-    title: cred["data"].name,
+    title: cred["verifiableCredential"].name,
     component: CredentialDetailView,
     credential: cred,
   });
 };
 
-const openNewPresentation = (credentialId: string) => {
-  const cred = $credentials.find((c) => c["@id"] === credentialId);
+const openDeriveCredential = (credentialId: string) => {
+  const cred = $credentials.find((c) => c["id"] === credentialId);
   slideOverContent.set({
-    title: `New Presentation Request`,
-    component: CredentialSubjectFieldSelector,
-    credentialSubject: cred["data"].credentialSubject,
+    title: `Derive Credential`,
+    component: CredentialDeriver,
+    verifiableCredential: cred["verifiableCredential"],
   });
 };
 
 onMount(async () => {
-  await getAllCredentials();
+  const resp = await getAllCredentials();
+  if (resp) {
+    credentials.set(resp);
+  }
 });
 </script>
 
 <template>
   <DataTable
-    headers="{['', 'Name', 'Issuer', 'Issuance Date', '']}"
+    headers="{['', 'Name', 'Issuer', 'Issuance Date', 'Derivations', '']}"
     data="{$credentials.map((c) => {
       return [
-        { component: Avatar, value: c['data'].id },
-        { component: Text, text: c['data'].name },
-        { component: Text, text: c['data'].issuer.id },
-        { component: Text, text: c['data'].issuanceDate },
+        { component: Avatar, value: c['verifiableCredential'].id },
+        { component: Text, text: c['verifiableCredential'].name },
+        { component: Text, text: c['verifiableCredential'].issuer.id },
+        { component: Text, text: c['verifiableCredential'].issuanceDate },
+        { component: Text, text: c['derivedCredentials'].length },
         {
           component: ComponentList,
           items: [
             {
               component: Button,
-              callback: () => openCredential(c['@id']),
+              callback: () => openCredential(c['id']),
               label: 'View',
             },
             {
               component: Button,
-              callback: () => openNewPresentation(c['@id']),
-              label: 'New Presentation',
+              callback: () => {
+                openDeriveCredential(c['id']);
+              },
+              label: 'Derive Credential',
             },
           ],
         },

@@ -24,14 +24,17 @@ import { nanoid } from 'nanoid';
 import { base64url, sha256 } from '@aviarytech/crypto-core';
 import { AcceptInvitationDto } from './dto/accept-invitation.dto';
 import { DIDCommService } from 'src/didcomm/didcomm.service';
+import { SubmitCredentialForPresentationDto } from './dto/submit-credential-for-presentation.dto';
+import { CredentialsService } from 'src/credentials/credentials.service';
 
 @ApiTags('presentations')
 @Controller('presentations')
 export class PresentationsController {
   constructor(
     private readonly presentationsService: PresentationsService,
-    private readonly didCommService: DIDCommService
-  ) { }
+    private readonly didCommService: DIDCommService,
+    private readonly credentialsService: CredentialsService,
+  ) {}
 
   @Post('requests')
   async create(
@@ -73,6 +76,30 @@ export class PresentationsController {
     return await this.presentationsService.findOneRequest(id);
   }
 
+  @Post('requests/:id/derive')
+  async submitPresentation(
+    @Param('id') id: string,
+    @Body() body: SubmitCredentialForPresentationDto,
+  ): Promise<PresentationRequest> {
+    // TODO change to vc id
+    let presentation = await this.presentationsService.findOneRequest(id);
+    if (!presentation) {
+      throw new HttpException('Presentation not found', HttpStatus.NOT_FOUND);
+    }
+    // const
+    // const vc = await this.credentialsService.deriveCredential(
+    //   body.credentialId,
+    //   presentation.definition.frame,
+    // );
+
+    presentation = await this.presentationsService.updatePresentationRequest(
+      presentation.id,
+      { derivedCredentials: [...presentation.derivedCredentials] },
+    );
+
+    return presentation;
+  }
+
   @Post('definitions')
   async createDefinition(
     @Body() createPresentationDefinitionDto: CreatePresentationDefinitionDto,
@@ -111,12 +138,11 @@ export class PresentationsController {
 
   @Post('acceptInvitation')
   async acceptInvitation(@Body() acceptInvitationDto: AcceptInvitationDto) {
-    const url = new URL(acceptInvitationDto.url)
-    let params = new URLSearchParams(url.search)
-    let decodedBase64Data = base64url.decode(params.get('_oob')).toString()
+    const url = new URL(acceptInvitationDto.url);
+    let params = new URLSearchParams(url.search);
+    let decodedBase64Data = base64url.decode(params.get('_oob')).toString();
     //console.log(decodedBase64Data)
-    await this.didCommService.receiveMessage(JSON.parse(decodedBase64Data))
-    return 'Success'
+    await this.didCommService.receiveMessage(JSON.parse(decodedBase64Data));
+    return 'Success';
   }
-
 }

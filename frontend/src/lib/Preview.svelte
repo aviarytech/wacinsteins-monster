@@ -33,4 +33,7 @@ async function presentationPostRequest() {
 
 <pre>{JSON.stringify(data[0],null,2)}</pre>
 
-<Button label="submit" callback="{presentationPostRequest}" />
+<Button
+  additionalClasses="mt-6"
+  label="Submit"
+  callback="{presentationPostRequest}" />

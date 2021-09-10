@@ -32,7 +32,7 @@ $: if (Object.entries(subjects).length > 0) {
           </button>
           <button
             on:click="{() => {
-              qrCodeIdValue.set('hi');
+              qrCodeIdValue.set(presentation.url);
               slideOverContent.set({
                 title: ``,
                 component: QRcode,
