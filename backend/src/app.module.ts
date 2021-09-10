@@ -17,6 +17,7 @@ import { PresentationsModule } from './presentations/presentations.module';
 import { CredentialsModule } from './credentials/credentials.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { MessagesApiModule } from './messages-api/messages-api.module';
+import { MsgGatewayModule } from './messages-api-websocket/msg.module';
 import { CredentialsService } from './credentials/credentials.service';
 
 @Module({
@@ -29,6 +30,7 @@ import { CredentialsService } from './credentials/credentials.service';
     ContactsModule,
     MessagesApiModule,
     DIDCommModule,
+    MsgGatewayModule
   ],
   controllers: [AppController, AdminController],
   providers: [
@@ -44,4 +46,4 @@ import { CredentialsService } from './credentials/credentials.service';
     CredentialsService,
   ],
 })
-export class AppModule {}
+export class AppModule { }
