@@ -7,6 +7,7 @@ import DataTable from "../lib/table-elements/DataTable.svelte";
 import Text from "../lib/table-elements/Text.svelte";
 import Image from "../lib/table-elements/Image.svelte";
 import Messenger from "../lib/Messenger.svelte";
+ import Avatar from "../lib/Avatar.svelte";
 //api
 import { getContacts } from "../api/contactsAxios";
 //stores
@@ -15,22 +16,41 @@ import { selectedUser } from "../stores/messages";
 import { sha256 } from "../utils/sha256";
 //ecma imports
 import { onMount } from "svelte";
-import Avatar from "../lib/Avatar.svelte";
+import { io } from "socket.io-client";
+//env
+const backendUrl = import.meta.env.VITE_API_URL
+  ? import.meta.env.VITE_API_URL
+  : `https://api.${window.location.hostname}`;
 
+
+
+
+//TODO: move all of the socket logic in a separate ts or store file.
+
+let socket;
+let initMessenger = false;
 onMount(async () => {
   const res = await getContacts();
+  socket = io(`${backendUrl}/chat`, {
+    secure: false,
+    reconnect: true,
+    rejectUnauthorized: false,
+    transports: ["websocket"],
+  });
   //console.log(res);
 
   //WARN: future point of failure
-  console.log($selectedUser);
   if (res.length > 0 && !$selectedUser) {
     selectedUser.set(res[0]["did"]);
+    socket.emit("joinRoom", $selectedUser);
   }
   availableContacts.set(res);
+  initMessenger = true;
 });
 function openConversation(id: string) {
+  socket.emit("leaveRoom", $selectedUser);
   selectedUser.set(id);
-  //console.log($selectedUser)
+  socket.emit("joinRoom", $selectedUser);
 }
 </script>
 
@@ -43,7 +63,9 @@ function openConversation(id: string) {
           class="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last">
           <!-- Start main area-->
           <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8">
-            <Messenger />
+            {#if initMessenger}
+              <Messenger socket="{socket}" />
+            {/if}
           </div>
           <!-- End main area -->
         </main>

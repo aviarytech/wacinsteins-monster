@@ -81,6 +81,7 @@ function openConversation(id: string) {
   console.log("open click", id);
   selectedUser.set(id);
   navigate("/messages");
+  //BUG: need to join a chatroom websocket
 }
 </script>
 
