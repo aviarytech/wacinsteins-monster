@@ -27,7 +27,7 @@ let socket;
 let initMessenger = false;
 onMount(async () => {
   const res = await getContacts();
-  socket = io(backendUrl, {
+  socket = io(`${backendUrl}/chat`, {
     secure: false,
     reconnect: true,
     rejectUnauthorized: false,
