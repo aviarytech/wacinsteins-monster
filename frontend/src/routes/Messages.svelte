@@ -16,13 +16,18 @@ import { sha256 } from "../utils/sha256";
 //ecma imports
 import { onMount } from "svelte";
 import { io } from "socket.io-client";
+//env
+const backendUrl = import.meta.env.VITE_API_URL
+  ? import.meta.env.VITE_API_URL
+  : `https://api.${window.location.hostname}`;
 
 //TODO: move all of the socket logic in a separate ts or store file.
+
 let socket;
 let initMessenger = false;
 onMount(async () => {
   const res = await getContacts();
-  socket = io("http://localhost:3100/chat", {
+  socket = io(backendUrl, {
     secure: false,
     reconnect: true,
     rejectUnauthorized: false,
@@ -55,7 +60,7 @@ function openConversation(id: string) {
           <!-- Start main area-->
           <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8">
             {#if initMessenger}
-              <Messenger socket={socket} />
+              <Messenger socket="{socket}" />
             {/if}
           </div>
           <!-- End main area -->
