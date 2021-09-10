@@ -17,6 +17,7 @@ import { PresentationsModule } from './presentations/presentations.module';
 import { CredentialsModule } from './credentials/credentials.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { MessagesApiModule } from './messages-api/messages-api.module';
+import { CredentialsService } from './credentials/credentials.service';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { MessagesApiModule } from './messages-api/messages-api.module';
     KMSService,
     ...CommandHandlers,
     ...EventHandlers,
+    CredentialsService,
   ],
 })
 export class AppModule {}

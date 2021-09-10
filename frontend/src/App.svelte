@@ -19,11 +19,17 @@ import { getAllCredentials } from "./api/credentials";
 import { user } from "./stores/user";
 import { credentials } from "./stores/credentials";
 import { onMount } from "svelte";
+import { wellKnown } from "./stores/well-known";
+import { getWellKnown } from "./api/wellKnown";
 //HACK: added so that the user doesn't have to go to the credential page to proprely use the presentation page.
 onMount(async () => {
   const resp = await getAllCredentials();
   if (resp.length > 0) {
     credentials.set(resp);
+  }
+  const info = await getWellKnown();
+  if (info) {
+    wellKnown.set(info);
   }
 });
 </script>

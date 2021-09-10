@@ -1,48 +1,62 @@
 <style lang="postcss">
-
 </style>
 
 <script lang="ts">
 //api
-import { postNewContact } from "../api/contactsAxios";
+import { getContacts, postNewContact } from "../api/contactsAxios";
 //stores
-import { contactDropDownOptions } from "../stores/contacts";
+import { availableContacts, contactDropDownOptions } from "../stores/contacts";
 //ecma
-import { IsFQDN, IsString,IsNotEmpty, validateSync, validateOrReject } from 'class-validator';
-import swal from 'sweetalert';
+import {
+  IsFQDN,
+  IsString,
+  IsNotEmpty,
+  validateSync,
+  validateOrReject,
+} from "class-validator";
+import swal from "sweetalert";
+import { useNavigate } from "svelte-navigator";
 
 //INFO: realy cool way to use opp to validate entries
 class ValidContact {
-
   @IsString()
   @IsNotEmpty()
-  type:string;
+  type: string;
 
   @IsFQDN()
-  url:string;
+  url: string;
 
-  error:boolean=false
+  error: boolean = false;
 
-  constructor(message:string[]){
-    this.type = message[0]
-    this.url = message[1]
-    this.validate()
+  constructor(message: string[]) {
+    this.type = message[0];
+    this.url = message[1];
+    this.validate();
   }
   protected validate() {
     const errors = validateSync(this);
     if (errors.length > 0) {
-      console.log("incorrect contact generated: ", errors)
-      swal('Incorrect Entry','Please ensure the domain name is valid',"error")
+      console.log("incorrect contact generated: ", errors);
+      swal(
+        "Incorrect Entry",
+        "Please ensure the domain name is valid",
+        "error"
+      );
     } else {
-      console.log('validation succeed');
-      swal('Success',`New contact from domain: ${this.url} has been added`,"success")
-      .then(() => window.location.reload())
-
+      console.log("validation succeed");
+      swal(
+        "Success",
+        `New contact from domain: ${this.url} has been added`,
+        "success"
+      ).then(async () => {
+        const res = await getContacts();
+        availableContacts.set(res);
+      });
     }
   }
 
   generatePayload() {
-    return {"did": `did:${this.type}:${this.url}`}
+    return { did: `did:${this.type}:${this.url}` };
   }
 }
 
@@ -50,61 +64,84 @@ async function validateOrRejectEntry(input) {
   try {
     await validateOrReject(input);
     //if correct we make the post call
-    postNewContact(input.generatePayload())
+    postNewContact(input.generatePayload());
   } catch (errors) {
-    console.log('Caught promise rejection (validation failed). Errors: ', errors);
+    console.log(
+      "Caught promise rejection (validation failed). Errors: ",
+      errors
+    );
   }
 }
 
-let localVal:string[] = ["web",""]
+let localVal: string[] = ["web", ""];
 function newContactValidator() {
-  let payload = new ValidContact(localVal)
+  let payload = new ValidContact(localVal);
   //check class validator for domain only names
-  validateOrRejectEntry(payload)
-  } 
+  validateOrRejectEntry(payload);
+}
 </script>
 
 <template>
   <div class=" flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <div>
-        <img class="mx-auto h-12 w-auto" src="../favicon.ico" alt="Av1 icon">
+        <img class="mx-auto h-12 w-auto" src="../favicon.ico" alt="Av1 icon" />
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Add a new contact
+          Add a New Contact
         </h2>
-
       </div>
-      <form class="mt-8 space-y-6"  on:submit|preventDefault={newContactValidator}>
-        <input type="hidden" name="remember" value="true">
+      <form
+        class="mt-8 space-y-6"
+        on:submit|preventDefault="{newContactValidator}">
+        <input type="hidden" name="remember" value="true" />
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
             <select
-              bind:value={localVal[0]}
-              required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              >
+              bind:value="{localVal[0]}"
+              required
+              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
               <!-- BUG: not assignign the proper value-->
               {#each $contactDropDownOptions as item}
-                <option value={item}>
+                <option value="{item}">
                   {item}
                 </option>
               {/each}
-
             </select>
           </div>
           <div>
             <label for="url" class="sr-only">Url</label>
-            <input id="url" name="url" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Domain" bind:value={localVal[1]}>
+            <input
+              id="url"
+              name="url"
+              autocomplete="current-password"
+              required
+              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Domain"
+              bind:value="{localVal[1]}" />
           </div>
         </div>
 
         <div>
-          <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" >
-            <span class="absolute left-0 inset-y-0 flex items-center pl-3 stroke-current text-white">
+          <button
+            type="submit"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <span
+              class="absolute left-0 inset-y-0 flex items-center pl-3 stroke-current text-white">
               <!-- Heroicon name: outline/outlineUserAdd (normally would have called an img)-->
-              
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-            </svg>
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                ></path>
+              </svg>
             </span>
             Add
           </button>

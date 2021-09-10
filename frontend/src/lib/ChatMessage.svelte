@@ -34,6 +34,7 @@ import { sha256 } from "../utils/sha256";
 
 //component imports
 import Image from "./table-elements/Image.svelte";
+import Avatar from "./Avatar.svelte";
 
 export let message;
 const baseUrl =
@@ -42,19 +43,11 @@ const baseUrl =
     : `did:web:api.${window.location.host}`;
 const messageClass = message.from === baseUrl ? "sent" : "received";
 
-const avatar = `https://www.tinygraphs.com/labs/isogrids/hexa16/${sha256(
-  message.from
-)}?theme=seascape&numcolors=4`;
 const ts = new Date(message.when);
 </script>
 
 <div class="{`message ${messageClass}`}">
-  <Image
-    src="{avatar}"
-    alt="{avatar}"
-    height="32"
-    width="32"
-    class="rounded-full" />
+  <Avatar value="{message.from}" />
   <div class="message-text ">
     <p class="rounded-lg">{message.data}</p>
 

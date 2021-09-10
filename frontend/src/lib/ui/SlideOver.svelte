@@ -27,7 +27,7 @@ const closeSlideOver = () => {
               <h2
                 class="text-lg font-medium text-gray-900"
                 id="slide-over-title">
-                {$slideOverContent.title}
+                {$slideOverContent.title ?? ""}
               </h2>
               <div class="ml-3 h-7 flex items-center">
                 <button

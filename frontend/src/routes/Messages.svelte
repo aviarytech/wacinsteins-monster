@@ -4,7 +4,7 @@
 <script lang="ts">
 //components import
 import DataTable from "../lib/table-elements/DataTable.svelte";
-import Text from '../lib/table-elements/Text.svelte'
+import Text from "../lib/table-elements/Text.svelte";
 import Image from "../lib/table-elements/Image.svelte";
 import Messenger from "../lib/Messenger.svelte";
 //api
@@ -15,6 +15,7 @@ import { selectedUser } from "../stores/messages";
 import { sha256 } from "../utils/sha256";
 //ecma imports
 import { onMount } from "svelte";
+import Avatar from "../lib/Avatar.svelte";
 
 onMount(async () => {
   const res = await getContacts();
@@ -52,18 +53,15 @@ function openConversation(id: string) {
           <div
             class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8 overflow-y-auto">
             <DataTable
-              headers="{['SHA256', 'Domain']}"
+              headers="{['', 'Domain']}"
               data="{$availableContacts.map((p) => {
                 return [
                   {
-                    component: Image,
-                    src: `https://www.tinygraphs.com/labs/isogrids/hexa16/${sha256(
-                      p['id']
-                    )}?theme=seascape&numcolors=4`,
-                    alt: p['did'],
-                    width: 32,
-                    height: 32,
-                    callback: () => openConversation(p['did']),
+                    component: Avatar,
+                    value: p['did'],
+                    callback: () => {
+                      openConversation(p['did']);
+                    },
                   },
                   {
                     component: Text,

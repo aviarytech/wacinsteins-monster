@@ -24,7 +24,7 @@ export class DIDWebService {
       throw Error('HOST env var must be set');
     }
     this.did = `did:web:${this.configService.get('HOST')}`;
-    this.getKeys();
+    this.reset();
     const protocol =
       this.configService.get('HOST').indexOf('localhost') >= 0
         ? 'http'
@@ -32,7 +32,7 @@ export class DIDWebService {
     this.basePath = `${protocol}://${this.configService.get('HOST')}`;
   }
 
-  async getKeys() {
+  async reset() {
     await this.db.ready;
     const key0 = await this.getKey0();
     const key1 = await this.getKey1();
