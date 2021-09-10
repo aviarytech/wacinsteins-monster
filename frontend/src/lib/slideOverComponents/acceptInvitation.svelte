@@ -22,14 +22,14 @@ async function acceptInvitationApiCall(url: string) {
     if (response) {
       swal({
         title: "Success",
-        text: `You have submitted the encrypted data for processing`,
+        text: `You have accepted the invitation.`,
         icon: "success",
         button: "Great!",
       }).then(slideOverContent.set(null));
     } else {
       swal({
-        title: "something went wrong",
-        text: "please ensure you have pasted the url from the QrCode in the input box. Otherwise, please contact us for it may be on our end.",
+        title: "Error",
+        text: "Please ensure you have submitted a valid Invitation URL.",
         icon: "error",
       });
     }
@@ -40,7 +40,7 @@ async function acceptInvitationApiCall(url: string) {
 </script>
 
 <template>
-  <h1>Hello there!, you will have to submit the url here</h1>
+  <h1>Enter a valid Invitation URL</h1>
 
   <Button
     label="submit"
@@ -51,5 +51,5 @@ async function acceptInvitationApiCall(url: string) {
     bind:value="{urlInput}"
     on:keypress="{onKeyPress}"
     type="text"
-    placeholder="paste the url and press enter" />
+    placeholder="Enter a valid Invitation URL" />
 </template>

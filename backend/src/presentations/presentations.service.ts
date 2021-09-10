@@ -128,10 +128,4 @@ export class PresentationsService {
       ...updatePresentationRequest,
     });
   }
-
-  async acceptInvitation(url: any): Promise<any> {
-    const regrex = /(?<==).*/gmi
-    let sha64 = regrex.exec(url)
-    return await sha64
-  }
 }

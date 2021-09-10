@@ -17,7 +17,7 @@ import ComponentList from "../lib/table-elements/ComponentList.svelte";
 import Tag from "../lib/ui/Tag.svelte";
 import QRcode from "../lib/QRcode.svelte";
 import Avatar from "../lib/Avatar.svelte";
-import SubmitCredentials from "../lib/slideOverComponents/submitCredentials.svelte";
+import AcceptInvitation from "../lib/slideOverComponents/acceptInvitation.svelte";
 //ECMA imports
 import { onMount } from "svelte";
 //stores
@@ -61,7 +61,7 @@ const newPresentationRequest = () => {
 function submitUrl() {
   slideOverContent.set({
     title: "",
-    component: SubmitCredentials,
+    component: AcceptInvitation,
     presentationSubject: [],
   });
   if (rightPreviewWindowDisplayed) {
