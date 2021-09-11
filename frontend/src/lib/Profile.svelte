@@ -32,7 +32,7 @@ function handleNav() {
           aria-haspopup="true"
           on:click="{handleNav}">
           <span class="sr-only">Open user menu</span>
-          <Avatar value="{$wellKnown.id}" />
+          <Avatar value="{$wellKnown.id}" left="{true}" />
         </button>
       </div>
 

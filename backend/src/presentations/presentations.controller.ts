@@ -26,6 +26,7 @@ import { AcceptInvitationDto } from './dto/accept-invitation.dto';
 import { DIDCommService } from 'src/didcomm/didcomm.service';
 import { SubmitCredentialForPresentationDto } from './dto/submit-credential-for-presentation.dto';
 import { CredentialsService } from 'src/credentials/credentials.service';
+import { DIDWebService } from 'src/didweb/didweb.service';
 
 @ApiTags('presentations')
 @Controller('presentations')
@@ -34,6 +35,7 @@ export class PresentationsController {
     private readonly presentationsService: PresentationsService,
     private readonly didCommService: DIDCommService,
     private readonly credentialsService: CredentialsService,
+    private readonly didweb: DIDWebService,
   ) {}
 
   @Post('requests')
@@ -60,6 +62,7 @@ export class PresentationsController {
       return await this.presentationsService.createRequest({
         definition,
         role: PRESENTATION_REQUEST_ROLES.VERIFIER,
+        requester: this.didweb.did,
       });
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);

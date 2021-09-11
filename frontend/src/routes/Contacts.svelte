@@ -97,6 +97,7 @@ function openConversation(id: string) {
         {
           component: Avatar,
           value: p['did'],
+          dataTableSpecialClass: 'pl-6 py-4 max-w-xs',
         },
         {
           component: Text,

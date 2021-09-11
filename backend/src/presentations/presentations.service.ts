@@ -29,7 +29,7 @@ export class PresentationsService {
     private log: Logger,
     private didWeb: DIDWebService,
     private config: ConfigService,
-  ) { }
+  ) {}
 
   async createDefinition(
     createPresentationDefinitionDto: {
@@ -67,8 +67,9 @@ export class PresentationsService {
   async createRequest(createRequest: {
     definition: PresentationDefinition;
     role: PRESENTATION_REQUEST_ROLES;
+    requester: string;
   }): Promise<PresentationRequest> {
-    const { definition, role } = createRequest;
+    const { definition, role, requester } = createRequest;
     const invitation = new InvitationMessage(
       this.didWeb.did,
       this.didWeb.basePath + '/invitation',
@@ -86,6 +87,7 @@ export class PresentationsService {
       definition,
       invitation.payload.id,
       role,
+      requester,
     );
 
     await validateOrReject(presReq, {

@@ -39,6 +39,7 @@ onMount(async () => {
         {
           component: Avatar,
           value: i,
+          dataTableSpecialClass: 'pl-6 py-4 max-w-xs',
         },
         // { component: Text, text: i.id, classes: 'max-w-xs' },
         { component: Text, text: i },

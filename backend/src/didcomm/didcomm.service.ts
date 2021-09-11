@@ -63,14 +63,18 @@ export class DIDCommService {
               attachment.data.json['dif']['presentation_definition'].id,
             );
             if (definition) {
-              const request = await this.presentations.createRequest({
+              const newRequest = await this.presentations.createRequest({
                 definition,
                 role: PRESENTATION_REQUEST_ROLES.PROVER,
+                requester: request.payload.from,
               });
               const updated =
-                await this.presentations.updatePresentationRequest(request.id, {
-                  status: PRESENTATION_REQUEST_STATUSES.REQUESTED,
-                });
+                await this.presentations.updatePresentationRequest(
+                  newRequest.id,
+                  {
+                    status: PRESENTATION_REQUEST_STATUSES.REQUESTED,
+                  },
+                );
             } else {
               console.log(`failed to create presentation definition`);
             }
@@ -198,6 +202,4 @@ export class DIDCommService {
       return false;
     }
   }
-
-
 }

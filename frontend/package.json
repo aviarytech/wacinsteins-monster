@@ -50,6 +50,9 @@
   "dependencies": {
     "@stablelib/sha256": "^1.0.1",
     "@tailwindcss/forms": "^0.3.3",
+    "@transmute/credentials-context": "^0.7.0-unstable.7",
+    "@transmute/did-context": "^0.7.0-unstable.7",
+    "@transmute/security-context": "^0.7.0-unstable.7",
     "axios": "^0.21.3",
     "class-validator": "^0.13.1",
     "dexie": "^3.0.3",
@@ -61,7 +64,9 @@
     "svelte-copy-to-clipboard": "^0.2.5",
     "svelte-jester": "^1.7.0",
     "svelte-navigator": "^3.1.5",
-    "sweetalert": "^2.1.2"
+    "svelte-tooltip": "^1.2.0",
+    "sweetalert": "^2.1.2",
+    "timeago-simple": "^1.2.4"
   },
   "jest": {
     "rootDir": "src",

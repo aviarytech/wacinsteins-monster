@@ -143,6 +143,9 @@ export class PresentationRequest {
   @IsArray()
   derivedCredentials?: VerifiableCredential[];
 
+  @IsString()
+  requester: string;
+
   constructor(
     id: string,
     url: string,
@@ -151,6 +154,7 @@ export class PresentationRequest {
     definition: PresentationDefinition,
     invitationId: string,
     role: PRESENTATION_REQUEST_ROLES,
+    requester: string,
   ) {
     this.id = id;
     this.url = url;
@@ -161,5 +165,6 @@ export class PresentationRequest {
     this.status = PRESENTATION_REQUEST_STATUSES.CREATED;
     this.role = role;
     this.derivedCredentials = [];
+    this.requester = requester;
   }
 }

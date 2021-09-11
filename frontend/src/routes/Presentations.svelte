@@ -75,6 +75,7 @@ function openSubmitPresentation(id: string) {
   slideOverContent.set({
     title: "Submit Presentation",
     component: SubmitPresentationRequestSelector,
+    presentation: $presentations.find((p) => p["id"] === id),
   });
 }
 
@@ -138,6 +139,7 @@ function tailwingBgColorizer(value: string): string | void {
           {
             component: Avatar,
             value: p['id'],
+            dataTableSpecialClass: 'pl-6 py-4 max-w-xs',
           },
           {
             component: Tag,

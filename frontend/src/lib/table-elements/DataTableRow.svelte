@@ -1,6 +1,6 @@
 <style lang="postcss">
 .cell {
-  @apply px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 truncate max-w-xs;
+  @apply px-6 py-4 truncate text-sm font-medium text-gray-900 max-w-xs;
 }
 </style>
 

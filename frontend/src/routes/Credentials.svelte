@@ -44,7 +44,11 @@ onMount(async () => {
     headers="{['', 'Name', 'Issuer', 'Issuance Date', 'Derivations', '']}"
     data="{$credentials.map((c) => {
       return [
-        { component: Avatar, value: c['verifiableCredential'].id },
+        {
+          component: Avatar,
+          value: c['verifiableCredential'].id,
+          dataTableSpecialClass: 'pl-6 py-4 max-w-xs',
+        },
         { component: Text, text: c['verifiableCredential'].name },
         { component: Text, text: c['verifiableCredential'].issuer.id },
         { component: Text, text: c['verifiableCredential'].issuanceDate },
