@@ -205,7 +205,7 @@ function tailwingBgColorizer(value: string): string {
   <div class="bg-white shadow-md mt-10 rounded-sm p-5">
     <div class="flex items-center justify-end py-2">
       <Tag
-        text="Prover"
+        text="Verifier"
         fontColor="text-white"
         bgCol="{tailwingBgColorizer('verifier')}" />
       <span class="pl-2 flex-grow">Presentations Requested by <b>you</b></span>

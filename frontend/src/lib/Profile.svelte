@@ -59,6 +59,7 @@ let show = false;
                 class="px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-gray-500"
                 role="menuitem"
                 to="identities"
+                on:click={() => show = false}
                 id="user-menu-item-0">Identities</Link>
             </div>
             <div>
@@ -66,6 +67,7 @@ let show = false;
                 class="py-2 text-sm text-white hover:text-gray-200"
                 role="menuitem"
                 to="reset"
+                on:click={() => show = false}
                 id="user-menu-item-3">⟳</Link>
             </div>
           </div>
@@ -73,6 +75,7 @@ let show = false;
             to="logout"
             class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-gray-500"
             role="menuitem"
+            on:click={() => show = false}
             id="user-menu-item-2">Sign out</Link>
         </Router>
       </div>
