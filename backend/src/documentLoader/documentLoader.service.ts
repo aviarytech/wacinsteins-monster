@@ -5,6 +5,8 @@ import * as sec from '@transmute/security-context';
 import * as did from '@transmute/did-context';
 import { DIDWebService } from '../didweb/didweb.service';
 import { DIDKeyService } from 'src/didkey/didkey.service';
+import vax from './contexts/vax-v1.json';
+import presentationExchange from './contexts/presentation-exchange.json';
 
 @Injectable()
 export class DocumentLoaderService {
@@ -43,8 +45,9 @@ export class DocumentLoaderService {
         sec.constants.SECURITY_CONTEXT_V1_URL,
       ),
 
-      //credential vocabularies
-      'https://w3id.org/vaccination/v1': require('./contexts/vax-v1.json'),
+      'https://w3id.org/vaccination/v1': vax,
+      'https://identity.foundation/presentation-exchange/submission/v1':
+        presentationExchange,
     };
     this.loader = async (iri: string) => {
       const context = await this.contextResolver(iri);

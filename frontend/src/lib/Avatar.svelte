@@ -4,7 +4,7 @@ import SvelteTooltip from "svelte-tooltip";
 export let value: string;
 $: tooltip = value.length > 32 ? `${value.substring(0, 31)}...` : value;
 
-export const callback = undefined;
+export let callback = undefined;
 export let right = false;
 export let left = false;
 export let top = false;

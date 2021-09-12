@@ -75,11 +75,13 @@ export async function postNewPresentationRequest(
 
 export async function submitPresentationRequestPresentation(
   presentationRequestId: string,
-  payload: any
+  credential: any
 ): Promise<any> {
   const endpoint = `${baseUrl}/presentations/requests/${presentationRequestId}/submit`;
   try {
-    const response = await axios.post(endpoint, payload);
+    const response = await axios.post(endpoint, {
+      verifiableCredential: credential,
+    });
     // success
     if (response.status == 201 || 200) {
       return response.data;

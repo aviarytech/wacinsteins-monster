@@ -6,21 +6,33 @@ import { deriveCredential } from "../api/credentials";
 import { credentials } from "../stores/credentials";
 import Tag from "./ui/Tag.svelte";
 import CredentialCard from "./cards/CredentialCard.svelte";
+import Button from "./ui/Button.svelte";
+import { submitPresentationRequestPresentation } from "../api/presentationAxios";
 
-export let presentation: any;
+export let presentationRequest: any;
 let selectedCredentialId: any;
+$: selectedCredential = $credentials.find((c) => c.id === selectedCredentialId);
 $: derivedCredential = (async () => {
-  const selectedCredential = $credentials.find(
-    (c) => c.id === selectedCredentialId
-  );
   if (selectedCredential) {
     return await applyFrame(
       selectedCredential.verifiableCredential,
-      presentation.definition.frame
+      presentationRequest.definition.frame
     );
   }
   return null;
 })();
+
+const submitCredential = async () => {
+  const derived = await deriveCredential(
+    selectedCredential.verifiableCredential,
+    presentationRequest.definition.frame
+  );
+  const result = await submitPresentationRequestPresentation(
+    presentationRequest.id,
+    derived
+  );
+  console.log(result);
+};
 </script>
 
 <form class="space-y-8 divide-y divide-gray-200">
@@ -32,7 +44,7 @@ $: derivedCredential = (async () => {
         </h3>
         <p class="mt-1 max-w-2xl text-sm text-gray-500">
           The information selected here will be submitted to <b
-            >{presentation.requester}</b> so be careful what you share.
+            >{presentationRequest.requester}</b> so be careful what you share.
         </p>
       </div>
       <div
@@ -43,7 +55,7 @@ $: derivedCredential = (async () => {
           Required Information
         </label>
         <div class="mt-1 sm:mt-0 sm:col-span-2">
-          {#each presentation.definition.input_descriptors[0].constraints.fields as field}
+          {#each presentationRequest.definition.input_descriptors[0].constraints.fields as field}
             <Tag text="{field['path']}" />
           {/each}
         </div>
@@ -75,6 +87,11 @@ $: derivedCredential = (async () => {
         {:then derivedDocument}
           {#if derivedDocument}
             <CredentialCard credential="{derivedDocument}" />
+            <div class="text-right">
+              <Button
+                callback="{async () => submitCredential()}"
+                label="Submit" />
+            </div>
           {/if}
           <!-- <pre>{JSON.stringify(derivedDocument, null, 2)}</pre> -->
 

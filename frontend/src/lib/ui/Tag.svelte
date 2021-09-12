@@ -1,6 +1,6 @@
 <style lang="postcss">
 .default {
-  @apply inline-flex items-center text-sm rounded mt-2 mr-1;
+  @apply inline-flex items-center text-sm rounded mr-1;
 }
 </style>
 
@@ -8,7 +8,7 @@
 export let text: string;
 export let removeCallback: () => void = undefined;
 export let bgCol: string = "bg-blue-100";
-export let fontColor: string = "text-black";
+export let fontColor: string = "text-gray-600";
 </script>
 
 <div class="{`default ${bgCol} ${fontColor}`}">

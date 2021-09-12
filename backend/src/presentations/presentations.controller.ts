@@ -27,6 +27,10 @@ import { DIDCommService } from 'src/didcomm/didcomm.service';
 import { SubmitCredentialForPresentationDto } from './dto/submit-credential-for-presentation.dto';
 import { CredentialsService } from 'src/credentials/credentials.service';
 import { DIDWebService } from 'src/didweb/didweb.service';
+import { PresentationMessage } from '@aviarytech/didcomm-protocols.present-proof';
+import { IDIDCommAttachment } from '@aviarytech/didcomm-core';
+import { IDIFPresentationExchangeSubmissionAttachment } from '@aviarytech/didcomm-protocols.present-proof/dist/interfaces';
+import { SUBMISSION_FORMATS } from '@aviarytech/dif-presentation-exchange';
 
 @ApiTags('presentations')
 @Controller('presentations')
@@ -83,17 +87,48 @@ export class PresentationsController {
   async submitPresentation(
     @Param('id') id: string,
     @Body() body: SubmitCredentialForPresentationDto,
-  ): Promise<PresentationRequest> {
-    // TODO change to vc id
-    let presentation = await this.presentationsService.findOneRequest(id);
-    if (!presentation) {
+  ): Promise<any> {
+    let request = await this.presentationsService.findOneRequest(id);
+    if (!request) {
       throw new HttpException('Presentation not found', HttpStatus.NOT_FOUND);
     }
 
-    presentation = await this.presentationsService.updatePresentationRequest(
-      presentation.id,
-      { derivedCredentials: [...presentation.derivedCredentials] },
+    request = await this.presentationsService.updatePresentationRequest(
+      request.id,
+      {
+        derivedCredentials: [
+          ...request.derivedCredentials,
+          body.verifiableCredential,
+        ],
+      },
     );
+
+    const presentation = await this.presentationsService.createPresentation(
+      request.id,
+      body.verifiableCredential,
+    );
+
+    return presentation;
+
+    // const attachment: IDIFPresentationExchangeSubmissionAttachment = {
+    //   id: sha256(nanoid()),
+    //   media_type: 'application/ld+json',
+    //   format: 'dif/presentation-exchange/submission@v1.0',
+    //   data: {
+    //     json: {
+    //       dif: {},
+    //     },
+    //   },
+    // };
+
+    // const presentationMessage = new PresentationMessage(
+    //   this.didweb.did,
+    //   [presentation.requester],
+    //   presentation.invitationId,
+    //   [
+    //     // TODO CREATE PRESENTATION SUBMISSION OBJECT AND SEND!!!!!
+    //   ],
+    // );
 
     return presentation;
   }
