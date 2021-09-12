@@ -1,4 +1,5 @@
 <script lang="ts">
+import { simple as format } from "timeago-simple";
 //component
 import CredentialDetailView from "../lib/CredentialDetailView.svelte";
 import DataTable from "../lib/table-elements/DataTable.svelte";
@@ -6,6 +7,7 @@ import Text from "../lib/table-elements/Text.svelte";
 import ComponentList from "../lib/table-elements/ComponentList.svelte";
 import Avatar from "../lib/Avatar.svelte";
 import Button from "../lib/ui/Button.svelte";
+import Tag from "../lib/ui/Tag.svelte";
 //stores
 import { credentials } from "../stores/credentials";
 import { slideOverContent } from "../stores/ui";
@@ -40,36 +42,51 @@ onMount(async () => {
 </script>
 
 <template>
-  <DataTable
-    headers="{['', 'Name', 'Issuer', 'Issuance Date', 'Derivations', '']}"
-    data="{$credentials.map((c) => {
-      return [
-        {
-          component: Avatar,
-          value: c['verifiableCredential'].id,
-          dataTableSpecialClass: 'pl-6 py-4 max-w-xs',
-        },
-        { component: Text, text: c['verifiableCredential'].name },
-        { component: Text, text: c['verifiableCredential'].issuer.id },
-        { component: Text, text: c['verifiableCredential'].issuanceDate },
-        { component: Text, text: c['derivedCredentials'].length },
-        {
-          component: ComponentList,
-          items: [
+  <div class="bg-white shadow-md rounded-sm p-5">
+    <div class="flex items-center justify-start py-2">
+      <Tag text="Holder" fontColor="text-white" bgCol="bg-green-400" />
+      <span class="pl-2 pr-6"><b>Your</b> Credentials</span>
+    </div>
+    {#if $credentials && $credentials.length > 0}
+      <DataTable
+        headers="{['', 'Name', 'Issuer', 'Issued', '']}"
+        data="{$credentials.map((c) => {
+          return [
             {
-              component: Button,
-              callback: () => openCredential(c['id']),
-              label: 'View',
+              component: Avatar,
+              value: c['verifiableCredential'].id,
+              dataTableSpecialClass: 'pl-6 py-4 max-w-xs',
+            },
+            { component: Text, text: c['verifiableCredential'].name },
+            {
+              component: Text,
+              text: `${c['verifiableCredential'].issuer.id.slice(0, 16)}...`,
             },
             {
-              component: Button,
-              callback: () => {
-                openDeriveCredential(c['id']);
-              },
-              label: 'Derive Credential',
+              component: Text,
+              text: format(c['verifiableCredential'].issuanceDate),
             },
-          ],
-        },
-      ];
-    })}" />
+            {
+              component: ComponentList,
+              items: [
+                {
+                  component: Button,
+                  callback: () => openCredential(c['id']),
+                  label: 'View',
+                },
+                {
+                  component: Button,
+                  callback: () => {
+                    openDeriveCredential(c['id']);
+                  },
+                  label: 'Derive Credential',
+                },
+              ],
+            },
+          ];
+        })}" />
+    {:else}
+      <p class="pt-3 text-sm text-gray-500">No Credentials 😞</p>
+    {/if}
+  </div>
 </template>

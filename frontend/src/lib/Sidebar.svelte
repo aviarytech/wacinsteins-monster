@@ -23,7 +23,7 @@ import Image from "./table-elements/Image.svelte";
 // location.subscribe((l) => {
 //   currentLocation = l;
 // });
-let host = import.meta.env.VITE_HOST;
+let host = import.meta.env.VITE_HOST ?? "aviary.one";
 </script>
 
 <template>

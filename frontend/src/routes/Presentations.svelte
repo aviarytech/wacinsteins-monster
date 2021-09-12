@@ -136,7 +136,7 @@ function tailwingBgColorizer(value: string): string {
         text="Prover"
         fontColor="text-white"
         bgCol="{tailwingBgColorizer('prover')}" />
-      <span class="flex-grow pl-2">Presentations Requested of <b>you</b></span>
+      <span class="flex-grow pl-2">Presentations Requested of <b>You</b></span>
       <Button label="Accept Invitation" callback="{async () => submitUrl()}" />
     </div>
     {#if requestsForMe && requestsForMe.length > 0}
@@ -208,7 +208,7 @@ function tailwingBgColorizer(value: string): string {
         text="Verifier"
         fontColor="text-white"
         bgCol="{tailwingBgColorizer('verifier')}" />
-      <span class="pl-2 flex-grow">Presentations Requested by <b>you</b></span>
+      <span class="pl-2 flex-grow">Presentations Requested by <b>You</b></span>
       <Button label="New" callback="{async () => newPresentationRequest()}" />
     </div>
 
