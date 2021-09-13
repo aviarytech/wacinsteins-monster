@@ -19,8 +19,8 @@ onMount(async () => {
     //loading all messages at the beginning
     msgUSerBackend.set(await getCurrentConversation($selectedUser));
     //we need to get the did domain from the selectedUser and ours (don't know how)
-    console.log($selectedUser);
-    console.log($msgUSerBackend);
+    //console.log($selectedUser);
+    //console.log($msgUSerBackend);
   }
 
   socket.on("error", console.error);
@@ -28,7 +28,7 @@ onMount(async () => {
 
   //specific
   socket.on("chatToClient", (data) => {
-    console.log(data);
+    //console.log(data);
     if (data.sender === userDomain) {
       msgUSerBackend.set([
         ...$msgUSerBackend,
@@ -54,7 +54,7 @@ onMount(async () => {
         },
       ]);
     }
-    console.log($msgUSerBackend);
+    //console.log($msgUSerBackend);
   });
 });
 

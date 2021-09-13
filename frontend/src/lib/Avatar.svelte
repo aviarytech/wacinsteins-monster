@@ -9,6 +9,7 @@ export let right = false;
 export let left = false;
 export let top = false;
 export let bottom = false;
+export let notification: boolean = false;
 </script>
 
 <div class="text-white">
@@ -22,6 +23,11 @@ export let bottom = false;
       <svg data-jdenticon-value="{value}" width="40" height="40">
         {value}
       </svg>
+      {#if notification}
+        <span
+          class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400"
+        ></span>
+      {/if}
     </SvelteTooltip>
   {:else}
     <SvelteTooltip
@@ -35,6 +41,11 @@ export let bottom = false;
           <svg data-jdenticon-value="{value}" width="40" height="40">
             {value}
           </svg>
+          {#if notification}
+            <span
+              class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400"
+            ></span>
+          {/if}
         </div>
       </button>
     </SvelteTooltip>

@@ -18,7 +18,7 @@ import { availableContacts } from "../stores/contacts";
 import { selectedUser } from "../stores/messages";
 //ecma imports
 import { onMount } from "svelte";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 //env
 const backendUrl = import.meta.env.VITE_API_URL
   ? import.meta.env.VITE_API_URL
@@ -29,27 +29,36 @@ const userDomain =
     : `did:web:api.${window.location.host}`;
 //TODO: move all of the socket logic in a separate ts or store file.
 
-let socket;
-let initMessenger = false;
+let socket: Socket;
+let initMessenger: boolean = false;
+let newNotification: boolean = false;
+$: newNotification;
 onMount(async () => {
   const res = await getContacts();
+  console.log(res);
   socket = io(`${backendUrl}/chat`, {
     secure: false,
     reconnect: true,
     rejectUnauthorized: false,
     transports: ["websocket"],
   });
-  //console.log(res);
 
-  //WARN: future point of failure
   if (res.length > 0 && !$selectedUser) {
     selectedUser.set(res[0]["did"]);
     socket.emit("joinRoom", $selectedUser);
   }
   availableContacts.set(res);
   initMessenger = true;
+
+  socket.on("chatToClient", (data) => {
+    console.log("ding");
+    if (data) {
+      newNotification = true;
+    }
+  });
 });
 function openConversation(id: string) {
+  newNotification = false;
   socket.emit("leaveRoom", $selectedUser);
   selectedUser.set(id);
   socket.emit("joinRoom", $selectedUser);
@@ -127,6 +136,7 @@ async function newMsg() {
                   {
                     component: Avatar,
                     value: p['did'],
+                    notification: newNotification,
                     callback: () => {
                       openConversation(p['did']);
                     },
