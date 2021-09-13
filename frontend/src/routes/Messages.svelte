@@ -52,11 +52,19 @@ onMount(async () => {
 
   socket.on("chatToClient", (data) => {
     console.log("ding");
+    playSound("../assets/sounds/notification-new-msg.mp3");
     if (data) {
       newNotification = true;
     }
   });
 });
+
+//notification
+function playSound(link: string) {
+  const audio = new Audio(link);
+  audio.play();
+}
+
 function openConversation(id: string) {
   newNotification = false;
   socket.emit("leaveRoom", $selectedUser);
