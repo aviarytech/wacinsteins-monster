@@ -107,7 +107,7 @@ async function newMsg() {
   <!--TODO: surround the entire chat -->
   <h1>you are connected with domain:<bold>{$selectedUser}</bold></h1>
   <div
-    class="inset-0 border-2 border-gray-200 border-dashed bg-gray-100 rounded-lg overflow-y-auto">
+    class="inset-0 border-2 border-gray-200 border-dashed bg-gray-100 rounded-lg overflow-y-auto overflow-x-hidden min-h-screen ">
     {#if $msgUSerBackend}
       {#each $msgUSerBackend as message}
         <svelte:component this="{ChatMessage}" message="{message.msg}" />
@@ -126,14 +126,14 @@ async function newMsg() {
   </div>
   <div class="flex bottom-1 space-x-4 w-full">
     <!-- <Avatar value="{$user.email}" /> -->
-    <div class="flex-grow max-w-screen-md">
+    <div class="flex-grow min-w-full">
       <input
         bind:value="{chatMsg}"
         on:keypress="{onKeyPress}"
         type="text"
         name="msg-chat"
         id="msg-chat"
-        class="fill-current shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full sm:text-sm border-gray-300 rounded-md min-w-max"
+        class="flex-grow  fill-current shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full sm:text-sm border-gray-300 rounded-md min-w-max"
         placeholder="Say hello!" />
     </div>
   </div>
