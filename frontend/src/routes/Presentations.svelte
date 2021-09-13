@@ -6,7 +6,7 @@
 
 <script lang="ts">
 // api imports
-import { getPresentations } from "../api/presentationAxios";
+import { getPresentations, acceptInvitation } from "../api/presentationAxios";
 //component imports
 import SchemaBuilder from "../lib/SchemaBuilder.svelte";
 import DataTable from "../lib/table-elements/DataTable.svelte";
@@ -24,6 +24,7 @@ import { onMount } from "svelte";
 //stores
 import { presentations, qrCodeIdValue } from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
+import swal from "sweetalert";
 
 $: requestsForMe = $presentations.filter((r) => r.role === "prover");
 $: requestsByMe = $presentations.filter((r) => r.role === "verifier");
@@ -61,17 +62,43 @@ const newPresentationRequest = () => {
   }
   rightPreviewWindowDisplayed = !rightPreviewWindowDisplayed;
 };
+async function acceptInvitationApiCall(url: string) {
+  if (url) {
+    let response = await acceptInvitation({ url: url });
+    if (response) {
+      swal({
+        title: "Success",
+        text: `You have accepted the invitation.`,
+        icon: "success",
+        button: "Great!",
+      });
+    } else {
+      swal({
+        title: "Error",
+        text: "Please ensure you have submitted a valid Invitation URL.",
+        icon: "error",
+      });
+    }
+  }
+}
 
 function submitUrl() {
-  slideOverContent.set({
-    title: "",
-    component: AcceptInvitation,
-    presentationSubject: [],
+  console.log("click");
+  swal({
+    title: "Accept Invitation",
+    text: "Please paste the url",
+    button: {
+      text: "submit",
+      closeModal: false,
+    },
+    content: "input",
+  }).then((value) => {
+    if (value) {
+      acceptInvitationApiCall(value);
+    } else {
+      swal("No input detected");
+    }
   });
-  if (rightPreviewWindowDisplayed) {
-    slideOverContent.set(null);
-  }
-  rightPreviewWindowDisplayed = !rightPreviewWindowDisplayed;
 }
 
 function openSubmitPresentation(id: string) {
