@@ -10,7 +10,7 @@ export let credential: any;
     <div
       class="p-3 flex-none border-b border-r rounded-tl-xl bg-gray-50 text-center">
       <span class="text-gray-500"
-        >Issuer <Avatar value="{credential.issuer}" left="{true}" /></span>
+        >Issuer <Avatar value="{credential.issuer}" right="{true}" /></span>
     </div>
     <div
       class="px-4 py-5 rounded-t-xl border-b border-gray-200 sm:px-6 flex-grow bg-gray-50 ">
