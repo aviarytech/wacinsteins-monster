@@ -30,7 +30,10 @@ import { DIDWebService } from 'src/didweb/didweb.service';
 import { PresentationMessage } from '@aviarytech/didcomm-protocols.present-proof';
 import { IDIDCommAttachment } from '@aviarytech/didcomm-core';
 import { IDIFPresentationExchangeSubmissionAttachment } from '@aviarytech/didcomm-protocols.present-proof/dist/interfaces';
-import { SUBMISSION_FORMATS } from '@aviarytech/dif-presentation-exchange';
+import {
+  IDIFPresentationExchangeSubmission,
+  SUBMISSION_FORMATS,
+} from '@aviarytech/dif-presentation-exchange';
 
 @ApiTags('presentations')
 @Controller('presentations')
@@ -108,29 +111,40 @@ export class PresentationsController {
       body.verifiableCredential,
     );
 
-    return presentation;
+    const attachments: IDIFPresentationExchangeSubmissionAttachment[] =
+      presentation.items.map((pres) => {
+        return {
+          id: sha256(nanoid()),
+          media_type: 'application/ld+json',
+          format: 'dif/presentation-exchange/submission@v1.0',
+          data: {
+            json: {
+              dif: {
+                presentation_submission: pres.presentation_submission,
+                ...pres,
+              },
+            },
+          },
+        };
+      });
 
-    // const attachment: IDIFPresentationExchangeSubmissionAttachment = {
-    //   id: sha256(nanoid()),
-    //   media_type: 'application/ld+json',
-    //   format: 'dif/presentation-exchange/submission@v1.0',
-    //   data: {
-    //     json: {
-    //       dif: {},
-    //     },
-    //   },
-    // };
-
-    // const presentationMessage = new PresentationMessage(
-    //   this.didweb.did,
-    //   [presentation.requester],
-    //   presentation.invitationId,
-    //   [
-    //     // TODO CREATE PRESENTATION SUBMISSION OBJECT AND SEND!!!!!
-    //   ],
-    // );
-
-    return presentation;
+    const presentationMessage = new PresentationMessage(
+      this.didweb.did,
+      [request.requester],
+      request.invitationId,
+      attachments,
+    );
+    const success = await this.didCommService.sendMessage(
+      request.requester,
+      presentationMessage,
+    );
+    if (success) {
+      return presentation;
+    }
+    throw new HttpException(
+      'Failed to send Presentation to requester',
+      HttpStatus.BAD_REQUEST,
+    );
   }
 
   @Post('definitions')

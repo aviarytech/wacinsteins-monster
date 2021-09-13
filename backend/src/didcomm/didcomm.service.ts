@@ -8,6 +8,7 @@ import {
 } from '@aviarytech/didcomm-messaging';
 import { BasicMessageHandler } from '@aviarytech/didcomm-protocols.basic-message';
 import {
+  PresentationMessageHandler,
   ProposePresentationMessage,
   ProposePresentationMessageHandler,
   RequestPresentationMessage,
@@ -41,6 +42,9 @@ export class DIDCommService {
   ) {
     this.didcomm = new DIDComm(
       [
+        new PresentationMessageHandler(async (presentation, didcomm) => {
+          console.log(`received ${presentation.payload.type} message`);
+        }),
         new RequestPresentationMessageHandler(async (request, didcomm) => {
           for (let i = 0; i < request.payload.attachments.length; i++) {
             let attachment = request.payload.attachments[i];
