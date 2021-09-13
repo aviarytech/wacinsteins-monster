@@ -35,6 +35,7 @@ let newNotification: boolean = false;
 $: newNotification;
 onMount(async () => {
   const res = await getContacts();
+  res["newNotification"] = newNotification;
   console.log(res);
   socket = io(`${backendUrl}/chat`, {
     secure: false,
@@ -51,15 +52,20 @@ onMount(async () => {
   initMessenger = true;
 
   socket.on("chatToClient", (data) => {
-    console.log("ding");
+    console.log(data);
     playSound("../assets/sounds/notification-new-msg.mp3");
     if (data) {
+      let searchResIndex = $availableContacts.findIndex(
+        (user) => user["did"] === data.room
+      );
+      $availableContacts[searchResIndex]["newNotification"] = true;
+      console.log(searchResIndex);
       newNotification = true;
     }
   });
 });
 
-//notification
+//notification sound
 function playSound(link: string) {
   const audio = new Audio(link);
   audio.play();
@@ -144,7 +150,7 @@ async function newMsg() {
                   {
                     component: Avatar,
                     value: p['did'],
-                    notification: newNotification,
+                    notification: p['newNotification'],
                     callback: () => {
                       openConversation(p['did']);
                     },
