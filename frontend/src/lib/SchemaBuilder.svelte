@@ -25,11 +25,12 @@ async function presentationPreview() {
   let inputDescriptor: Object = {
     credentialSubject: inputDescriptionBuilder(
       selectedSchemaFields,
-      credentialsChosen
+      credentialsChosen["verifiableCredential"]["credentialSubject"]
     ),
   };
-  inputDescriptor["type"] = credentialsChosen["data"]["type"];
-  inputDescriptor["@context"] = credentialsChosen["data"]["@context"];
+  inputDescriptor["type"] = credentialsChosen["verifiableCredential"]["type"];
+  inputDescriptor["@context"] =
+    credentialsChosen["verifiableCredential"]["@context"];
 
   if (Object.keys(inputDescriptor).length === 0) {
     swal({
@@ -40,7 +41,7 @@ async function presentationPreview() {
   } else {
     slidePreviewOverContent.set($slideOverContent);
     slideOverContent.set({
-      title: "review",
+      title: "Review",
       component: Preview,
       data: [inputDescriptor, selectedSchemaFields],
     });
@@ -57,7 +58,7 @@ async function presentationPreview() {
       id="cy-schema-hook-select">
       {#each $credentials as item}
         <option value="{item}">
-          {item["data"].name}
+          {item["verifiableCredential"].name}
         </option>
       {/each}
     </select>
@@ -65,7 +66,8 @@ async function presentationPreview() {
     {#if credentialsChosen}
       {#key unique}
         <CredentialSubjectFieldSelector
-          credentialSubject="{credentialsChosen['data'].credentialSubject}"
+          credentialSubject="{credentialsChosen['verifiableCredential']
+            .credentialSubject}"
           bind:selected="{selectedSchemaFields}" />
       {/key}
     {:else}
@@ -74,5 +76,9 @@ async function presentationPreview() {
       </h2>
     {/if}
   </form>
-  <Button callback="{presentationPreview}" type="submit" label="Review" />
+  <Button
+    additionalClasses="mt-6"
+    callback="{presentationPreview}"
+    type="submit"
+    label="Review" />
 </template>

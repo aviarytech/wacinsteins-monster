@@ -1,4 +1,5 @@
 import { PartialType } from '@nestjs/swagger';
+import { VerifiableCredential } from 'src/credentials/interfaces';
 import {
   PresentationProposal,
   PRESENTATION_REQUEST_STATUSES,
@@ -8,7 +9,7 @@ import { CreatePresentationRequestDto } from './create-presentation-request.dto'
 export class UpdatePresentationRequestDto extends PartialType(
   CreatePresentationRequestDto,
 ) {
-  id: string;
   proposal?: PresentationProposal;
   status?: PRESENTATION_REQUEST_STATUSES;
+  derivedCredentials?: VerifiableCredential[];
 }

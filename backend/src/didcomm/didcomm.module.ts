@@ -14,6 +14,7 @@ import { ContactsService } from 'src/contacts/contacts.service';
 import { MessagesApiService } from 'src/messages-api/messages-api.service';
 import { DIDCommController } from './didcomm.controller';
 import { PresentationsService } from 'src/presentations/presentations.service';
+import { DIDKeyService } from 'src/didkey/didkey.service';
 
 @Module({
   imports: [CqrsModule],
@@ -33,6 +34,7 @@ import { PresentationsService } from 'src/presentations/presentations.service';
     ContactsService,
     MessagesApiService,
     PresentationsService,
+    DIDKeyService,
   ],
   exports: [DIDCommService],
 })

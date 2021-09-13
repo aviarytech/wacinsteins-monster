@@ -83,7 +83,7 @@ const onKeyPress = (e) => {
 async function newMsg() {
   if (chatMsg) {
     //building the new entry for the mongo db
-    const fullPayload: Object = {
+    const fullPayload: object = {
       to: $selectedUser,
       data: chatMsg,
       when: new Date(),

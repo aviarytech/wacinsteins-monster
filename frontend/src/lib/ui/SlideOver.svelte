@@ -17,8 +17,15 @@ const closeSlideOver = () => {
 <template>
   {#if $slideOverContent}
     <div
+      class="fixed z-50 inset-0 bg-gray-500 bg-opacity-75"
+            transition:fly="{{ duration: 500, easing: quintOut }}"
+
+      aria-hidden="true"
+      on:click={closeSlideOver}></div>
+
+    <div
       transition:fly="{{ x: 200, duration: 500, easing: quintOut }}"
-      class="fixed inset-y-0 right-0 pl-10 pt-16 max-w-full flex">
+      class="fixed z-50 h-screen inset-y-0 right-0 pl-10 max-w-full flex">
       <div class="w-screen max-w-xl">
         <div
           class="h-full flex flex-col py-6 bg-white shadow-xl overflow-y-scroll">

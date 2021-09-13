@@ -8,7 +8,10 @@ import Messages from "../routes/Messages.svelte";
 import Contacts from "../routes/Contacts.svelte";
 import Identities from "../routes/Identities.svelte";
 import Logout from "../routes/Logout.svelte";
+import FAQ from "../routes/FAQ.svelte";
 import Reset from "../routes/Reset.svelte";
+import Demo from "../routes/Demo.svelte";
+
 //components
 import Loading from "./ui/Loading.svelte";
 
@@ -59,6 +62,14 @@ import AuthGuard from "./AuthGuard.svelte";
 
     <Route path="logout">
       <Logout />
+    </Route>
+
+    <Route path="wtf">
+      <FAQ />
+    </Route>
+
+    <Route path="demo">
+      <Demo />
     </Route>
   </Router>
 </AuthGuard>

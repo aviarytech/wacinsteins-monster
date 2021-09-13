@@ -8,6 +8,7 @@ import {
 } from '@aviarytech/didcomm-messaging';
 import { BasicMessageHandler } from '@aviarytech/didcomm-protocols.basic-message';
 import {
+  PresentationMessageHandler,
   ProposePresentationMessage,
   ProposePresentationMessageHandler,
   RequestPresentationMessage,
@@ -41,6 +42,9 @@ export class DIDCommService {
   ) {
     this.didcomm = new DIDComm(
       [
+        new PresentationMessageHandler(async (presentation, didcomm) => {
+          console.log(`received ${presentation.payload.type} message`);
+        }),
         new RequestPresentationMessageHandler(async (request, didcomm) => {
           for (let i = 0; i < request.payload.attachments.length; i++) {
             let attachment = request.payload.attachments[i];
@@ -63,15 +67,18 @@ export class DIDCommService {
               attachment.data.json['dif']['presentation_definition'].id,
             );
             if (definition) {
-              const request = await this.presentations.createRequest({
+              const newRequest = await this.presentations.createRequest({
                 definition,
                 role: PRESENTATION_REQUEST_ROLES.PROVER,
+                requester: request.payload.from,
               });
               const updated =
-                await this.presentations.updatePresentationRequest(request.id, {
-                  id: request.id,
-                  status: PRESENTATION_REQUEST_STATUSES.REQUESTED,
-                });
+                await this.presentations.updatePresentationRequest(
+                  newRequest.id,
+                  {
+                    status: PRESENTATION_REQUEST_STATUSES.REQUESTED,
+                  },
+                );
             } else {
               console.log(`failed to create presentation definition`);
             }
@@ -87,7 +94,6 @@ export class DIDCommService {
           }
           const updatedPresentationRequest =
             await this.presentations.updatePresentationRequest(request.id, {
-              id: request.id,
               status: PRESENTATION_REQUEST_STATUSES.PROPOSED,
               proposal: { from: proposal.payload.from },
             });
@@ -131,7 +137,6 @@ export class DIDCommService {
             await this.presentations.updatePresentationRequest(
               updatedPresentationRequest.id,
               {
-                id: updatedPresentationRequest.id,
                 status: PRESENTATION_REQUEST_STATUSES.REQUESTED,
               },
             );
@@ -201,6 +206,4 @@ export class DIDCommService {
       return false;
     }
   }
-
-
 }

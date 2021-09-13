@@ -8,6 +8,8 @@ import { encode } from 'b58';
 import { KMSService } from '../kms/kms.service';
 import { DBService } from '../db/db.service';
 import { generateX25519 } from '../kms/x25519';
+import axios from 'axios';
+import { generateEd25519 } from 'src/kms/ed25519';
 
 @Injectable()
 export class DIDWebService {
@@ -41,10 +43,14 @@ export class DIDWebService {
     this.keys = [key0, key1];
   }
 
+  async getAuthenticationKey() {
+    return this.getKey0();
+  }
+
   async getKey0(): Promise<Key> {
     let key0 = await this.kms.getKey(`${this.did}#key-0`);
     if (!key0) {
-      const keyPair = await generateX25519();
+      const keyPair = await generateEd25519();
       const { publicKeyJwk, privateKeyJwk } = (await keyPair.export({
         type: 'JsonWebKey2020',
         privateKey: true,
@@ -140,5 +146,19 @@ export class DIDWebService {
       ],
     });
     return didDoc.document;
+  }
+
+  async resolve(iri: string) {
+    const [_, method, id, ...extras] = iri.split(':');
+    let domain = id.split('#').length > 1 ? id.split('#')[0] : id;
+    if (id.indexOf('localhost') >= 0) {
+      domain += `:${extras}`;
+    }
+    const resp = await axios.get(
+      `http${
+        id.indexOf('localhost') >= 0 ? null : 's'
+      }://${domain}/.well-known/did.json`,
+    );
+    return resp.data;
   }
 }

@@ -8,6 +8,10 @@ import { sha256 } from 'src/utils/sha256';
 import { CreatePresentationDefinitionDto } from './dto/create-presentation-definition.dto';
 
 import { CreatePresentationRequestDto } from './dto/create-presentation-request.dto';
+import {
+  IDIFPresentationExchangeSubmission,
+  SUBMISSION_FORMATS,
+} from '@aviarytech/dif-presentation-exchange';
 
 import {
   InputConstraint,
@@ -21,6 +25,12 @@ import {
 import { DIDWebService } from 'src/didweb/didweb.service';
 import { UpdatePresentationRequestDto } from './dto/update-presentation-request.dto';
 import { ConfigService } from '@nestjs/config';
+import { CredentialsService } from 'src/credentials/credentials.service';
+import { IDIFPresentationExchangeSubmissionAttachment } from '@aviarytech/didcomm-protocols.present-proof/dist/interfaces';
+import { VerifiableCredential } from 'src/credentials/interfaces';
+import { verifiable } from '@transmute/vc.js';
+import { DocumentLoaderService } from 'src/documentLoader/documentLoader.service';
+import { JsonWebKey, JsonWebKey2020, JWS } from '@aviarytech/crypto-core';
 
 @Injectable()
 export class PresentationsService {
@@ -29,7 +39,8 @@ export class PresentationsService {
     private log: Logger,
     private didWeb: DIDWebService,
     private config: ConfigService,
-  ) { }
+    private documentLoader: DocumentLoaderService,
+  ) {}
 
   async createDefinition(
     createPresentationDefinitionDto: {
@@ -67,8 +78,9 @@ export class PresentationsService {
   async createRequest(createRequest: {
     definition: PresentationDefinition;
     role: PRESENTATION_REQUEST_ROLES;
+    requester: string;
   }): Promise<PresentationRequest> {
-    const { definition, role } = createRequest;
+    const { definition, role, requester } = createRequest;
     const invitation = new InvitationMessage(
       this.didWeb.did,
       this.didWeb.basePath + '/invitation',
@@ -86,6 +98,7 @@ export class PresentationsService {
       definition,
       invitation.payload.id,
       role,
+      requester,
     );
 
     await validateOrReject(presReq, {
@@ -102,7 +115,7 @@ export class PresentationsService {
     });
   }
 
-  async findOneRequest(id: string) {
+  async findOneRequest(id: string): Promise<PresentationRequest> {
     return await this.db.getById(id);
   }
 
@@ -127,5 +140,57 @@ export class PresentationsService {
       ...request,
       ...updatePresentationRequest,
     });
+  }
+
+  async createPresentation(
+    presentationRequestId: string,
+    derivedCredential: VerifiableCredential,
+  ) {
+    const presentationRequest = await this.findOneRequest(
+      presentationRequestId,
+    );
+
+    const submission: IDIFPresentationExchangeSubmission = {
+      presentation_submission: {
+        id: sha256(nanoid()),
+        definition_id: presentationRequest.definition.id,
+        descriptor_map: [
+          {
+            id: 'input',
+            format: SUBMISSION_FORMATS.LinkedDataProof_VerifiablePresentation,
+            path: '$.verifiableCredential[0]',
+          },
+        ],
+      },
+    };
+
+    const presentation = {
+      '@context': [
+        'https://www.w3.org/2018/credentials/v1',
+        'https://identity.foundation/presentation-exchange/submission/v1',
+        'https://w3id.org/security/suites/jws-2020/v1',
+      ],
+      type: ['VerifiablePresentation', 'PresentationSubmission'],
+      holder: {
+        id: this.didWeb.did,
+      },
+      verifiableCredential: [derivedCredential],
+      ...submission,
+    };
+
+    const result = await verifiable.presentation.create({
+      presentation,
+      format: ['vp'],
+      documentLoader: this.documentLoader.loader,
+      challenge: presentationRequest.challenge,
+      domain: presentationRequest.domain,
+      suite: new JWS.Suite({
+        key: await JsonWebKey.from(
+          (await this.didWeb.getAuthenticationKey()) as JsonWebKey2020,
+        ),
+      }),
+    });
+
+    return result;
   }
 }

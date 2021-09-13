@@ -11,7 +11,7 @@ export class DIDResolverService {
   constructor(private documentLoader: DocumentLoaderService) {}
 
   async resolve(did: string): Promise<IDIDDocument> {
-    const doc = (await this.documentLoader.load(did)).document;
+    const doc = await this.documentLoader.load(did);
     return new DIDDocument(doc);
   }
 

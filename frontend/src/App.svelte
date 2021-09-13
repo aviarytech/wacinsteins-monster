@@ -42,7 +42,6 @@ onMount(async () => {
         <button
           class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden">
           <span class="sr-only">Open sidebar</span>
-          <!-- Heroicon name: outline/menu-alt-2 -->
           <svg
             class="h-6 w-6"
             xmlns="http://www.w3.org/2000/svg"

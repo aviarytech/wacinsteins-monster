@@ -6,6 +6,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
+import { VerifiableCredential } from 'src/credentials/interfaces';
 
 export enum PRESENTATION_REQUEST_STATUSES {
   CREATED = 'created',
@@ -139,6 +140,12 @@ export class PresentationRequest {
   @IsEnum(PRESENTATION_REQUEST_ROLES)
   role: PRESENTATION_REQUEST_ROLES;
 
+  @IsArray()
+  derivedCredentials?: VerifiableCredential[];
+
+  @IsString()
+  requester: string;
+
   constructor(
     id: string,
     url: string,
@@ -147,6 +154,7 @@ export class PresentationRequest {
     definition: PresentationDefinition,
     invitationId: string,
     role: PRESENTATION_REQUEST_ROLES,
+    requester: string,
   ) {
     this.id = id;
     this.url = url;
@@ -156,5 +164,7 @@ export class PresentationRequest {
     this.invitationId = invitationId;
     this.status = PRESENTATION_REQUEST_STATUSES.CREATED;
     this.role = role;
+    this.derivedCredentials = [];
+    this.requester = requester;
   }
 }

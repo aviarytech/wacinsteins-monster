@@ -175,7 +175,6 @@ export class DBService {
     return this.removeIds(res);
   }
 
-  // upsert by @id or referenceId
   async upsert(obj) {
     const id = obj['id'];
     const referenceId = obj['referenceId'];
@@ -289,18 +288,6 @@ export class DBService {
         });
       delete res._id;
       return res;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  async addToSet(id: string, setName: string, toAdd: any): Promise<boolean> {
-    try {
-      const res = await this.client
-        .db(this.dbName)
-        .collection(this.collection)
-        .updateOne({ '@id': id }, { $addToSet: { [setName]: toAdd } });
-      return res.result.nModified === 1;
     } catch (e) {
       return null;
     }

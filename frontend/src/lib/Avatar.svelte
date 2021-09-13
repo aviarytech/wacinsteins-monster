@@ -1,18 +1,42 @@
 <script lang="ts">
+import SvelteTooltip from "svelte-tooltip";
+
 export let value: string;
-export const callback = undefined;
+$: tooltip = value.length > 32 ? `${value.substring(0, 31)}...` : value;
+
+export let callback = undefined;
+export let right = false;
+export let left = false;
+export let top = false;
+export let bottom = false;
 </script>
 
-{#if typeof callback === "undefined"}
-  <svg data-jdenticon-value="{value}" width="40" height="40">
-    {value}
-  </svg>
-{:else}
-  <button on:click="{callback}">
-    <div class="rounded-full">
+<div class="text-white">
+  {#if typeof callback === "undefined"}
+    <SvelteTooltip
+      tip="{tooltip}"
+      right="{right}"
+      left="{left}"
+      top="{top}"
+      bottom="{bottom}">
       <svg data-jdenticon-value="{value}" width="40" height="40">
         {value}
       </svg>
-    </div>
-  </button>
-{/if}
+    </SvelteTooltip>
+  {:else}
+    <SvelteTooltip
+      tip="{tooltip}"
+      right="{right}"
+      left="{left}"
+      top="{top}"
+      bottom="{bottom}">
+      <button on:click="{callback}" data-tooltip="{value}">
+        <div class="rounded-full">
+          <svg data-jdenticon-value="{value}" width="40" height="40">
+            {value}
+          </svg>
+        </div>
+      </button>
+    </SvelteTooltip>
+  {/if}
+</div>

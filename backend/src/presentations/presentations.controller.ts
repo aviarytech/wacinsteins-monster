@@ -24,14 +24,26 @@ import { nanoid } from 'nanoid';
 import { base64url, sha256 } from '@aviarytech/crypto-core';
 import { AcceptInvitationDto } from './dto/accept-invitation.dto';
 import { DIDCommService } from 'src/didcomm/didcomm.service';
+import { SubmitCredentialForPresentationDto } from './dto/submit-credential-for-presentation.dto';
+import { CredentialsService } from 'src/credentials/credentials.service';
+import { DIDWebService } from 'src/didweb/didweb.service';
+import { PresentationMessage } from '@aviarytech/didcomm-protocols.present-proof';
+import { IDIDCommAttachment } from '@aviarytech/didcomm-core';
+import { IDIFPresentationExchangeSubmissionAttachment } from '@aviarytech/didcomm-protocols.present-proof/dist/interfaces';
+import {
+  IDIFPresentationExchangeSubmission,
+  SUBMISSION_FORMATS,
+} from '@aviarytech/dif-presentation-exchange';
 
 @ApiTags('presentations')
 @Controller('presentations')
 export class PresentationsController {
   constructor(
     private readonly presentationsService: PresentationsService,
-    private readonly didCommService: DIDCommService
-  ) { }
+    private readonly didCommService: DIDCommService,
+    private readonly credentialsService: CredentialsService,
+    private readonly didweb: DIDWebService,
+  ) {}
 
   @Post('requests')
   async create(
@@ -57,6 +69,7 @@ export class PresentationsController {
       return await this.presentationsService.createRequest({
         definition,
         role: PRESENTATION_REQUEST_ROLES.VERIFIER,
+        requester: this.didweb.did,
       });
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
@@ -71,6 +84,67 @@ export class PresentationsController {
   @Get('requests/:id')
   async findOne(@Param('id') id: string): Promise<PresentationRequest> {
     return await this.presentationsService.findOneRequest(id);
+  }
+
+  @Post('requests/:id/submit')
+  async submitPresentation(
+    @Param('id') id: string,
+    @Body() body: SubmitCredentialForPresentationDto,
+  ): Promise<any> {
+    let request = await this.presentationsService.findOneRequest(id);
+    if (!request) {
+      throw new HttpException('Presentation not found', HttpStatus.NOT_FOUND);
+    }
+
+    request = await this.presentationsService.updatePresentationRequest(
+      request.id,
+      {
+        derivedCredentials: [
+          ...request.derivedCredentials,
+          body.verifiableCredential,
+        ],
+      },
+    );
+
+    const presentation = await this.presentationsService.createPresentation(
+      request.id,
+      body.verifiableCredential,
+    );
+
+    const attachments: IDIFPresentationExchangeSubmissionAttachment[] =
+      presentation.items.map((pres) => {
+        return {
+          id: sha256(nanoid()),
+          media_type: 'application/ld+json',
+          format: 'dif/presentation-exchange/submission@v1.0',
+          data: {
+            json: {
+              dif: {
+                presentation_submission: pres.presentation_submission,
+                ...pres,
+              },
+            },
+          },
+        };
+      });
+
+    const presentationMessage = new PresentationMessage(
+      this.didweb.did,
+      [request.requester],
+      request.invitationId,
+      attachments,
+    );
+    const success = await this.didCommService.sendMessage(
+      request.requester,
+      presentationMessage,
+    );
+    if (success) {
+      return presentation;
+    }
+    throw new HttpException(
+      'Failed to send Presentation to requester',
+      HttpStatus.BAD_REQUEST,
+    );
   }
 
   @Post('definitions')
@@ -111,12 +185,11 @@ export class PresentationsController {
 
   @Post('acceptInvitation')
   async acceptInvitation(@Body() acceptInvitationDto: AcceptInvitationDto) {
-    const url = new URL(acceptInvitationDto.url)
-    let params = new URLSearchParams(url.search)
-    let decodedBase64Data = base64url.decode(params.get('_oob')).toString()
+    const url = new URL(acceptInvitationDto.url);
+    let params = new URLSearchParams(url.search);
+    let decodedBase64Data = base64url.decode(params.get('_oob')).toString();
     //console.log(decodedBase64Data)
-    await this.didCommService.receiveMessage(JSON.parse(decodedBase64Data))
-    return 'Success'
+    await this.didCommService.receiveMessage(JSON.parse(decodedBase64Data));
+    return 'Success';
   }
-
 }
