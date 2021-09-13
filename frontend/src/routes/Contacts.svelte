@@ -9,7 +9,7 @@ import DataTable from "../lib/table-elements/DataTable.svelte";
 import Text from "../lib/table-elements/Text.svelte";
 import Image from "../lib/table-elements/Image.svelte";
 import ComponentList from "../lib/table-elements/ComponentList.svelte";
-import ContactProfile from "../lib/ContactProfile.svelte";
+import Avatar from "../lib/Avatar.svelte";
 // stores
 import { slideOverContent } from "../stores/ui";
 import { selectedUser } from "../stores/messages";
@@ -22,7 +22,6 @@ import { useNavigate } from "svelte-navigator";
 import { getContacts, deleteContact } from "../api/contactsAxios";
 //utils
 import { sha256 } from "../utils/sha256";
-import Avatar from "../lib/Avatar.svelte";
 
 onMount(async () => {
   const res = await getContacts();
@@ -45,10 +44,10 @@ async function newContactCreation() {
 //view button
 let rightPreviewWindowDisplayed: boolean = false;
 function viewContactProfile(id: string) {
-  console.log("open click", id);
   slideOverContent.set({
-    title: `Contact Profile or ${id}`,
-    component: ContactProfile,
+    title: `Contact Profile of ${id}`,
+    component: Avatar,
+    value: id,
   });
   if (rightPreviewWindowDisplayed) {
     slideOverContent.set(null);

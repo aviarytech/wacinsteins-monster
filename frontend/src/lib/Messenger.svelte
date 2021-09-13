@@ -1,27 +1,19 @@
 <script lang="ts">
 //stores
 import ChatMessage from "./ChatMessage.svelte";
-import Avatar from "./Avatar.svelte";
-import { user } from "../stores/user";
-import { sha256 } from "../utils/sha256";
 import { msgUSerBackend, selectedUser } from "../stores/messages";
 //ECAM imports
-import { io } from "socket.io-client";
 import { onMount } from "svelte";
 //api
-import {
-  getCurrentConversation,
-  postNewMsg2Conversation,
-} from "../api/messagesLogic";
+import { getCurrentConversation } from "../api/messagesLogic";
 //env
-
 const userDomain =
   import.meta.env.VITE_ENV_TYPE === "dev"
     ? `did:web:localhost:3100`
     : `did:web:api.${window.location.host}`;
-
-//declaring to remove later errors
+//exports
 export let socket;
+
 onMount(async () => {
   if ($selectedUser) {
     //loading all messages at the beginning
@@ -72,42 +64,13 @@ selectedUser.subscribe(async (v) => {
   msgUSerBackend.set(await getCurrentConversation($selectedUser));
 });
 $: msgUSerBackend;
-
-//input dom handling
-let chatMsg: string;
-const onKeyPress = (e) => {
-  if (e.charCode === 13) {
-    newMsg();
-  }
-};
-async function newMsg() {
-  if (chatMsg) {
-    //building the new entry for the mongo db
-    const fullPayload: object = {
-      to: $selectedUser,
-      data: chatMsg,
-      when: new Date(),
-    };
-
-    //saving the data to the mongo db
-    await postNewMsg2Conversation(fullPayload);
-
-    //websocket new entry
-    socket.emit("chatToServer", {
-      sender: userDomain,
-      room: $selectedUser,
-      message: chatMsg,
-    });
-    chatMsg = "";
-  }
-}
 </script>
 
 <template>
   <!--TODO: surround the entire chat -->
   <h1>you are connected with domain:<bold>{$selectedUser}</bold></h1>
   <div
-    class="inset-0 border-2 border-gray-200 border-dashed bg-gray-100 rounded-lg overflow-y-auto">
+    class="inset-0 border-2 border-gray-200 border-dashed bg-gray-100 rounded-lg overflow-y-auto overflow-x-hidden min-h-screen ">
     {#if $msgUSerBackend}
       {#each $msgUSerBackend as message}
         <svelte:component this="{ChatMessage}" message="{message.msg}" />
@@ -124,17 +87,5 @@ async function newMsg() {
         }}" />
     {/if}
   </div>
-  <div class="flex bottom-1 space-x-4 w-full">
-    <!-- <Avatar value="{$user.email}" /> -->
-    <div class="flex-grow max-w-screen-md">
-      <input
-        bind:value="{chatMsg}"
-        on:keypress="{onKeyPress}"
-        type="text"
-        name="msg-chat"
-        id="msg-chat"
-        class="fill-current shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full sm:text-sm border-gray-300 rounded-md min-w-max"
-        placeholder="Say hello!" />
-    </div>
-  </div>
+  <div class="flex bottom-1 space-x-4 w-full"></div>
 </template>
