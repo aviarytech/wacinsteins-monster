@@ -1,8 +1,9 @@
-# WACInsteins-monster
+# Wacinstein's Monster
 
-To work on end to end waci-pex implementation
+This project contains an end to end waci-pex implementation
 
-This project uses the nestjs library as a web server and currently stores everything in memory (including private keys)
+This project uses the nestjs library as a web server and stores everything in memory (including private keys).. It is meant for development purposes only. Any other use is strictly prohibited.
+
 
 TODO:
 
