@@ -3,10 +3,12 @@
 import QRcode from "./QRcode.svelte";
 import ComponentList from "./table-elements/ComponentList.svelte";
 import Tag from "./ui/Tag.svelte";
-import { presentations, qrCodeIdValue } from "../stores/presentation";
+import Button from "./ui/Button.svelte";
+import { qrCodeIdValue } from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
 import { onMount } from "svelte";
 import CredentialCard from "./cards/CredentialCard.svelte";
+import SubmitPresentationRequestSelector from "./SubmitPresentationRequestSelector.svelte";
 
 export let presentation;
 
@@ -21,6 +23,13 @@ onMount(() => {
     visibleSubjectIndex = 1;
   }
 });
+const openSubmitter = () => {
+  slideOverContent.set({
+    title: "Submit Presentation",
+    component: SubmitPresentationRequestSelector,
+    presentationRequest: presentation,
+  });
+};
 </script>
 
 <template>
@@ -111,5 +120,14 @@ onMount(() => {
         </div>
       {/each}
     {/each}
+  {/if}
+  {#if presentation.role === "prover" && presentation.status !== "submitted"}
+    <div class="mt-4">
+      <Button
+        callback="{async () => {
+          openSubmitter();
+        }}"
+        label="Submit" />
+    </div>
   {/if}
 </template>
