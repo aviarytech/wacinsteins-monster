@@ -12,16 +12,25 @@ const closeSlideOver = () => {
     slideOverContent.set(null);
   }
 };
+
+//using esc to exit the slideover window
+const globalEscOnKeyPress = (e) => {
+  if (e.keyCode === 27) {
+    slideOverContent.set(null);
+  }
+};
 </script>
+
+<svelte:window on:keydown="{globalEscOnKeyPress}" />
 
 <template>
   {#if $slideOverContent}
     <div
       class="fixed z-50 inset-0 bg-gray-500 bg-opacity-75"
-            transition:fly="{{ duration: 500, easing: quintOut }}"
-
+      transition:fly="{{ duration: 500, easing: quintOut }}"
       aria-hidden="true"
-      on:click={closeSlideOver}></div>
+      on:click="{closeSlideOver}">
+    </div>
 
     <div
       transition:fly="{{ x: 200, duration: 500, easing: quintOut }}"

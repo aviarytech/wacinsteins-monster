@@ -7,20 +7,21 @@
 </style>
 
 <script lang="ts">
+//components
 import Sidebar from "./lib/Sidebar.svelte";
-//import SearchBar from "./lib/SearchBar.svelte";
 import Profile from "./lib/Profile.svelte";
 import SlideOver from "./lib/ui/SlideOver.svelte";
-
-import { slideOverContent } from "./stores/ui";
 import Router from "./lib/Router.svelte";
+//api
 import { getAllCredentials } from "./api/credentials";
-
+import { getWellKnown } from "./api/wellKnown";
+//stores
+import { slideOverContent } from "./stores/ui";
 import { user } from "./stores/user";
 import { credentials } from "./stores/credentials";
-import { onMount } from "svelte";
 import { wellKnown } from "./stores/well-known";
-import { getWellKnown } from "./api/wellKnown";
+//ECMA imports
+import { onMount } from "svelte";
 //HACK: added so that the user doesn't have to go to the credential page to proprely use the presentation page.
 onMount(async () => {
   const resp = await getAllCredentials();
