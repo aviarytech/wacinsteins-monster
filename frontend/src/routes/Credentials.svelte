@@ -45,7 +45,7 @@ onMount(async () => {
   <div class="bg-white shadow-md rounded-sm p-5">
     <div class="flex items-center justify-start py-2">
       <Tag text="Holder" fontColor="text-white" bgCol="bg-green-400" />
-      <span class="pl-2 pr-6"><b>Your</b> Credentials</span>
+      <span class="pl-2 pr-6">Your Credentials</span>
     </div>
     {#if $credentials && $credentials.length > 0}
       <DataTable

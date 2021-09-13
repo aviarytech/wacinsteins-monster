@@ -1,12 +1,18 @@
 <script lang="ts">
 //api
-import { acceptInvitation } from "../../api/presentationAxios";
+import {
+  acceptInvitation,
+  getPresentations,
+} from "../../api/presentationAxios";
 //ECMA imports
 import swal from "sweetalert";
 //components
 import Button from "../ui/Button.svelte";
 import { slideOverContent } from "../../stores/ui";
+import { presentations } from "../../stores/presentation";
+import PresentationDetailedView from "../PresentationDetailedView.svelte";
 
+let invitationId: string;
 let urlInput: string;
 const onKeyPress = (e) => {
   //13 === enter
@@ -15,17 +21,36 @@ const onKeyPress = (e) => {
     //error
   }
 };
+
+async function openPresentationForInvitation() {
+  const row = $presentations.find((p) => p.invitationId === invitationId);
+  slideOverContent.set({
+    title: `Presentation Request`,
+    component: PresentationDetailedView,
+    presentation: row,
+  });
+}
+
 //NOTE:weird implementation but allows for both 'enter' and the sumbit button to work
 async function acceptInvitationApiCall(url: string) {
   if (urlInput) {
     let response = await acceptInvitation({ url: urlInput });
+    invitationId = response.invitationId;
     if (response) {
       swal({
         title: "Success",
         text: `You have accepted the invitation.`,
         icon: "success",
         button: "Great!",
-      }).then(slideOverContent.set(null));
+      }).then(async () => {
+        const pres = await getPresentations();
+        if (pres) {
+          presentations.set(pres);
+          await openPresentationForInvitation();
+        } else {
+          slideOverContent.set(null);
+        }
+      });
     } else {
       swal({
         title: "Error",
@@ -33,8 +58,6 @@ async function acceptInvitationApiCall(url: string) {
         icon: "error",
       });
     }
-
-    //error
   }
 }
 </script>
@@ -44,8 +67,8 @@ async function acceptInvitationApiCall(url: string) {
 
   <Button
     label="submit"
-    callback="{() => {
-      acceptInvitationApiCall(urlInput);
+    callback="{async () => {
+      await acceptInvitationApiCall(urlInput);
     }}" />
   <input
     bind:value="{urlInput}"

@@ -35,7 +35,7 @@ export async function acceptInvitation(
     // success
     if (response.status == 201 || 200) {
       // test for status you want, etc
-      console.log(response.status);
+      console.log(response.data);
       return response.data;
     }
     // not successfull

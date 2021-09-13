@@ -42,12 +42,28 @@ export class DIDCommService {
   ) {
     this.didcomm = new DIDComm(
       [
-        new PresentationMessageHandler(async (presentation, didcomm) => {
-          console.log(`received ${presentation.payload.type} message`);
+        new PresentationMessageHandler(async (message, didcomm) => {
+          const request = await this.presentations.findOneRequestByInvitationId(
+            message.payload.thid,
+          );
+          if (request) {
+            const presentations = message.payload.attachments.map((a) => {
+              return a.data.json.dif;
+            });
+            const updated = await this.presentations.updatePresentationRequest(
+              request.id,
+              {
+                status: PRESENTATION_REQUEST_STATUSES.SUBMITTED,
+                presentations,
+              },
+            );
+          } else {
+            console.log('Presentation received but request not found');
+          }
         }),
-        new RequestPresentationMessageHandler(async (request, didcomm) => {
-          for (let i = 0; i < request.payload.attachments.length; i++) {
-            let attachment = request.payload.attachments[i];
+        new RequestPresentationMessageHandler(async (message, didcomm) => {
+          for (let i = 0; i < message.payload.attachments.length; i++) {
+            let attachment = message.payload.attachments[i];
             if (
               attachment.format !== 'dif/presentation-exchange/definitions@v1.0'
             ) {
@@ -70,7 +86,8 @@ export class DIDCommService {
               const newRequest = await this.presentations.createRequest({
                 definition,
                 role: PRESENTATION_REQUEST_ROLES.PROVER,
-                requester: request.payload.from,
+                requester: message.payload.from,
+                invitationId: message.payload.thid,
               });
               const updated =
                 await this.presentations.updatePresentationRequest(

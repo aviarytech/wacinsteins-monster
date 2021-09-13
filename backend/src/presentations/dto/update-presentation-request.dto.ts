@@ -1,4 +1,5 @@
 import { PartialType } from '@nestjs/swagger';
+import { VerifiablePresentation } from '@transmute/vc.js/dist/types/VerifiablePresentation';
 import { VerifiableCredential } from 'src/credentials/interfaces';
 import {
   PresentationProposal,
@@ -12,4 +13,5 @@ export class UpdatePresentationRequestDto extends PartialType(
   proposal?: PresentationProposal;
   status?: PRESENTATION_REQUEST_STATUSES;
   derivedCredentials?: VerifiableCredential[];
+  presentations?: any[];
 }
