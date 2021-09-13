@@ -18,7 +18,6 @@ import Tag from "../lib/ui/Tag.svelte";
 import QRcode from "../lib/QRcode.svelte";
 import Avatar from "../lib/Avatar.svelte";
 import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestSelector.svelte";
-import AcceptInvitation from "../lib/slideOverComponents/acceptInvitation.svelte";
 //ECMA imports
 import { onMount } from "svelte";
 //stores
@@ -95,8 +94,6 @@ function submitUrl() {
   }).then((value) => {
     if (value) {
       acceptInvitationApiCall(value);
-    } else {
-      swal("No input detected");
     }
   });
 }
