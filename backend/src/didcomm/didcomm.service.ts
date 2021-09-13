@@ -48,7 +48,7 @@ export class DIDCommService {
           );
           if (request) {
             const presentations = message.payload.attachments.map((a) => {
-              return a.data.json.dif;
+              return a.data.json['dif'];
             });
             const updated = await this.presentations.updatePresentationRequest(
               request.id,
