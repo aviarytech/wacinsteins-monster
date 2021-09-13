@@ -69,9 +69,10 @@ function openConversation(id: string) {
         <aside
           class="hidden relative xl:order-first xl:flex xl:flex-col flex-shrink-0 w-96 border-r border-gray-200">
           <!-- Start secondary column (hidden on smaller screens) -->
-          <div
-            class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8 overflow-y-auto">
+          <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8 ">
             <DataTable
+              tableOverallClass="overflow-hidden"
+              xOverflowClass="overflow-x-hidden"
               headers="{['', 'Domain']}"
               data="{$availableContacts.map((p) => {
                 return [

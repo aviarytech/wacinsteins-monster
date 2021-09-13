@@ -2,10 +2,18 @@
 import DataTableRow from "./DataTableRow.svelte";
 export let headers: string[];
 export let data: object[][];
+export let tableOverallClass: string;
+export let xOverflowClass: string;
 </script>
 
-<div class="flex flex-col">
-  <div class="-my-2 overflow-x-auto ">
+<div
+  class="{tableOverallClass
+    ? `flex flex-col ${tableOverallClass}`
+    : 'flex flex-col'}">
+  <div
+    class="{xOverflowClass
+      ? `-my-2 ${xOverflowClass}`
+      : '-my-2 overflow-x-auto '}">
     <div class="py-6 align-middle inline-block min-w-full sm:px-1 lg:px-2">
       <div class="shadow border-b border-gray-200 sm:rounded-xl">
         <table class="divide-gray-200 table-auto w-full">
