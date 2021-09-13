@@ -3,6 +3,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsObject,
+  IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
@@ -112,8 +113,8 @@ export class PresentationRequest {
   @IsString()
   id: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsOptional()
   url: string;
 
   @IsNotEmpty()

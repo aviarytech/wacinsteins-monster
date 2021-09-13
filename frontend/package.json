@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev2": "vite --mode dev2",
     "test": "jest src",
     "test:watch": "npm run test -- --watch",
     "build": "vite build",

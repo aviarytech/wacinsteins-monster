@@ -1,9 +1,3 @@
-<style lang="postcss">
-.name {
-  color: red;
-}
-</style>
-
 <script lang="ts">
 // api imports
 import { getPresentations, acceptInvitation } from "../api/presentationAxios";
@@ -18,6 +12,7 @@ import Tag from "../lib/ui/Tag.svelte";
 import QRcode from "../lib/QRcode.svelte";
 import Avatar from "../lib/Avatar.svelte";
 import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestSelector.svelte";
+import AcceptInvitation from "../lib/slideOverComponents/AcceptInvitation.svelte";
 //ECMA imports
 import { onMount } from "svelte";
 //stores
@@ -140,7 +135,7 @@ function tailwingBgColorizer(value: string): string {
       break;
 
     case "submitted":
-      bgCol = "bg-yellow-400";
+      bgCol = "bg-green-400";
       break;
 
     default:
@@ -160,7 +155,7 @@ function tailwingBgColorizer(value: string): string {
         text="Prover"
         fontColor="text-white"
         bgCol="{tailwingBgColorizer('prover')}" />
-      <span class="flex-grow pl-2">Presentations Requested of <b>You</b></span>
+      <span class="flex-grow pl-2">Presentations Requested of You</span>
       <Button label="Accept Invitation" callback="{async () => submitUrl()}" />
     </div>
     {#if requestsForMe && requestsForMe.length > 0}
@@ -197,19 +192,7 @@ function tailwingBgColorizer(value: string): string {
                     openPresentationRequest(p['@id']);
                   },
                 },
-                p['role'] === 'verifier'
-                  ? {
-                      component: Button,
-                      label: 'QR code',
-                      callback: () => {
-                        qrCodeDisplay([
-                          p['url'],
-                          p.definition.input_descriptors[0].name,
-                        ]);
-                      },
-                    }
-                  : null,
-                p['role'] === 'prover'
+                p['role'] === 'prover' && p['status'] !== 'submitted'
                   ? {
                       component: Button,
                       label: 'Submit',
@@ -232,7 +215,7 @@ function tailwingBgColorizer(value: string): string {
         text="Verifier"
         fontColor="text-white"
         bgCol="{tailwingBgColorizer('verifier')}" />
-      <span class="pl-2 flex-grow">Presentations Requested by <b>You</b></span>
+      <span class="pl-2 flex-grow">Presentations Requested by You</span>
       <Button label="New" callback="{async () => newPresentationRequest()}" />
     </div>
 
@@ -271,7 +254,7 @@ function tailwingBgColorizer(value: string): string {
                     openPresentationRequest(p['@id']);
                   },
                 },
-                p['role'] === 'verifier'
+                p['role'] === 'verifier' && p['status'] === 'created'
                   ? {
                       component: Button,
                       label: 'QR code',
@@ -280,15 +263,6 @@ function tailwingBgColorizer(value: string): string {
                           p['url'],
                           p.definition.input_descriptors[0].name,
                         ]);
-                      },
-                    }
-                  : null,
-                p['role'] === 'prover'
-                  ? {
-                      component: Button,
-                      label: 'Submit',
-                      callback: () => {
-                        openSubmitPresentation(p['id']);
                       },
                     }
                   : null,

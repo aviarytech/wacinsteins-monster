@@ -7,7 +7,12 @@ import { credentials } from "../stores/credentials";
 import Tag from "./ui/Tag.svelte";
 import CredentialCard from "./cards/CredentialCard.svelte";
 import Button from "./ui/Button.svelte";
-import { submitPresentationRequestPresentation } from "../api/presentationAxios";
+import {
+  getPresentations,
+  submitPresentationRequestPresentation,
+} from "../api/presentationAxios";
+import { presentations } from "../stores/presentation";
+import { slideOverContent } from "../stores/ui";
 
 export let presentationRequest: any;
 let selectedCredentialId: any;
@@ -31,7 +36,13 @@ const submitCredential = async () => {
     presentationRequest.id,
     derived
   );
-  console.log(result);
+  if (result) {
+    const pres = await getPresentations();
+    if (pres) {
+      presentations.set(pres);
+    }
+    slideOverContent.set(null);
+  }
 };
 </script>
 

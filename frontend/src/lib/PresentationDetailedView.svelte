@@ -3,8 +3,12 @@
 import QRcode from "./QRcode.svelte";
 import ComponentList from "./table-elements/ComponentList.svelte";
 import Tag from "./ui/Tag.svelte";
+import Button from "./ui/Button.svelte";
 import { qrCodeIdValue } from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
+import { onMount } from "svelte";
+import CredentialCard from "./cards/CredentialCard.svelte";
+import SubmitPresentationRequestSelector from "./SubmitPresentationRequestSelector.svelte";
 
 export let presentation;
 
@@ -14,6 +18,18 @@ let visible = [];
 $: if (Object.entries(subjects).length > 0) {
   visible = Object.values(Object.entries(subjects)[visibleSubjectIndex][1]);
 }
+onMount(() => {
+  if (presentation.status === "submitted") {
+    visibleSubjectIndex = 1;
+  }
+});
+const openSubmitter = () => {
+  slideOverContent.set({
+    title: "Submit Presentation",
+    component: SubmitPresentationRequestSelector,
+    presentationRequest: presentation,
+  });
+};
 </script>
 
 <template>
@@ -30,20 +46,33 @@ $: if (Object.entries(subjects).length > 0) {
             aria-current="page">
             Definition
           </button>
-          <button
-            on:click="{() => {
-              qrCodeIdValue.set(presentation.url);
-              slideOverContent.set({
-                title: ``,
-                component: QRcode,
-                presentationSubject: [],
-              });
-            }}"
-            class:border-pink-500="{visibleSubjectIndex === 1}"
-            class="text-gray-900 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
-            aria-current="page">
-            QR
-          </button>
+          {#if presentation.status === "created"}
+            <button
+              on:click="{() => {
+                qrCodeIdValue.set(presentation.url);
+                slideOverContent.set({
+                  title: ``,
+                  component: QRcode,
+                  presentationSubject: [],
+                });
+              }}"
+              class:border-pink-500="{visibleSubjectIndex === 1}"
+              class="text-gray-900 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+              aria-current="page">
+              QR
+            </button>
+          {/if}
+          {#if presentation.status === "submitted"}
+            <button
+              on:click="{() => {
+                visibleSubjectIndex = 1;
+              }}"
+              class:border-pink-500="{visibleSubjectIndex === 1}"
+              class="text-gray-900 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+              aria-current="page">
+              Presentation
+            </button>
+          {/if}
         </nav>
       </div>
     </div>
@@ -83,5 +112,22 @@ $: if (Object.entries(subjects).length > 0) {
         </dd>
       </div>
     </dl>
+  {:else if visibleSubjectIndex === 1}
+    {#each presentation.presentations as pres}
+      {#each pres["verifiableCredential"] as vc}
+        <div class="pt-2">
+          <CredentialCard credential="{vc}" />
+        </div>
+      {/each}
+    {/each}
+  {/if}
+  {#if presentation.role === "prover" && presentation.status !== "submitted"}
+    <div class="mt-4">
+      <Button
+        callback="{async () => {
+          openSubmitter();
+        }}"
+        label="Submit" />
+    </div>
   {/if}
 </template>

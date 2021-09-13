@@ -79,15 +79,20 @@ export class PresentationsService {
     definition: PresentationDefinition;
     role: PRESENTATION_REQUEST_ROLES;
     requester: string;
+    invitationId?: string;
   }): Promise<PresentationRequest> {
-    const { definition, role, requester } = createRequest;
-    const invitation = new InvitationMessage(
-      this.didWeb.did,
-      this.didWeb.basePath + '/invitation',
-      'streamlined-vp',
-    );
+    let { definition, role, requester, invitationId } = createRequest;
+    let url;
+    if (!invitationId) {
+      const invitation = new InvitationMessage(
+        this.didWeb.did,
+        this.didWeb.basePath + '/invitation',
+        'streamlined-vp',
+      );
+      url = invitation.url;
+      invitationId = invitation.payload.id;
+    }
     const id = sha256(nanoid());
-    const url = invitation.url;
     const domain = this.config.get('HOST');
 
     const presReq = new PresentationRequest(
@@ -96,7 +101,7 @@ export class PresentationsService {
       sha256(nanoid()),
       domain,
       definition,
-      invitation.payload.id,
+      invitationId,
       role,
       requester,
     );

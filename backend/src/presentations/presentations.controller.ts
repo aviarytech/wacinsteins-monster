@@ -16,6 +16,7 @@ import {
   InputFilter,
   PresentationRequest,
   PRESENTATION_REQUEST_ROLES,
+  PRESENTATION_REQUEST_STATUSES,
 } from './entities/presentation.entity';
 import { CreatePresentationDefinitionDto } from './dto/create-presentation-definition.dto';
 import { CreatePresentationRequestDto } from './dto/create-presentation-request.dto';
@@ -106,13 +107,18 @@ export class PresentationsController {
       },
     );
 
-    const presentation = await this.presentationsService.createPresentation(
-      request.id,
-      body.verifiableCredential,
-    );
+    const presentationResult =
+      await this.presentationsService.createPresentation(
+        request.id,
+        body.verifiableCredential,
+      );
+
+    const presentations = presentationResult.items.map((pres) => {
+      return pres;
+    });
 
     const attachments: IDIFPresentationExchangeSubmissionAttachment[] =
-      presentation.items.map((pres) => {
+      presentations.map((pres) => {
         return {
           id: sha256(nanoid()),
           media_type: 'application/ld+json',
@@ -139,7 +145,12 @@ export class PresentationsController {
       presentationMessage,
     );
     if (success) {
-      return presentation;
+      const updatedPresentation =
+        await this.presentationsService.updatePresentationRequest(request.id, {
+          status: PRESENTATION_REQUEST_STATUSES.SUBMITTED,
+          presentations,
+        });
+      return presentations;
     }
     throw new HttpException(
       'Failed to send Presentation to requester',
@@ -188,8 +199,8 @@ export class PresentationsController {
     const url = new URL(acceptInvitationDto.url);
     let params = new URLSearchParams(url.search);
     let decodedBase64Data = base64url.decode(params.get('_oob')).toString();
-    //console.log(decodedBase64Data)
+    const id = JSON.parse(decodedBase64Data)['id'];
     await this.didCommService.receiveMessage(JSON.parse(decodedBase64Data));
-    return 'Success';
+    return { invitationId: id };
   }
 }
