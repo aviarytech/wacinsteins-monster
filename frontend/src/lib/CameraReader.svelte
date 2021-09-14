@@ -1,31 +1,39 @@
+<style lang="postcss">
+.video {
+  width: 640px;
+  height: 480px;
+  background-color: pink;
+  object-fit: "none";
+  object-position: -100px;
+}
+</style>
+
 <script lang="ts">
-//ECMA improts
+//ECMA imports
 import QrScanner from "qr-scanner";
 import { onMount } from "svelte";
 //components
 import Button from "./ui/Button.svelte";
-
+let video;
+let WxH: number = 250;
 //TODO: is there a better way than using the dom?
 onMount(() => {
   QrScanner.WORKER_PATH = "./assets/js/qr-scanner-worker.min.js";
-
-  const qrScanner = new QrScanner(
-    document.getElementById("videoElem"),
-    (result) => console.log("decoded qr code:", result)
-  );
 });
-
+let qrScanner = new QrScanner(
+  document.getElementById("videoElem"),
+  (result) => console.log("decoded qr code:", result),
+  (error) => {
+    console.log("qr-scanner encountered an error", error);
+  }
+);
 function takePic() {
   console.log("cheese2");
-  //qrScanner.start();
+  qrScanner.start();
 }
 </script>
 
 <template>
-  <Button callback="{async () => takePic()}" label="">Super Temp Button</Button>
-  {#if QrScanner.hasCamera()}
-    <video id="videoElem"><track kind="captions" /></video>
-  {:else}
-    hallo
-  {/if}
+  <Button callback="{async () => takePic()}">Super Temp Button</Button>
+  <video id="videoElem" class="video"><track kind="captions" /></video>
 </template>
