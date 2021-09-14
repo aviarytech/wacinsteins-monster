@@ -20,6 +20,9 @@ import { MessagesApiModule } from './messages-api/messages-api.module';
 import { MsgGatewayModule } from './messages-api-websocket/msg.module';
 import { CredentialsService } from './credentials/credentials.service';
 import { DIDKeyService } from './didkey/didkey.service';
+import { VerifierService } from './verifier/verifier.service';
+import { VerifierController } from './verifier/verifier.controller';
+import { VerifierModule } from './verifier/verifier.module';
 
 @Module({
   imports: [
@@ -32,6 +35,7 @@ import { DIDKeyService } from './didkey/didkey.service';
     MessagesApiModule,
     DIDCommModule,
     MsgGatewayModule,
+    VerifierModule,
   ],
   controllers: [AppController, AdminController],
   providers: [
@@ -46,6 +50,7 @@ import { DIDKeyService } from './didkey/didkey.service';
     ...CommandHandlers,
     ...EventHandlers,
     CredentialsService,
+    VerifierService,
   ],
 })
 export class AppModule {}
