@@ -108,7 +108,7 @@ function submitUrl() {
       swal({
         title: "No input detected",
         text: "Please paste the url",
-        button: { test: "close" },
+        button: { text: "close" },
         icon: "error",
       });
     }
