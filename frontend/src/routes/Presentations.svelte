@@ -12,7 +12,6 @@ import Tag from "../lib/ui/Tag.svelte";
 import QRcode from "../lib/QRcode.svelte";
 import Avatar from "../lib/Avatar.svelte";
 import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestSelector.svelte";
-import AcceptInvitation from "../lib/slideOverComponents/acceptInvitation.svelte";
 //ECMA imports
 import { onMount } from "svelte";
 //stores
@@ -24,11 +23,15 @@ $: requestsForMe = $presentations.filter((r) => r.role === "prover");
 $: requestsByMe = $presentations.filter((r) => r.role === "verifier");
 
 onMount(async () => {
+  refreshPresentations();
+});
+
+async function refreshPresentations() {
   const res = await getPresentations();
   if (res) {
     presentations.set(res);
   }
-});
+}
 
 const openPresentationRequest = (presentationId) => {
   const singleRow = $presentations.find((c) => c["@id"] === presentationId);
@@ -58,13 +61,24 @@ const newPresentationRequest = () => {
 };
 async function acceptInvitationApiCall(url: string) {
   if (url) {
-    let response = await acceptInvitation({ url: url });
-    if (response) {
+    let { invitationId } = await acceptInvitation({ url: url });
+
+    if (invitationId) {
       swal({
         title: "Success",
         text: `You have accepted the invitation.`,
         icon: "success",
         button: "Great!",
+      }).then(async () => {
+        await refreshPresentations();
+        const presentation = $presentations.find(
+          (p) => p.invitationId === invitationId
+        );
+        slideOverContent.set({
+          component: PresentationDetailedView,
+          title: "Presentation Request",
+          presentation,
+        });
       });
     } else {
       swal({
@@ -75,28 +89,21 @@ async function acceptInvitationApiCall(url: string) {
     }
   }
 }
-let method: string = "slideOver";
+
 function submitUrl() {
-  if (method === "slideOver") {
-    slideOverContent.set({
-      title: "",
-      component: AcceptInvitation,
-    });
-  } else {
-    swal({
-      title: "Accept Invitation",
-      text: "Please paste the url",
-      button: {
-        text: "submit",
-        closeModal: false,
-      },
-      content: "input",
-    }).then((value) => {
-      if (value) {
-        acceptInvitationApiCall(value);
-      }
-    });
-  }
+  swal({
+    title: "Accept Invitation",
+    text: "Input a valid invitation URL",
+    button: {
+      text: "Submit",
+      closeModal: false,
+    },
+    content: "input",
+  }).then((value) => {
+    if (value) {
+      acceptInvitationApiCall(value);
+    }
+  });
 }
 
 function openSubmitPresentation(id: string) {
