@@ -170,13 +170,13 @@ function tailwindBgColorizer(value: string): string {
 
 function cameraQRcodeScan() {
   console.log("cheese");
-  console.log(typeof Image);
 }
 //prover - verifier
 //statuses created(blue), proposed(orang), requested(oran), submitted(y)
 </script>
 
 <template>
+  <CameraReader />
   <div class="bg-white shadow-md rounded-sm p-5">
     <div class="flex items-center justify-end py-2">
       <Tag
