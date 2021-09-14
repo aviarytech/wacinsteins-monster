@@ -12,7 +12,9 @@
 </style>
 
 <script lang="ts">
-export let label: string;
+//ecma imports
+
+export let label: string | HTMLOrSVGImageElement;
 export let callback: () => Promise<void>;
 export let type = "button";
 export let additionalClasses = "";
@@ -21,4 +23,6 @@ export let additionalClasses = "";
 <button
   on:click="{callback}"
   class="{additionalClasses ? `${additionalClasses} button` : 'button'}"
-  type="{type}">{label}</button>
+  type="{type}"
+  >{#if label}{label}{:else}<slot />{/if}
+</button>

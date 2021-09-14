@@ -12,12 +12,14 @@ import Tag from "../lib/ui/Tag.svelte";
 import QRcode from "../lib/QRcode.svelte";
 import Avatar from "../lib/Avatar.svelte";
 import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestSelector.svelte";
+import CameraReader from "../lib/CameraReader.svelte";
+import Image from "../lib/table-elements/Image.svelte";
 //ECMA imports
-import { onMount } from "svelte";
+import { onMount, SvelteComponent } from "svelte";
+import swal from "sweetalert";
 //stores
 import { presentations, qrCodeIdValue } from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
-import swal from "sweetalert";
 
 $: requestsForMe = $presentations.filter((r) => r.role === "prover");
 $: requestsByMe = $presentations.filter((r) => r.role === "verifier");
@@ -131,7 +133,7 @@ function qrCodeDisplay(id) {
     presentationSubject: [],
   });
 }
-function tailwingBgColorizer(value: string): string {
+function tailwindBgColorizer(value: string): string {
   let bgCol: string;
   switch (value) {
     //roles
@@ -166,6 +168,10 @@ function tailwingBgColorizer(value: string): string {
   return bgCol;
 }
 
+function cameraQRcodeScan() {
+  console.log("cheese");
+  console.log(typeof Image);
+}
 //prover - verifier
 //statuses created(blue), proposed(orang), requested(oran), submitted(y)
 </script>
@@ -176,9 +182,17 @@ function tailwingBgColorizer(value: string): string {
       <Tag
         text="Prover"
         fontColor="text-white"
-        bgCol="{tailwingBgColorizer('prover')}" />
+        bgCol="{tailwindBgColorizer('prover')}" />
       <span class="flex-grow pl-2">Presentations Requested of You</span>
-      <Button label="Accept Invitation" callback="{async () => submitUrl()}" />
+      <Button callback="{async () => submitUrl()}" label=""
+        >Accept Invitation</Button>
+      <Button callback="{async () => cameraQRcodeScan()}">
+        <Image
+          src="./assets/outlineCamera.svg"
+          alt="use Camera"
+          width="{16}"
+          height="{16}" />
+      </Button>
     </div>
     {#if requestsForMe && requestsForMe.length > 0}
       <DataTable
@@ -194,7 +208,7 @@ function tailwingBgColorizer(value: string): string {
               component: Tag,
               text: p['status'],
               fontColor: 'text-white',
-              bgCol: tailwingBgColorizer(p['status']),
+              bgCol: tailwindBgColorizer(p['status']),
             },
             {
               component: ComponentList,
@@ -236,9 +250,9 @@ function tailwingBgColorizer(value: string): string {
       <Tag
         text="Verifier"
         fontColor="text-white"
-        bgCol="{tailwingBgColorizer('verifier')}" />
+        bgCol="{tailwindBgColorizer('verifier')}" />
       <span class="pl-2 flex-grow">Presentations Requested by You</span>
-      <Button label="New" callback="{async () => newPresentationRequest()}" />
+      <Button callback="{async () => newPresentationRequest()}">New</Button>
     </div>
 
     {#if requestsByMe && requestsByMe.length > 0}
@@ -256,7 +270,7 @@ function tailwingBgColorizer(value: string): string {
               component: Tag,
               text: p['status'],
               fontColor: 'text-white',
-              bgCol: tailwingBgColorizer(p['status']),
+              bgCol: tailwindBgColorizer(p['status']),
             },
             {
               component: ComponentList,
