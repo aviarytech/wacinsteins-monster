@@ -14,11 +14,13 @@ export class VerifierService {
     presentation: VerifiablePresentation,
     options: VerifyOptions,
   ) {
+    const { challenge, domain } = options;
     const { verified, ...rest } = await verifiable.presentation.verify({
       presentation,
       format: ['vp', 'vp-jwt'],
       documentLoader: this.documentLoader.loader,
-      challenge: '123', // this is supplied by the verifier / presentation recipient
+      challenge,
+      domain,
       suite: new JWS.Suite({}),
     });
     return verified;
