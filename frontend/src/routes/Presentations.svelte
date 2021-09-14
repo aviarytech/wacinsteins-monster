@@ -42,12 +42,14 @@ const openPresentationRequest = (presentationId) => {
   });
 };
 
+//allows for the user to click the same button to close the slideover
 let rightPreviewWindowDisplayed: boolean = false;
 $: if ($slideOverContent) {
   rightPreviewWindowDisplayed = true;
 } else {
   rightPreviewWindowDisplayed = false;
 }
+
 const newPresentationRequest = () => {
   slideOverContent.set({
     title: "New Presentation Request",
@@ -102,6 +104,13 @@ function submitUrl() {
   }).then((value) => {
     if (value) {
       acceptInvitationApiCall(value);
+    } else {
+      swal({
+        title: "No input detected",
+        text: "Please paste the url",
+        button: { test: "close" },
+        icon: "error",
+      });
     }
   });
 }
