@@ -75,22 +75,28 @@ async function acceptInvitationApiCall(url: string) {
     }
   }
 }
-
+let method: string = "slideOver";
 function submitUrl() {
-  console.log("click");
-  swal({
-    title: "Accept Invitation",
-    text: "Please paste the url",
-    button: {
-      text: "submit",
-      closeModal: false,
-    },
-    content: "input",
-  }).then((value) => {
-    if (value) {
-      acceptInvitationApiCall(value);
-    }
-  });
+  if (method === "slideOver") {
+    slideOverContent.set({
+      title: "",
+      component: AcceptInvitation,
+    });
+  } else {
+    swal({
+      title: "Accept Invitation",
+      text: "Please paste the url",
+      button: {
+        text: "submit",
+        closeModal: false,
+      },
+      content: "input",
+    }).then((value) => {
+      if (value) {
+        acceptInvitationApiCall(value);
+      }
+    });
+  }
 }
 
 function openSubmitPresentation(id: string) {
