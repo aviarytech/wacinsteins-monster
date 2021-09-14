@@ -188,7 +188,7 @@ function cameraQRcodeScan() {
         >Accept Invitation</Button>
       <Button callback="{async () => cameraQRcodeScan()}">
         <Image
-          src="./assets/outlineCamera.svg"
+          src="./assets/svg/outlineCamera.svg"
           alt="use Camera"
           width="{16}"
           height="{16}" />
