@@ -149,15 +149,14 @@ export class DIDWebService {
   }
 
   async resolve(iri: string) {
-    const [_, method, id, ...extras] = iri.split(':');
-    let domain = id.split('#').length > 1 ? id.split('#')[0] : id;
-    if (id.indexOf('localhost') >= 0) {
+    const [did, path] = iri.split('#');
+    let [_, method, domain, ...extras] = did.split(':');
+    if (domain.indexOf('localhost') >= 0) {
       domain += `:${extras}`;
     }
+    const protocol = did.indexOf('localhost') >= 0 ? 'http' : 'https';
     const resp = await axios.get(
-      `http${
-        id.indexOf('localhost') >= 0 ? null : 's'
-      }://${domain}/.well-known/did.json`,
+      `${protocol}://${domain}/.well-known/did.json`,
     );
     return resp.data;
   }

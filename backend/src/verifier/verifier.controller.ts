@@ -36,7 +36,9 @@ export class VerifierController {
 
   @Post('presentations/verify')
   async verifyPresentation(@Body() body: VerifyPresentationRequest) {
-    const { verifiablePresentation, options } = body;
+    let { verifiablePresentation, options } = body;
+    options.challenge = verifiablePresentation.proof.challenge;
+    options.domain = verifiablePresentation.proof.domain;
     const result = await this.verifier.verifyPresentation(
       verifiablePresentation,
       options,
