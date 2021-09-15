@@ -12,7 +12,7 @@ import { slideOverContent } from "../stores/ui";
 import { user } from "../stores/user";
 import { sha256 } from "../utils/sha256";
 import Avatar from "../lib/Avatar.svelte";
-import { getAllIdentities } from "../api/identities";
+import { getServerIdentity } from "../api/identities";
 
 const openIdentity = (value: string) => {
   slideOverContent.set({
@@ -23,33 +23,37 @@ const openIdentity = (value: string) => {
 };
 
 onMount(async () => {
-  const resp = await getAllIdentities([$user.email]);
-  if (resp.length > 0) {
-    identities.set(resp);
+  let ids = [{ role: "You", id: $user.email }];
+  const resp = await getServerIdentity();
+  if (resp) {
+    console.log(resp.id);
+    ids = [...ids, { role: "Server", id: resp.id }];
   }
+  identities.set(ids);
 });
 </script>
 
 <!-- <pre>{JSON.stringify($identities, null, 2)}</pre> -->
 {#if $identities}
   <DataTable
-    headers="{['', 'Identifier', '']}"
+    xOverflowClass="bg-red"
+    headers="{['', 'Role', 'Identifier', '']}"
     data="{$identities.map((i) => {
       return [
         {
           component: Avatar,
-          value: i,
+          value: i.id,
           dataTableSpecialClass: 'pl-6 py-4 max-w-xs',
         },
-        // { component: Text, text: i.id, classes: 'max-w-xs' },
-        { component: Text, text: i },
+        { component: Text, text: i.role },
+        { component: Text, text: i.id },
         {
           component: ComponentList,
           items: [
             {
               component: Button,
               callback: () => {
-                openIdentity(i);
+                openIdentity(i.id);
               },
               label: 'View',
             },

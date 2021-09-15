@@ -68,11 +68,16 @@ export class DocumentLoaderService {
   }
 
   async documentResolver(iri: string) {
+    let doc;
     if (iri.startsWith('did:web')) {
-      return await this.didWeb.resolve(iri);
+      doc = await this.didWeb.resolve(iri);
     }
     if (iri.startsWith('did:key')) {
-      return await this.didKey.resolve(iri);
+      doc = await this.didKey.resolve(iri);
+    }
+
+    if (doc) {
+      return { document: doc, documentUrl: iri, contextUrl: null };
     }
 
     return undefined;
@@ -80,7 +85,11 @@ export class DocumentLoaderService {
 
   async contextResolver(iri: string) {
     if (this.contexts[iri]) {
-      return { document: this.contexts[iri] };
+      return {
+        document: this.contexts[iri],
+        documentUrl: iri,
+        contextUrl: null,
+      };
     }
     return undefined;
   }
