@@ -12,6 +12,8 @@ import Tag from "../lib/ui/Tag.svelte";
 import QRcode from "../lib/QRcode.svelte";
 import Avatar from "../lib/Avatar.svelte";
 import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestSelector.svelte";
+import CameraReader from "../lib/CameraReader.svelte";
+
 //ECMA imports
 import { onMount } from "svelte";
 //stores
@@ -171,6 +173,7 @@ function tailwingBgColorizer(value: string): string {
 </script>
 
 <template>
+  <CameraReader />
   <div class="bg-white shadow-md rounded-sm p-5">
     <div class="flex items-center justify-end py-2">
       <Tag
