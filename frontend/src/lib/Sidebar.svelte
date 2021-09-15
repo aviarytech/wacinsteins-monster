@@ -124,7 +124,7 @@ let host = import.meta.env.VITE_HOST ?? "aviary.one";
 
   <!-- Static sidebar for desktop -->
   <div class="hidden md:flex md:flex-shrink-0">
-    <div class="flex flex-col w-64">
+    <div class="flex flex-col">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div
         class="flex flex-col flex-grow border-r border-gray-200 pt-3 pb-4 bg-white overflow-y-auto">
@@ -136,21 +136,20 @@ let host = import.meta.env.VITE_HOST ?? "aviary.one";
               class="h-8 w-auto"
               src="https://media.bitcoinfiles.org/18a10cb9df7102cbb58af3bb653e6d1c4fe4b70d1f039d9e3bb19e4e877578cc"
               alt="av1" />
-            <h1 class="px-2 font-bold">Wacinstein's Monster</h1>
           </button>
           <div class="inset-0 flex items-center" aria-hidden="true">
             <div class="w-full border-t border-gray-300"></div>
           </div>
           <Router>
-            <nav class="flex-1 px-2 py-3 bg-white space-y-1">
+            <nav class="flex-1 px-2 py-3 bg-white space-y-1 pr-6">
               {#each Routes as route}
                 {#if route.heroIcon !== ""}
                   <Link
                     to="{route.routeUrl}"
-                    class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                    class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-xs font-medium uppercase rounded-md hover:text-gray-1000">
                     <img
                       src="{route.heroIcon}"
-                      class="icon md:px-1"
+                      class="icon md"
                       alt="heroIcon" />
                     {route.routeName}
                   </Link>

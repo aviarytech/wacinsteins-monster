@@ -7,6 +7,7 @@ import { DocumentLoaderService } from '../documentLoader/documentLoader.service'
 import { VerifyOptions } from './verifier.controller';
 import {
   BbsBlsSignature2020,
+  BbsBlsSignatureProof2020,
   Bls12381G2KeyPair,
 } from '@mattrglobal/jsonld-signatures-bbs';
 @Injectable()
@@ -37,15 +38,10 @@ export class VerifierService {
     const { proof } = credential;
     switch (proof['type']) {
       case 'BbsBlsSignature2020':
-        const did = await this.documentLoader.loader(
-          proof['verificationMethod'],
-        );
-        const key = did.document['verificationMethod'].find(
-          (k) => k.type === 'Bls12381G2Key2020',
-        );
-        suite = new BbsBlsSignature2020({
-          key: await Bls12381G2KeyPair.from(key),
-        });
+        suite = new BbsBlsSignature2020();
+        break;
+      case 'BbsBlsSignatureProof2020':
+        suite = new BbsBlsSignatureProof2020();
         break;
       case 'JsonWebSignature2020':
         suite = new JWS.Suite({});

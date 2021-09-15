@@ -1,8 +1,12 @@
 <script lang="ts">
 import Avatar from "../Avatar.svelte";
 import { simple as format } from "timeago-simple";
+import { verifyVC } from "../../api/verifier";
 
 export let credential: any;
+$: verified = (async () => {
+  return await verifyVC(credential);
+})();
 </script>
 
 <div class="bg-white shadow-md rounded-xl border-2 border-blue-200">
@@ -20,6 +24,13 @@ export let credential: any;
       <p class="mt-1 text-sm text-gray-500">
         {credential.description}
       </p>
+    </div>
+    <div>
+      {#await verified}
+        ...
+      {:then name}
+        {name}
+      {/await}
     </div>
   </div>
   <div class="px-4 py-5 border-b border-gray-200 sm:px-6">

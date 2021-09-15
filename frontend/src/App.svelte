@@ -22,6 +22,7 @@ import { credentials } from "./stores/credentials";
 import { wellKnown } from "./stores/well-known";
 //ECMA imports
 import { onMount } from "svelte";
+import SearchBar from "./lib/SearchBar.svelte";
 //HACK: added so that the user doesn't have to go to the credential page to proprely use the presentation page.
 onMount(async () => {
   const resp = await getAllCredentials();
@@ -30,7 +31,7 @@ onMount(async () => {
   }
   const info = await getWellKnown();
   if (info) {
-    wellKnown.set(info);
+    wellKnown.set({ ...info, connected: true });
   }
 });
 </script>
@@ -60,7 +61,7 @@ onMount(async () => {
 
         <div class="flex-1 px-4 flex justify-between">
           <div class="flex-1 flex">
-            <!-- <SearchBar /> -->
+            <SearchBar />
           </div>
 
           <div class="ml-4 flex items-center md:ml-6">

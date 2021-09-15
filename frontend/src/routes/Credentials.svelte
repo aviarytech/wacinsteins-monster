@@ -1,4 +1,6 @@
 <script lang="ts">
+import captureImage from "https://cdn.jsdelivr.net/gh/AppliedRecognition/Ver-ID-Image-Capture-JS@3.1.0/dist/imageCapture.min.js";
+
 import { simple as format } from "timeago-simple";
 //component
 import CredentialDetailView from "../lib/CredentialDetailView.svelte";
@@ -38,6 +40,36 @@ onMount(async () => {
   if (resp) {
     credentials.set(resp);
   }
+
+  // Import capture function
+
+  // Create a button
+  var button = document.createElement("a");
+  button.href = "javascript:void(0)";
+  // Attach a click listener
+  button.onclick = function () {
+    var options = {
+      useFrontCamera: true,
+      size: {
+        width: 600,
+        height: 400,
+      },
+      scaling: "fill",
+    };
+    // Capture the image
+    captureImage()
+      .then(function (imageDataURL) {
+        // Display the captured image
+        var img = document.createElement("img");
+        img.src = imageDataURL;
+        document.body.appendChild(img);
+      })
+      .catch(function (error) {
+        alert("Capture failed");
+      });
+  };
+  button.innerText = "Capture image";
+  document.body.appendChild(button);
 });
 </script>
 

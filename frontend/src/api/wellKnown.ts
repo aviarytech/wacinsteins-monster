@@ -12,6 +12,6 @@ export async function getWellKnown(): Promise<any> {
     return null;
   } catch (error) {
     console.error(error);
-    return [];
+    return null;
   }
 }
