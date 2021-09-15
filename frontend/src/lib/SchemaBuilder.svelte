@@ -2,6 +2,7 @@
 </style>
 
 <script lang="ts">
+import jsonld from "jsonld";
 //components
 import CredentialSubjectFieldSelector from "./CredentialSubjectFieldSelector.svelte";
 import Button from "../lib/ui/Button.svelte";
@@ -12,6 +13,12 @@ import { slideOverContent, slidePreviewOverContent } from "../stores/ui";
 //js imports
 import swal from "sweetalert";
 import inputDescriptionBuilder from "../utils/frameBuilder";
+import {
+  getPresentations,
+  postNewPresentationRequest,
+} from "../api/presentationAxios";
+import { presentations, qrCodeIdValue } from "../stores/presentation";
+import QRcode from "./QRcode.svelte";
 
 let unique = {}; // every {} is unique, {} === {} evaluates to false
 let selectedSchemaFields: string[];
@@ -20,10 +27,10 @@ function clearSelection() {
 }
 
 let credentialsChosenId: string;
-$: credentialsChosen = $credentials.find((c) => c.id === credentialsChosenId)
+$: credentialsChosen = $credentials.find((c) => c.id === credentialsChosenId);
 
-async function presentationPreview() {
-  let inputDescriptor: Object = {
+async function submitPresentation() {
+  let inputDescriptor: object = {
     credentialSubject: inputDescriptionBuilder(
       selectedSchemaFields,
       credentialsChosen["verifiableCredential"]["credentialSubject"]
@@ -32,20 +39,42 @@ async function presentationPreview() {
   inputDescriptor["type"] = credentialsChosen["verifiableCredential"]["type"];
   inputDescriptor["@context"] =
     credentialsChosen["verifiableCredential"]["@context"];
-
-  if (Object.keys(inputDescriptor).length === 0) {
+  const compacted = await jsonld.compact(
+    credentialsChosen["verifiableCredential"],
+    {}
+  );
+  const schema = compacted["@type"].filter(
+    (t) => t !== "https://www.w3.org/2018/credentials#VerifiableCredential"
+  );
+  if (schema.length > 1) {
     swal({
-      title: "Empty selection",
-      text: "Please select the credential fields you want presented",
+      title: "Too Many Schemas",
+      text: "There are too many schemas on this credential",
       icon: "error",
     });
   } else {
-    slidePreviewOverContent.set($slideOverContent);
-    slideOverContent.set({
-      title: "Review",
-      component: Preview,
-      data: [inputDescriptor, selectedSchemaFields],
-    });
+    if (Object.keys(inputDescriptor).length === 0) {
+      swal({
+        title: "Empty selection",
+        text: "Please select the credential fields you want presented",
+        icon: "error",
+      });
+    } else {
+      const newPres = await postNewPresentationRequest({
+        schema: schema[0],
+        paths: selectedSchemaFields,
+        frame: inputDescriptor,
+      });
+      qrCodeIdValue.set(newPres.url);
+      const res = await getPresentations();
+      if (res) {
+        presentations.set(res);
+      }
+      slideOverContent.set({
+        title: ``,
+        component: QRcode,
+      });
+    }
   }
 }
 </script>
@@ -72,14 +101,14 @@ async function presentationPreview() {
           bind:selected="{selectedSchemaFields}" />
       {/key}
     {:else}
-      <h2 id="cy-error-msg" class="bg-yellow-500 rounded-lg max-w-prose">
+      <h2 id="cy-error-msg" class="bg-gray-300 rounded-xs p-3">
         Please select a schema
       </h2>
     {/if}
   </form>
   <Button
     additionalClasses="mt-6"
-    callback="{presentationPreview}"
+    callback="{submitPresentation}"
     type="submit"
-    label="Review" />
+    label="Submit" />
 </template>
