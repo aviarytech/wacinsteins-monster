@@ -19,6 +19,7 @@ export let additionalClasses = "";
 </script>
 
 <button
+  id={`${label.toLowerCase().replace(/ /g, '-')}-btn`}
   on:click="{callback}"
   class="{additionalClasses ? `${additionalClasses} button` : 'button'}"
   type="{type}">{label}</button>
