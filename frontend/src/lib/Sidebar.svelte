@@ -1,11 +1,4 @@
 <style lang="postcss">
-.open {
-  @apply ease-in-out duration-300 opacity-0;
-}
-.open2 {
-  @apply transition ease-in-out duration-300 transform translate-x-0;
-}
-
 .icon {
   @apply mr-3 flex-shrink-0 h-6 w-6;
 }
@@ -51,6 +44,7 @@ let host = import.meta.env.VITE_HOST ?? "aviary.one";
                 {#if route.heroIcon !== ""}
                   <Link
                     to="{route.routeUrl}"
+                    id="{`${route.routeUrl}-btn`}"
                     class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-xs font-medium uppercase rounded-md hover:text-gray-1000">
                     <img
                       src="{route.heroIcon}"
