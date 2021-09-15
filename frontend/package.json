@@ -64,6 +64,7 @@
     "schema-dts": "^0.10.0",
     "svelte-closable": "^0.0.0",
     "svelte-copy-to-clipboard": "^0.2.5",
+    "svelte-inline-svg": "^1.0.8",
     "svelte-jester": "^1.7.0",
     "svelte-navigator": "^3.1.5",
     "svelte-tooltip": "^1.2.0",

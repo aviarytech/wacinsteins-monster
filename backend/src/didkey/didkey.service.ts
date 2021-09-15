@@ -12,18 +12,12 @@ export class DIDKeyService {
       const { didDocument } = await resolve(iri.split('#')[0], {
         accept: 'application/did+ld+json',
       });
-      return {
-        documentUrl: iri,
-        document: didDocument,
-      };
+      return didDocument;
     } else {
       const { didDocument } = await resolve(iri.split('#')[0], {
         accept: 'application/did+json',
       });
-      return {
-        documentUrl: iri,
-        document: didDocument,
-      };
+      return didDocument;
     }
   }
 }

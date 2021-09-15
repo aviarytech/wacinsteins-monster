@@ -110,7 +110,7 @@ async function newMsg() {
 </script>
 
 <template>
-  <div class="h-screen flex overflow-hidden bg-white rounded-xl">
+  <div class="h-screen flex overflow-hidden bg-white rounded-sm p-5 shadow-md">
     <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
     <div class="flex flex-col min-w-0 flex-1 overflow-hidden">
       <div class="flex-1 relative z-0 flex overflow-hidden">
