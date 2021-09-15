@@ -19,7 +19,8 @@ function clearSelection() {
   unique = {};
 }
 
-let credentialsChosen: any;
+let credentialsChosenId: string;
+$: credentialsChosen = $credentials.find((c) => c.id === credentialsChosenId)
 
 async function presentationPreview() {
   let inputDescriptor: Object = {
@@ -53,11 +54,11 @@ async function presentationPreview() {
   <form>
     <h3 id="cy-schema">Schema</h3>
     <select
-      bind:value="{credentialsChosen}"
+      bind:value="{credentialsChosenId}"
       on:change="{() => clearSelection()}"
       id="cy-schema-hook-select">
       {#each $credentials as item}
-        <option value="{item}">
+        <option value="{item.id}">
           {item["verifiableCredential"].name}
         </option>
       {/each}
