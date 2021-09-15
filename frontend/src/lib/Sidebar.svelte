@@ -43,11 +43,6 @@ let host = import.meta.env.VITE_HOST ?? "aviary.one";
         From: "opacity-100"
         To: "opacity-0"
     -->
-    <div
-      class="fixed inset-0 bg-gray-600 bg-opacity-75 -translate-x-full"
-      class:open2="{$mobileSidebarClose}"
-      aria-hidden="true">
-    </div>
 
     <!--
       Off-canvas menu, show/hide based on off-canvas menu state.
@@ -61,7 +56,7 @@ let host = import.meta.env.VITE_HOST ?? "aviary.one";
     -->
     <div
       class="relative flex-1 flex flex-col max-w-1/2 w-full pt-5 pb-4 bg-white opacity-100"
-      class:open="{$mobileSidebarClose}">
+      class:hidden="{!$mobileSidebarClose}">
       <!--
         Close button, show/hide based on off-canvas menu state.
 

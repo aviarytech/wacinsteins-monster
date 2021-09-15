@@ -13,7 +13,7 @@ import closable from "../utils/closable";
 
 let button;
 let avatar;
-let show = true;
+let show = false;
 </script>
 
 <!-- Profile dropdown -->
