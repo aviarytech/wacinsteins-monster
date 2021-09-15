@@ -13,13 +13,20 @@
 
 <script lang="ts">
 export let label: string;
+export let slotOverLabel: boolean = false;
 export let callback: () => Promise<void>;
 export let type = "button";
 export let additionalClasses = "";
 </script>
 
 <button
-  id={`${label.toLowerCase().replace(/ /g, '-')}-btn`}
+  id="{`${label.toLowerCase().replace(/ /g, '-')}-btn`}"
   on:click="{callback}"
   class="{additionalClasses ? `${additionalClasses} button` : 'button'}"
-  type="{type}">{label}</button>
+  type="{type}">
+  {#if !slotOverLabel}
+    {label}
+  {:else}
+    <slot />
+  {/if}
+</button>
