@@ -11,10 +11,10 @@ import Logout from "../routes/Logout.svelte";
 import FAQ from "../routes/FAQ.svelte";
 import Reset from "../routes/Reset.svelte";
 import Demo from "../routes/Demo.svelte";
-
+import DemoAuth from "../routes/DemoAuth.svelte";
 //components
 import Loading from "./ui/Loading.svelte";
-
+//ECMA imports
 import { Router, Route } from "svelte-navigator";
 import AuthGuard from "./AuthGuard.svelte";
 </script>
@@ -27,7 +27,11 @@ import AuthGuard from "./AuthGuard.svelte";
     <Route path="login">
       <Login />
     </Route>
+    <Route path="demo-auth">
+      <DemoAuth />
+    </Route>
   </Router>
+
   <Router slot="authed">
     <Route path="">
       <Loading />
