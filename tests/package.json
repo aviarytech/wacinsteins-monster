@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "cy:headless": "cypress run --browser=firefox",
+    "cy:debug": "DEBUG=cypress:cli cypress run",
+    "cy:headed": "npx cypress run --headed"
+  },
+  "devDependencies": {
+    "@testing-library/cypress": "^8.0.1",
+    "cypress": "^8.4.0"
+  }
+}

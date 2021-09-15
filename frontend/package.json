@@ -10,9 +10,6 @@
     "build": "vite build",
     "serve": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "cy:headless": "cypress run --browser=firefox",
-    "cy:debug": "DEBUG=cypress:cli cypress run",
-    "cy:headed": "npx cypress run --headed --no-exit",
     "prettier": "prettier --write \"{cypress,src}/**/*.{ts,svelte,js,css,html}\""
   },
   "devDependencies": {
