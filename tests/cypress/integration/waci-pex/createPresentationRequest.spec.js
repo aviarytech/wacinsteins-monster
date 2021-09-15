@@ -1,7 +1,10 @@
 describe('create a presentation request', () => {
   //cy.visit()
   before(() => {
-    cy.visit('https://aviary.one/demo-auth/')
+    cy.visit('demo-auth')//.then(() => { cy.visit('https://aviary.one/presentations/') })
+  })
+  beforeEach(() => {
+    cy.wait(2500)
   })
 
   //assuming we are home
@@ -12,8 +15,8 @@ describe('create a presentation request', () => {
         'https://aviary.one/presentations'
       )
     })
-
   })
+  it('click the new button to generate a new request', () => { cy.get() })
   it('renders all the required components for this transaction', () => {
     console.log('test')
   })
