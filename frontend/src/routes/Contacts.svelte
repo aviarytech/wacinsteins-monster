@@ -85,47 +85,49 @@ function openConversation(id: string) {
 </script>
 
 <template>
-  <div class="pb-2">
-    <Button label="New Contact" callback="{newContactCreation}" />
+  <div class="bg-white shadow-md rounded-sm p-5">
+    <div class="pb-2">
+      <Button label="New Contact" callback="{newContactCreation}" />
+    </div>
+    <!-- TODO: once the user selects a conversation the menu shoudl split in 3-->
+    <DataTable
+      headers="{['', 'Domain', 'Created', '']}"
+      data="{$availableContacts.map((p) => {
+        return [
+          {
+            component: Avatar,
+            value: p['did'],
+            dataTableSpecialClass: 'pl-6 py-4 max-w-xs',
+          },
+          {
+            component: Text,
+            text: p['did'],
+          },
+          {
+            component: Text,
+            text: new Date(p['created_at']).toLocaleString(),
+          },
+          {
+            component: ComponentList,
+            items: [
+              {
+                component: Button,
+                callback: () => viewContactProfile(p['did']),
+                label: 'View',
+              },
+              {
+                component: Button,
+                callback: () => deleteContactApi(p['id']),
+                label: 'Delete',
+              },
+              {
+                component: Button,
+                callback: () => openConversation(p['did']),
+                label: 'Conversation',
+              },
+            ],
+          },
+        ];
+      })}" />
   </div>
-  <!-- TODO: once the user selects a conversation the menu shoudl split in 3-->
-  <DataTable
-    headers="{['', 'Domain', 'Created', '']}"
-    data="{$availableContacts.map((p) => {
-      return [
-        {
-          component: Avatar,
-          value: p['did'],
-          dataTableSpecialClass: 'pl-6 py-4 max-w-xs',
-        },
-        {
-          component: Text,
-          text: p['did'],
-        },
-        {
-          component: Text,
-          text: new Date(p['created_at']).toLocaleString(),
-        },
-        {
-          component: ComponentList,
-          items: [
-            {
-              component: Button,
-              callback: () => viewContactProfile(p['did']),
-              label: 'View',
-            },
-            {
-              component: Button,
-              callback: () => deleteContactApi(p['id']),
-              label: 'Delete',
-            },
-            {
-              component: Button,
-              callback: () => openConversation(p['did']),
-              label: 'Conversation',
-            },
-          ],
-        },
-      ];
-    })}" />
 </template>

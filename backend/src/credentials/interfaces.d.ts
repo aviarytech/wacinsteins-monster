@@ -12,7 +12,7 @@ export interface VerifiableCredential {
   credentialSubject: object;
   description?: string;
   expirationDate?: string;
-  issuanceDate?: string;
+  issuanceDate: string;
   issuer: string | { id: string };
   name?: string;
   proof: object;
