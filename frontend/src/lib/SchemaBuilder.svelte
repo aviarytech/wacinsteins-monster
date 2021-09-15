@@ -6,7 +6,6 @@ import jsonld from "jsonld";
 //components
 import CredentialSubjectFieldSelector from "./CredentialSubjectFieldSelector.svelte";
 import Button from "../lib/ui/Button.svelte";
-import Preview from "./Preview.svelte";
 //stores
 import { credentials } from "../stores/credentials";
 import { slideOverContent, slidePreviewOverContent } from "../stores/ui";
