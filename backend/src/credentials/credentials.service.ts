@@ -6,7 +6,6 @@ import {
 import { DBService } from '../db/db.service';
 import { Credential, VerifiableCredential } from './interfaces';
 import { DocumentLoaderService } from 'src/documentLoader/documentLoader.service';
-
 import { sha256 } from '@aviarytech/crypto-core';
 @Injectable()
 export class CredentialsService implements OnApplicationBootstrap {
