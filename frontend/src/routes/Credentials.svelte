@@ -1,7 +1,6 @@
 <script lang="ts">
 import { simple as format } from "timeago-simple";
 //component
-import CredentialDetailView from "../lib/CredentialDetailView.svelte";
 import DataTable from "../lib/table-elements/DataTable.svelte";
 import Text from "../lib/table-elements/Text.svelte";
 import ComponentList from "../lib/table-elements/ComponentList.svelte";
@@ -58,7 +57,7 @@ onMount(async () => {
               value: c['verifiableCredential'].id,
               dataTableSpecialClass: 'pl-6 py-4 max-w-xs',
             },
-            { component: Text, text: c['verifiableCredential'].name },
+            { component: Text, text: c['verifiableCredential'].name ?? '' },
             {
               component: Text,
               text: c['verifiableCredential'].issuer.id

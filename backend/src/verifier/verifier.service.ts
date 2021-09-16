@@ -52,15 +52,13 @@ export class VerifierService {
           HttpStatus.BAD_REQUEST,
         );
     }
-    if (proof['type']) {
-      console.log(proof['type']);
-    }
-    const { verified, ...rest } = await verifiable.credential.verify({
+    const { verified } = await verifiable.credential.verify({
       credential,
       format: ['vc'],
       documentLoader: this.documentLoader.loader,
       suite,
     });
+
     return verified;
   }
 }
