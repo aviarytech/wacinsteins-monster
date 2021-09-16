@@ -1,10 +1,12 @@
 import { Bls12381G2KeyPair } from '@mattrglobal/bls12381-key-pair';
 
 export const resolve = async (did: string) => {
+  const fingerprint = did.split(':')[did.split(':').length - 1];
+  const keyId = `${did}#${fingerprint}`;
   const keyPair = Bls12381G2KeyPair.fromFingerprint({
     id: did,
     controller: did,
-    fingerprint: did.split(':')[did.split(':').length - 1],
+    fingerprint,
   });
   return {
     didDocument: {
@@ -15,16 +17,16 @@ export const resolve = async (did: string) => {
       id: did,
       verificationMethod: [
         {
-          id: did,
+          id: keyId,
           type: 'Bls12381G2Key2020',
           controller: did,
           publicKeyBase58: keyPair.publicKey,
         },
       ],
-      authentication: [did],
-      assertionMethod: [did],
-      capabilityDelegation: [did],
-      capabilityInvocation: [did],
+      authentication: [keyId],
+      assertionMethod: [keyId],
+      capabilityDelegation: [keyId],
+      capabilityInvocation: [keyId],
       keyAgreement: [],
     },
   };
