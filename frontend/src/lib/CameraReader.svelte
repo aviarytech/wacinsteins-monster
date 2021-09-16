@@ -49,15 +49,20 @@ h1 {
 <script>
 //ecma scripts
 import { onMount } from "svelte";
-onMount(() => {});
+import jsQR from "jsQR";
 
-var video = document.createElement("video");
-var canvasElement; //document.getElementById("canvas");
-var canvas = canvasElement.getContext("2d");
-var loadingMessage; //document.getElementById("loadingMessage");
-var outputContainer; // document.getElementById("output");
-var outputMessage; // document.getElementById("outputMessage");
-var outputData; // document.getElementById("outputData");
+let canvas;
+let video;
+let canvasElement;
+let loadingMessage; //document.getElementById("loadingMessage");
+let outputContainer; // document.getElementById("output");
+let outputMessage; // document.getElementById("outputMessage");
+let outputData; // document.getElementById("outputData");
+
+onMount(() => {
+  canvas = canvasElement.getContext("2d");
+  video = document.createElement("video");
+});
 
 // Use facingMode: environment to attemt to get the front camera on phones
 navigator.mediaDevices
@@ -135,7 +140,7 @@ function tick() {
     enabled)
   </div>
   <canvas id="canvas" bind:this="{canvasElement}" hidden></canvas>
-  <div id="output" hidden binf:this="{outputContainer}">
+  <div id="output" hidden bind:this="{outputContainer}">
     <div id="outputMessage" bind:this="{outputMessage}">
       No QR code detected.
     </div>
