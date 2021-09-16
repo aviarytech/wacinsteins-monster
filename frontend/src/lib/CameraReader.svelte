@@ -7,18 +7,6 @@ template {
   position: relative;
 }
 
-#githubLink {
-  position: absolute;
-  right: 0;
-  top: 12px;
-  color: #2d99ff;
-}
-
-h1 {
-  margin: 10px 0;
-  font-size: 40px;
-}
-
 #loadingMessage {
   text-align: center;
   padding: 40px;
@@ -27,6 +15,8 @@ h1 {
 
 #canvas {
   width: 100%;
+  width: 640px;
+  height: 480px;
 }
 
 #output {
@@ -46,11 +36,17 @@ h1 {
 }
 </style>
 
-<script>
+<script lang="ts">
 //ecma scripts
 import { onMount } from "svelte";
 import jsQR from "jsqr";
+//stores
+import { scannedQRCode } from "../stores/presentation";
+//component
+import Button from "./ui/Button.svelte";
 
+let cameraPosition: string = "environment";
+let componentReference;
 let canvas;
 let video;
 let canvasElement;
@@ -66,7 +62,7 @@ onMount(() => {
 
 // Use facingMode: environment to attemt to get the front camera on phones
 navigator.mediaDevices
-  .getUserMedia({ video: { facingMode: "environment" } })
+  .getUserMedia({ video: { facingMode: cameraPosition } })
   .then(function (stream) {
     video.srcObject = stream;
     video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
@@ -102,29 +98,31 @@ function tick() {
       inversionAttempts: "dontInvert",
     });
     if (code) {
-      drawLine(
-        code.location.topLeftCorner,
-        code.location.topRightCorner,
-        "#FF3B58"
-      );
-      drawLine(
-        code.location.topRightCorner,
-        code.location.bottomRightCorner,
-        "#FF3B58"
-      );
-      drawLine(
-        code.location.bottomRightCorner,
-        code.location.bottomLeftCorner,
-        "#FF3B58"
-      );
-      drawLine(
-        code.location.bottomLeftCorner,
-        code.location.topLeftCorner,
-        "#FF3B58"
-      );
-      outputMessage.hidden = true;
-      outputData.parentElement.hidden = false;
-      outputData.innerText = code.data;
+      console.log(code.data);
+      scannedQRCode.set(code.data);
+      //drawLine(
+      //  code.location.topLeftCorner,
+      //  code.location.topRightCorner,
+      //  "#FF3B58"
+      //);
+      //drawLine(
+      //  code.location.topRightCorner,
+      //  code.location.bottomRightCorner,
+      //  "#FF3B58"
+      //);
+      //drawLine(
+      //  code.location.bottomRightCorner,
+      //  code.location.bottomLeftCorner,
+      //  "#FF3B58"
+      //);
+      //drawLine(
+      //  code.location.bottomLeftCorner,
+      //  code.location.topLeftCorner,
+      //  "#FF3B58"
+      //);
+      //outputMessage.hidden = true;
+      //outputData.parentElement.hidden = false;
+      //outputData.innerText = code.data;
     } else {
       outputMessage.hidden = false;
       outputData.parentElement.hidden = true;
@@ -134,18 +132,33 @@ function tick() {
 }
 </script>
 
-<template>
-  <div id="loadingMessage" bind:this="{loadingMessage}">
-    🎥 Unable to access video stream (please make sure you have a webcam
-    enabled)
-  </div>
-  <canvas id="canvas" bind:this="{canvasElement}" hidden></canvas>
-  <div id="output" hidden bind:this="{outputContainer}">
-    <div id="outputMessage" bind:this="{outputMessage}">
-      No QR code detected.
+<template bind:this="{componentReference}">
+  <div class="">
+    <div id="loadingMessage" bind:this="{loadingMessage}">
+      🎥 Unable to access video stream (please make sure you have a webcam
+      enabled)
     </div>
-    <div hidden>
-      <b>Data:</b> <span id="outputData" bind:this="{outputData}"></span>
+    <div class="flex content-center py-2">
+      <Button
+        callback="{() => {
+          if (cameraPosition === 'user') {
+            cameraPosition = 'environment';
+          } else {
+            cameraPosition = 'user';
+          }
+        }}"
+        label="rearFacing" />
+      <h2 class="mx-2">
+        Camera Position: {cameraPosition}
+      </h2>
     </div>
-  </div>
-</template>
+    <canvas id="canvas" bind:this="{canvasElement}" hidden></canvas>
+    <div id="output" hidden bind:this="{outputContainer}">
+      <div id="outputMessage" bind:this="{outputMessage}">
+        No QR code detected.
+      </div>
+      <div hidden>
+        <b>Data:</b> <span id="outputData" bind:this="{outputData}"></span>
+      </div>
+    </div>
+  </div></template>
