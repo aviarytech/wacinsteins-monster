@@ -1,8 +1,9 @@
 {
   "scripts": {
-    "cy:headless": "cypress run --browser=firefox",
+    "cy:headless": "cypress run --browser=chrome",
     "cy:debug": "DEBUG=cypress:cli cypress run",
-    "cy:headed": "npx cypress run --headed --no-exit"
+    "cy:headed": "npx cypress run --headed --no-exit",
+    "cy:launcher": "cypress:launcher"
   },
   "devDependencies": {
     "@testing-library/cypress": "^8.0.1",

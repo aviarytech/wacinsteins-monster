@@ -64,24 +64,26 @@ onMount(() => {
       text="{$qrCodeIdValue}"
       on:copy="{() => {
         swal({
-          title: 'Success',
-          text: `you have copied url: ${$qrCodeIdValue}`,
+          title: 'Copied!',
+          text: `${$qrCodeIdValue}`,
           icon: 'success',
-          button: 'Great!',
+          button: 'Done',
         }).then(async () => {
           await slideOverContent.set(null);
         });
       }}"
       on:fail="{() => {
         swal({
-          title: 'Something went wrong',
-          text: `Unable to copy text`,
-          icon: 'error',
-          button: ':(',
+          title: 'Copy Below Invitation',
+          text: `${$qrCodeIdValue}`,
+          icon: 'success',
+          button: 'Done',
+        }).then(async () => {
+          await slideOverContent.set(null);
         });
       }}"
       let:copy>
-      <button class="button mb-5" on:click="{copy}">Copy to clipboard</button>
+      <Button callback="{copy}" additionalClasses="mb-3" label="Copy" />
     </CopyToClipboard>
   </div>
   <!--<div id="clipboard">{$qrCodeIdValue}</div>-->
