@@ -49,7 +49,7 @@ h1 {
 <script>
 //ecma scripts
 import { onMount } from "svelte";
-import jsQR from "jsQR";
+import jsQR from "jsqr";
 
 let canvas;
 let video;
