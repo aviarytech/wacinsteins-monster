@@ -18,6 +18,7 @@ import {
 } from "../api/presentationAxios";
 import { presentations, qrCodeIdValue } from "../stores/presentation";
 import QRcode from "./QRcode.svelte";
+import { onMount } from "svelte";
 
 let unique = {}; // every {} is unique, {} === {} evaluates to false
 let selectedSchemaFields: string[];
@@ -26,7 +27,17 @@ function clearSelection() {
 }
 
 let credentialsChosenId: string;
+let compact: object;
 $: credentialsChosen = $credentials.find((c) => c.id === credentialsChosenId);
+
+onMount(async () => {
+  compact = await jsonld.compact(
+    $credentials.find((c) => c.id === credentialsChosenId)[
+      "verifiableCredential"
+    ],
+    {}
+  );
+});
 
 async function submitPresentation() {
   let inputDescriptor: object = {
@@ -38,11 +49,8 @@ async function submitPresentation() {
   inputDescriptor["type"] = credentialsChosen["verifiableCredential"]["type"];
   inputDescriptor["@context"] =
     credentialsChosen["verifiableCredential"]["@context"];
-  const compacted = await jsonld.compact(
-    credentialsChosen["verifiableCredential"],
-    {}
-  );
-  const schema = compacted["@type"].filter(
+
+  const schema = compact["@type"].filter(
     (t) => t !== "https://www.w3.org/2018/credentials#VerifiableCredential"
   );
   if (schema.length > 1) {
@@ -65,16 +73,18 @@ async function submitPresentation() {
         frame: inputDescriptor,
       });
       qrCodeIdValue.set(newPres.url);
-      const res = await getPresentations();
-      if (res) {
-        presentations.set(res);
-      }
+      refreshPresentations();
       slideOverContent.set({
         title: ``,
         component: QRcode,
       });
     }
   }
+}
+
+async function refreshPresentations() {
+  const pres = await getPresentations();
+  presentations.set(pres);
 }
 </script>
 

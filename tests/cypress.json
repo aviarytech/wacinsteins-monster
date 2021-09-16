@@ -1,9 +1,6 @@
 {
   "componentFolder": "src",
   "testFiles": "**/*.spec.js",
-  "baseUrl": "https://aviary.one",
-  "ignoreTestFiles": [
-    "**/examples/**/*.js"
-  ],
+  "ignoreTestFiles": ["**/examples/**/*.js"],
   "pluginsFile": false
 }
