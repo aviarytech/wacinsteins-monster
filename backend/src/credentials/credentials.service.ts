@@ -6,6 +6,8 @@ import {
 import { DBService } from '../db/db.service';
 import { Credential, VerifiableCredential } from './interfaces';
 import { DocumentLoaderService } from 'src/documentLoader/documentLoader.service';
+import glob from 'glob';
+import fs from 'fs';
 @Injectable()
 export class CredentialsService implements OnApplicationBootstrap {
   constructor(
@@ -25,6 +27,12 @@ export class CredentialsService implements OnApplicationBootstrap {
     if (!(await this.db.getById(vc1.id))) {
       await this.create(vc1);
       console.log(`created ${vc1.id} credential`);
+    }
+
+    const case18 = require('../../__fixtures__/case-18.json');
+    if (!(await this.db.getById(case18.id))) {
+      await this.create(case18);
+      console.log(`created ${case18.id} credential`);
     }
   }
 
