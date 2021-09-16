@@ -13,7 +13,6 @@ import QRcode from "../lib/QRcode.svelte";
 import Avatar from "../lib/Avatar.svelte";
 import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestSelector.svelte";
 import CameraReader from "../lib/CameraReader.svelte";
-
 //ECMA imports
 import { onMount } from "svelte";
 //stores
