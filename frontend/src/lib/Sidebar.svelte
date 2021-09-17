@@ -31,7 +31,7 @@
       Leaving: "transition ease-in-out duration-300 transform"
         From: "translate-x-0"
         To: "-translate-x-full"
-*/ ;
+*/
 </style>
 
 <script lang="ts">
@@ -39,13 +39,19 @@
 import { Router, Link, useLocation, navigate } from "svelte-navigator";
 import { Routes } from "../stores/routes";
 // stores
-import { mobileSidebarClose } from "../stores/ui";
-import Image from "./table-elements/Image.svelte";
+import { mblSidebar } from "../stores/ui";
+//import Image from "./table-elements/Image.svelte";
 import Icon from "./ui/Icon.svelte";
-
+//using esc to exit the slideover window
+const globalEscOnKeyPress = (e) => {
+  if (e.keyCode === 27) {
+    mblSidebar.set(true);
+  }
+};
 let host = import.meta.env.VITE_HOST ?? "aviary.one";
-let mblSidebar = false;
 </script>
+
+<svelte:window on:keydown="{globalEscOnKeyPress}" />
 
 <template>
   <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
@@ -53,22 +59,23 @@ let mblSidebar = false;
     class="fixed inset-0 flex z-40 md:hidden"
     role="dialog"
     aria-modal="true"
-    class:canvas-overlay-off="{mblSidebar}"
-    class:canvas-overlay-on="{!mblSidebar}">
+    class:canvas-overlay-off="{$mblSidebar}"
+    class:canvas-overlay-on="{!$mblSidebar}">
     <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true">
     </div>
+
     <div
       class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-600"
-      class:.mbl-sidebar-menu-off="{mblSidebar}"
-      class:.mbl-sidebar-menu-on="{!mblSidebar}">
+      class:mbl-sidebar-menu-off="{$mblSidebar}"
+      class:mbl-sidebar-menu-on="{!$mblSidebar}">
       <div class="absolute top-0 right-0 -mr-12 pt-2">
         <button
           type="button"
           on:click="{() => {
-            mblSidebar = !mblSidebar;
+            $mblSidebar = !$mblSidebar;
           }}"
-          class:btn-close="{mblSidebar}"
-          class:btn-open="{!mblSidebar}"
+          class:btn-close="{$mblSidebar}"
+          class:btn-open="{!$mblSidebar}"
           class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
           <span class="sr-only">Close sidebar</span>
           <!-- Heroicon name: outline/x -->

@@ -16,7 +16,7 @@ import Router from "./lib/Router.svelte";
 import { getAllCredentials } from "./api/credentials";
 import { getWellKnown } from "./api/wellKnown";
 //stores
-import { mobileSidebarClose, slideOverContent } from "./stores/ui";
+import { mobileSidebarClose, slideOverContent, mblSidebar } from "./stores/ui";
 import { user } from "./stores/user";
 import { credentials } from "./stores/credentials";
 import { wellKnown } from "./stores/well-known";
@@ -45,7 +45,7 @@ onMount(async () => {
         <button
           class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
           on:click="{() => {
-            console.log('click');
+            $mblSidebar = !$mblSidebar;
           }}">
           <span class="sr-only">Open sidebar</span>
           <img
