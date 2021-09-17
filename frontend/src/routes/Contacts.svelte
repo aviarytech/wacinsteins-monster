@@ -77,10 +77,8 @@ async function deleteContactApi(id) {
 //conversation button
 const navigate = useNavigate();
 function openConversation(id: string) {
-  console.log("open click", id);
   selectedUser.set(id);
   navigate("/messages");
-  //BUG: need to join a chatroom websocket
 }
 </script>
 
@@ -89,7 +87,6 @@ function openConversation(id: string) {
     <div class="pb-2">
       <Button label="New Contact" callback="{newContactCreation}" />
     </div>
-    <!-- TODO: once the user selects a conversation the menu shoudl split in 3-->
     <DataTable
       headers="{['', 'Domain', 'Created', '']}"
       data="{$availableContacts.map((p) => {

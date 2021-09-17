@@ -127,21 +127,7 @@ function newContactValidator() {
             class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             <span
               class="absolute left-0 inset-y-0 flex items-center pl-3 stroke-current text-white">
-              <!-- Heroicon name: outline/outlineUserAdd (normally would have called an img)-->
-
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                ></path>
-              </svg>
+              <img src="./assets/icons/user-add.svg" class="icon md" alt="" />
             </span>
             Add
           </button>

@@ -46,13 +46,9 @@ let host = import.meta.env.VITE_HOST ?? "aviary.one";
                     to="{route.routeUrl}"
                     id="{`${route.routeUrl}-btn`}"
                     class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-xs font-medium uppercase rounded-md hover:text-gray-1000">
-                    <img
-                      src="{route.heroIcon}"
-                      class="icon md"
-                      alt="heroIcon" />
+                    <img src="{route.heroIcon}" class="icon md" alt="" />
                     {route.routeName}
                   </Link>
-                  <!-- </div> -->
                 {/if}
               {/each}
             </nav>

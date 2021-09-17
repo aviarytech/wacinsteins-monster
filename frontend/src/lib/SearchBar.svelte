@@ -2,7 +2,7 @@
 </style>
 
 <script lant="ts">
-import Icon from "./Icon.svelte";
+import Icon from "./ui/Icon.svelte";
 import Roles from "./Roles.svelte";
 </script>
 
