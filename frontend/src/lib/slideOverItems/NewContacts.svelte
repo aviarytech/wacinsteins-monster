@@ -3,10 +3,15 @@
 
 <script lang="ts">
 //api
-import { getContacts, postNewContact } from "../api/contactsAxios";
+import { getContacts, postNewContact } from "../../api/contactsAxios";
 //stores
-import { availableContacts, contactDropDownOptions } from "../stores/contacts";
-//ecma
+import {
+  availableContacts,
+  contactDropDownOptions,
+} from "../../stores/contacts";
+//ecma imports
+import swal from "sweetalert";
+import { useNavigate } from "svelte-navigator";
 import {
   IsFQDN,
   IsString,
@@ -14,8 +19,6 @@ import {
   validateSync,
   validateOrReject,
 } from "class-validator";
-import swal from "sweetalert";
-import { useNavigate } from "svelte-navigator";
 
 //INFO: realy cool way to use opp to validate entries
 class ValidContact {

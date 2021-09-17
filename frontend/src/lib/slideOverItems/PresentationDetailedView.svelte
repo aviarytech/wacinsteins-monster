@@ -1,15 +1,17 @@
 <script lang="ts">
 //components
 import QRcode from "./QRcode.svelte";
-import ComponentList from "./table-elements/ComponentList.svelte";
-import Tag from "./ui/Tag.svelte";
-import Button from "./ui/Button.svelte";
-import { qrCodeIdValue } from "../stores/presentation";
-import { slideOverContent } from "../stores/ui";
+import ComponentList from "../table-elements/ComponentList.svelte";
+import Tag from "../ui/Tag.svelte";
+import Button from "../ui/Button.svelte";
+import CredentialCard from "../cards/CredentialCard.svelte";
+import SubmitPresentationRequestSelector from "../SubmitPresentationRequestSelector.svelte";
+//stores
+import { qrCodeIdValue } from "../../stores/presentation";
+import { slideOverContent } from "../../stores/ui";
+//ECMA imports
 import { onMount } from "svelte";
-import CredentialCard from "./cards/CredentialCard.svelte";
-import SubmitPresentationRequestSelector from "./SubmitPresentationRequestSelector.svelte";
-
+//exports
 export let presentation;
 
 let subjects = {};

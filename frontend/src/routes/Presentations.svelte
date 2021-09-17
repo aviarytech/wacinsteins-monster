@@ -2,14 +2,14 @@
 // api imports
 import { getPresentations, acceptInvitation } from "../api/presentationAxios";
 //component imports
-import SchemaBuilder from "../lib/SchemaBuilder.svelte";
+import SchemaBuilder from "../lib/slideOverItems/SchemaBuilder.svelte";
 import DataTable from "../lib/table-elements/DataTable.svelte";
-import PresentationDetailedView from "../lib/PresentationDetailedView.svelte";
+import PresentationDetailedView from "../lib/slideOverItems/PresentationDetailedView.svelte";
 import Text from "../lib/table-elements/Text.svelte";
 import Button from "../lib/ui/Button.svelte";
 import ComponentList from "../lib/table-elements/ComponentList.svelte";
 import Tag from "../lib/ui/Tag.svelte";
-import QRcode from "../lib/QRcode.svelte";
+import QRcode from "../lib/slideOverItems/QRcode.svelte";
 import Avatar from "../lib/Avatar.svelte";
 import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestSelector.svelte";
 import CameraReader from "../lib/CameraReader.svelte";

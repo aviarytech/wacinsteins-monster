@@ -1,6 +1,8 @@
 <script lang="ts">
-import { roles } from "../stores/roles";
-import Tag from "../lib/ui/Tag.svelte";
+//stores
+import { roles } from "../../stores/roles";
+//components
+import Tag from "./Tag.svelte";
 
 const toggleRole = (role: string) => {
   roles.set({ ...$roles, [role]: !$roles[role] });

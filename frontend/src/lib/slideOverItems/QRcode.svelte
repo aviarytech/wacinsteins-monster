@@ -9,11 +9,10 @@
 
 <script lang="ts">
 //stores
-import { qrCodeIdValue } from "../stores/presentation";
-import { slideOverContent } from "../stores/ui";
-
+import { qrCodeIdValue } from "../../stores/presentation";
+import { slideOverContent } from "../../stores/ui";
 //component
-import Button from "./ui/Button.svelte";
+import Button from "../ui/Button.svelte";
 //ecma imports
 import QRious from "qrious";
 import { onMount } from "svelte";

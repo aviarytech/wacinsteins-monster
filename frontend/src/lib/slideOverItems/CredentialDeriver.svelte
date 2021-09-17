@@ -1,10 +1,14 @@
 <script lang="ts">
-import inputDescriptionBuilder from "../utils/frameBuilder";
-import { deriveCredential, getAllCredentials } from "../api/credentials";
-import CredentialSubjectFieldSelector from "./CredentialSubjectFieldSelector.svelte";
-import Button from "./ui/Button.svelte";
-import { slideOverContent } from "../stores/ui";
-import { credentials } from "../stores/credentials";
+//components
+import CredentialSubjectFieldSelector from "../CredentialSubjectFieldSelector.svelte";
+import Button from "../ui/Button.svelte";
+//stores
+import { slideOverContent } from "../../stores/ui";
+import { credentials } from "../../stores/credentials";
+//utils
+import inputDescriptionBuilder from "../../utils/frameBuilder";
+//api
+import { deriveCredential, getAllCredentials } from "../../api/credentials";
 
 export let selectedSchemaFields: string[] = [];
 export let verifiableCredential: object;

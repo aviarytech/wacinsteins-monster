@@ -8,12 +8,14 @@ import ComponentList from "../lib/table-elements/ComponentList.svelte";
 import Avatar from "../lib/Avatar.svelte";
 import Button from "../lib/ui/Button.svelte";
 import Tag from "../lib/ui/Tag.svelte";
+import CredentialDeriver from "../lib/slideOverItems/CredentialDeriver.svelte";
 //stores
 import { credentials } from "../stores/credentials";
 import { slideOverContent } from "../stores/ui";
+//ecma imports
 import { onMount } from "svelte";
+//api
 import { getAllCredentials } from "../api/credentials";
-import CredentialDeriver from "../lib/CredentialDeriver.svelte";
 
 const openCredential = (credentialId: string) => {
   const cred = $credentials.find((c) => c["id"] === credentialId);
