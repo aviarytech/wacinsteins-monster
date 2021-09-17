@@ -5,6 +5,7 @@ import CredentialSubjectFieldSelector from "./CredentialSubjectFieldSelector.sve
 import Button from "./ui/Button.svelte";
 import { slideOverContent } from "../stores/ui";
 import { credentials } from "../stores/credentials";
+import CredentialCard from "./cards/CredentialCard.svelte";
 
 export let selectedSchemaFields: string[] = [];
 export let verifiableCredential: object;
@@ -14,12 +15,16 @@ const handleDeriveCredential = async () => {
     selectedSchemaFields,
     verifiableCredential["credentialSubject"]
   );
-  await deriveCredential(verifiableCredential, {
+  const derived = await deriveCredential(verifiableCredential, {
     "@context": verifiableCredential["@context"],
     type: verifiableCredential["type"],
     credentialSubject: frame,
   });
-  slideOverContent.set(null);
+  slideOverContent.set({
+    title: "Derived Credential",
+    component: CredentialCard,
+    credential: derived,
+  });
   const resp = await getAllCredentials();
   if (resp) {
     credentials.set(resp);

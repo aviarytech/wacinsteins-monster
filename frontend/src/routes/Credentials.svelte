@@ -1,7 +1,6 @@
 <script lang="ts">
 import { simple as format } from "timeago-simple";
 //component
-import CredentialDetailView from "../lib/CredentialDetailView.svelte";
 import DataTable from "../lib/table-elements/DataTable.svelte";
 import Text from "../lib/table-elements/Text.svelte";
 import ComponentList from "../lib/table-elements/ComponentList.svelte";
@@ -14,13 +13,14 @@ import { slideOverContent } from "../stores/ui";
 import { onMount } from "svelte";
 import { getAllCredentials } from "../api/credentials";
 import CredentialDeriver from "../lib/CredentialDeriver.svelte";
+import CredentialCard from "../lib/cards/CredentialCard.svelte";
 
 const openCredential = (credentialId: string) => {
   const cred = $credentials.find((c) => c["id"] === credentialId);
   slideOverContent.set({
     title: cred["verifiableCredential"].name,
-    component: CredentialDetailView,
-    credential: cred,
+    component: CredentialCard,
+    credential: cred["verifiableCredential"],
   });
 };
 
@@ -57,10 +57,12 @@ onMount(async () => {
               value: c['verifiableCredential'].id,
               dataTableSpecialClass: 'pl-6 py-4 max-w-xs',
             },
-            { component: Text, text: c['verifiableCredential'].name },
+            { component: Text, text: c['verifiableCredential'].name ?? '' },
             {
               component: Text,
-              text: `${c['verifiableCredential'].issuer.id.slice(0, 16)}...`,
+              text: c['verifiableCredential'].issuer.id
+                ? `${c['verifiableCredential'].issuer.id.slice(0, 16)}...`
+                : `${c['verifiableCredential'].issuer.slice(0, 16)}...`,
             },
             {
               component: Text,

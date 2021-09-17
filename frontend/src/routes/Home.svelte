@@ -6,16 +6,14 @@ import { Link } from "svelte-navigator";
 </script>
 
 <template>
-  <main class="bg-white py-16 mt-2 mx-auto max-w-7xl px-4 rounded-lg shadow-md">
+  <main class="bg-white py-5 mt-2 mx-auto max-w-7xl px-4 rounded-lg shadow-md">
     <div class="hero-text">
       <div class="text-center">
-        <h1
-          class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-          <span class="block text-gray-700 xl:inline">Welcome to</span>
-          <span class="block text-indigo-400 xl:inline">Alpha Pre-Beta</span>
-          <span class="block text-indigo-600 xl:inline"
-            >Wacinstein's Monster</span>
-        </h1>
+        <div class="font-extrabold text-gray-900 text-3xl">
+          <span class="block text-gray-700">Welcome to</span>
+          <span class="block text-indigo-400">Alpha Pre-Beta</span>
+          <span class="block text-indigo-600">Wacinstein's Monster</span>
+        </div>
       </div>
     </div>
     <div class="bg-white mx-auto max-w-7xl px-4 sm:mt-24 text-center ">

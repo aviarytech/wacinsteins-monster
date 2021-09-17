@@ -15,7 +15,7 @@ export let hideDisabled: boolean = true;
     active="{$roles['subject']}"
     text="{full ? `Subject` : `S`}"
     fontColor="text-white"
-    bgCol="bg-green-400"
+    bgCol="bg-red-400"
     callback="{() => {
       toggleRole('subject');
     }}" />
@@ -25,7 +25,7 @@ export let hideDisabled: boolean = true;
     active="{$roles['holder']}"
     text="{full ? `Holder` : `H`}"
     fontColor="text-white"
-    bgCol="bg-red-600"
+    bgCol="bg-green-400"
     callback="{() => {
       toggleRole('holder');
     }}" />
