@@ -34,6 +34,7 @@ onMount(async () => {
     wellKnown.set({ ...info, connected: true });
   }
 });
+//mobileSideBar;
 </script>
 
 {#if $user}
@@ -42,7 +43,10 @@ onMount(async () => {
     <div class="flex flex-col w-0 flex-1 overflow-hidden">
       <header class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
         <button
-          class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden">
+          class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+          on:click="{() => {
+            console.log('click');
+          }}">
           <span class="sr-only">Open sidebar</span>
           <img
             src="./assets/icons/show-sidebar.svg"
