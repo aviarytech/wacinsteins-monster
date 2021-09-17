@@ -200,7 +200,7 @@ function tailwingBgColorizer(value: string): string {
         label="start"
         slotOverLabel="{true}">
         <Image
-          src="./assets/svg/outlineCamera.svg"
+          src="./assets/icons/camera.svg"
           alt="use Camera"
           width="{16}"
           height="{16}" />

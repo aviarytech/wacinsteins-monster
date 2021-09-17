@@ -9,21 +9,21 @@ export const Routes: routeHooks[] = [
   {
     routeName: "Credentials",
     routeUrl: "credentials",
-    heroIcon: "../assets/outlineBookmarkAlt.svg",
+    heroIcon: "./assets/icons/badge.svg",
   },
   {
     routeName: "Presentations",
     routeUrl: "presentations",
-    heroIcon: "../assets/outlineDocumentReport.svg",
+    heroIcon: "../assets/icons/document.svg",
   },
   {
     routeName: "Messages",
     routeUrl: "messages",
-    heroIcon: "../assets/outlineChatAlt2.svg",
+    heroIcon: "./assets/icons/conversation.svg",
   },
   {
     routeName: "Contacts", // be cool if we could use a cog
     routeUrl: "contacts",
-    heroIcon: "../assets/outlineUser.svg",
+    heroIcon: "../assets/icons/user.svg",
   },
 ];
