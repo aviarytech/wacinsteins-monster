@@ -52,7 +52,7 @@ const globalEscOnKeyPress = (e) => {
                   on:click="{() => closeSlideOver()}">
                   <span class="sr-only">Close panel</span>
                   <!-- Heroicon name: outline/x -->
-                  <img src="../assets/icons/close.svg" class="icon" alt="X" />
+                  <img src="./assets/icons/close.svg" class="icon" alt="X" />
                 </button>
               </div>
             </div>
