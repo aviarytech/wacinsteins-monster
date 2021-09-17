@@ -15,6 +15,8 @@ import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestS
 import CameraReader from "../lib/CameraReader.svelte";
 //ECMA imports
 import { onMount } from "svelte";
+import { getContext } from "svelte";
+const { open } = getContext("simple-modal"); //not really an import
 //stores
 import {
   presentations,
@@ -182,9 +184,6 @@ function tailwingBgColorizer(value: string): string {
 </script>
 
 <template>
-  {#if qrCodeScanning}
-    <CameraReader />
-  {/if}
   <div class="bg-white shadow-md rounded-sm p-5">
     <div class="flex items-center justify-end py-2">
       <Tag
@@ -196,6 +195,7 @@ function tailwingBgColorizer(value: string): string {
       <Button
         callback="{async () => {
           qrCodeScanning = !qrCodeScanning;
+          open(CameraReader);
         }}"
         label="start"
         slotOverLabel="{true}">
