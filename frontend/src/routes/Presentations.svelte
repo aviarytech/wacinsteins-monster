@@ -12,16 +12,27 @@ import Tag from "../lib/ui/Tag.svelte";
 import QRcode from "../lib/QRcode.svelte";
 import Avatar from "../lib/Avatar.svelte";
 import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestSelector.svelte";
+import CameraReader from "../lib/CameraReader.svelte";
 //ECMA imports
 import { onMount } from "svelte";
 //stores
-import { presentations, qrCodeIdValue } from "../stores/presentation";
+import {
+  presentations,
+  qrCodeIdValue,
+  scannedQRCode,
+} from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
 import swal from "sweetalert";
+import Image from "../lib/table-elements/Image.svelte";
 
+let qrCodeScanning: boolean = false;
 $: requestsForMe = $presentations.filter((r) => r.role === "prover");
 $: requestsByMe = $presentations.filter((r) => r.role === "verifier");
-
+$: if ($scannedQRCode) {
+  acceptInvitationApiCall($scannedQRCode);
+  scannedQRCode.set(null);
+  qrCodeScanning = false;
+}
 onMount(async () => {
   refreshPresentations();
 });
@@ -171,6 +182,9 @@ function tailwingBgColorizer(value: string): string {
 </script>
 
 <template>
+  {#if qrCodeScanning}
+    <CameraReader />
+  {/if}
   <div class="bg-white shadow-md rounded-sm p-5">
     <div class="flex items-center justify-end py-2">
       <Tag
@@ -179,6 +193,18 @@ function tailwingBgColorizer(value: string): string {
         bgCol="{tailwingBgColorizer('prover')}" />
       <span class="flex-grow pl-2">Presentations Requested of You</span>
       <Button label="Accept Invitation" callback="{async () => submitUrl()}" />
+      <Button
+        callback="{async () => {
+          qrCodeScanning = !qrCodeScanning;
+        }}"
+        label="start"
+        slotOverLabel="{true}">
+        <Image
+          src="./assets/svg/outlineCamera.svg"
+          alt="use Camera"
+          width="{16}"
+          height="{16}" />
+      </Button>
     </div>
     {#if requestsForMe && requestsForMe.length > 0}
       <DataTable
