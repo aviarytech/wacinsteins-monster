@@ -19,7 +19,7 @@ $: tagColor = active
     });
 </script>
 
-<div class="{`default ${tagColor} h-6`}">
+<div class="{`default ${tagColor} h-6`}" id="{`tag-${text}`}">
   {#if callback}
     <button
       on:click="{callback}"

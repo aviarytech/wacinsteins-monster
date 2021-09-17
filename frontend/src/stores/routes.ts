@@ -7,23 +7,23 @@ export const Routes: routeHooks[] = [
     heroIcon: "",
   },
   {
-    routeName: "Credentials",
+    routeName: "Wallet",
     routeUrl: "credentials",
-    heroIcon: "./assets/icons/badge.svg",
+    heroIcon: "../assets/icons/wallet.svg",
   },
   {
     routeName: "Presentations",
     routeUrl: "presentations",
-    heroIcon: "../assets/icons/document.svg",
+    heroIcon: "../assets/icons/inbox-full.svg",
   },
-  {
-    routeName: "Messages",
-    routeUrl: "messages",
-    heroIcon: "./assets/icons/conversation.svg",
-  },
-  {
-    routeName: "Contacts", // be cool if we could use a cog
-    routeUrl: "contacts",
-    heroIcon: "../assets/icons/user.svg",
-  },
+  // {
+  //   routeName: "Messages",
+  //   routeUrl: "messages",
+  //   heroIcon: "../assets/icons/chat-bubble-dots.svg",
+  // },
+  // {
+  //   routeName: "Contacts", // be cool if we could use a cog
+  //   routeUrl: "contacts",
+  //   heroIcon: "../assets/icons/user-group.svg",
+  // },
 ];
