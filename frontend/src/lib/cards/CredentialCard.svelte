@@ -1,5 +1,5 @@
 <script lang="ts">
-import Avatar from "../Avatar.svelte";
+import Avatar from "../ui/Avatar.svelte";
 import { simple as format } from "timeago-simple";
 import { verifyVC } from "../../api/verifier";
 

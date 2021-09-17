@@ -10,7 +10,7 @@ import Button from "../lib/ui/Button.svelte";
 import ComponentList from "../lib/table-elements/ComponentList.svelte";
 import Tag from "../lib/ui/Tag.svelte";
 import QRcode from "../lib/slideOverItems/QRcode.svelte";
-import Avatar from "../lib/Avatar.svelte";
+import Avatar from "../lib/ui/Avatar.svelte";
 import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestSelector.svelte";
 import CameraReader from "../lib/CameraReader.svelte";
 //ECMA imports

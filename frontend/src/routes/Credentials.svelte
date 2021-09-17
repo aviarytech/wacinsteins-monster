@@ -5,7 +5,7 @@ import CredentialDetailView from "../lib/CredentialDetailView.svelte";
 import DataTable from "../lib/table-elements/DataTable.svelte";
 import Text from "../lib/table-elements/Text.svelte";
 import ComponentList from "../lib/table-elements/ComponentList.svelte";
-import Avatar from "../lib/Avatar.svelte";
+import Avatar from "../lib/ui/Avatar.svelte";
 import Button from "../lib/ui/Button.svelte";
 import Tag from "../lib/ui/Tag.svelte";
 import CredentialDeriver from "../lib/slideOverItems/CredentialDeriver.svelte";
