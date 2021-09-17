@@ -4,16 +4,18 @@ import { simple as format } from "timeago-simple";
 import DataTable from "../lib/table-elements/DataTable.svelte";
 import Text from "../lib/table-elements/Text.svelte";
 import ComponentList from "../lib/table-elements/ComponentList.svelte";
-import Avatar from "../lib/Avatar.svelte";
+import Avatar from "../lib/ui/Avatar.svelte";
 import Button from "../lib/ui/Button.svelte";
 import Tag from "../lib/ui/Tag.svelte";
+import CredentialDeriver from "../lib/slideOverItems/CredentialDeriver.svelte";
+import CredentialCard from "../lib/cards/CredentialCard.svelte";
 //stores
 import { credentials } from "../stores/credentials";
 import { slideOverContent } from "../stores/ui";
+//ecma imports
 import { onMount } from "svelte";
+//api
 import { getAllCredentials } from "../api/credentials";
-import CredentialDeriver from "../lib/CredentialDeriver.svelte";
-import CredentialCard from "../lib/cards/CredentialCard.svelte";
 
 const openCredential = (credentialId: string) => {
   const cred = $credentials.find((c) => c["id"] === credentialId);

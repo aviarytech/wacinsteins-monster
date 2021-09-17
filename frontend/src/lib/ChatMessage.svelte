@@ -34,7 +34,7 @@ import { sha256 } from "../utils/sha256";
 
 //component imports
 import Image from "./table-elements/Image.svelte";
-import Avatar from "./Avatar.svelte";
+import Avatar from "./ui/Avatar.svelte";
 
 export let message;
 const baseUrl =

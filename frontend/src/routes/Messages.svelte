@@ -9,7 +9,7 @@
 import DataTable from "../lib/table-elements/DataTable.svelte";
 import Text from "../lib/table-elements/Text.svelte";
 import Messenger from "../lib/Messenger.svelte";
-import Avatar from "../lib/Avatar.svelte";
+import Avatar from "../lib/ui/Avatar.svelte";
 //api
 import { getContacts } from "../api/contactsAxios";
 import { postNewMsg2Conversation } from "../api/messagesLogic";

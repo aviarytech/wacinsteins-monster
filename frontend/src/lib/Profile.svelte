@@ -6,8 +6,8 @@ import { wellKnown } from "../stores/well-known";
 //stores
 import { Link, Router } from "svelte-navigator";
 import { user } from "../stores/user";
-import Avatar from "./Avatar.svelte";
-import Roles from "./Roles.svelte";
+import Avatar from "./ui/Avatar.svelte";
+import Roles from "./ui/Roles.svelte";
 import SvelteTooltip from "svelte-tooltip";
 import closable from "../utils/closable";
 

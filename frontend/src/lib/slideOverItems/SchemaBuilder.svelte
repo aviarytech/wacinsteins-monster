@@ -2,23 +2,25 @@
 </style>
 
 <script lang="ts">
-import jsonld from "jsonld";
 //components
-import CredentialSubjectFieldSelector from "./CredentialSubjectFieldSelector.svelte";
-import Button from "../lib/ui/Button.svelte";
+import CredentialSubjectFieldSelector from "../CredentialSubjectFieldSelector.svelte";
+import Button from "../ui/Button.svelte";
 //stores
-import { credentials } from "../stores/credentials";
-import { slideOverContent, slidePreviewOverContent } from "../stores/ui";
-//js imports
+import { credentials } from "../../stores/credentials";
+import { slideOverContent, slidePreviewOverContent } from "../../stores/ui";
+import { presentations, qrCodeIdValue } from "../../stores/presentation";
+//ecma imports
+import QRcode from "./QRcode.svelte";
+import { onMount } from "svelte";
 import swal from "sweetalert";
-import inputDescriptionBuilder from "../utils/frameBuilder";
+import jsonld from "jsonld";
+//utils
+import inputDescriptionBuilder from "../../utils/frameBuilder";
+//api
 import {
   getPresentations,
   postNewPresentationRequest,
-} from "../api/presentationAxios";
-import { presentations, qrCodeIdValue } from "../stores/presentation";
-import QRcode from "./QRcode.svelte";
-import { onMount } from "svelte";
+} from "../../api/presentationAxios";
 
 let unique = {}; // every {} is unique, {} === {} evaluates to false
 let selectedSchemaFields: string[];

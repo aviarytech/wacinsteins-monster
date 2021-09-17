@@ -3,7 +3,7 @@
 
 <script lant="ts">
 import Icon from "./ui/Icon.svelte";
-import Roles from "./Roles.svelte";
+import Roles from "./ui/Roles.svelte";
 </script>
 
 <template>

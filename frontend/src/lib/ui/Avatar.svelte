@@ -1,4 +1,5 @@
 <script lang="ts">
+//ecma imports
 import SvelteTooltip from "svelte-tooltip";
 
 export let value: string;
