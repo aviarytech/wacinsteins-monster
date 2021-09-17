@@ -147,7 +147,7 @@ function tick() {
             cameraPosition = 'user';
           }
         }}"
-        label="rearFacing" />
+        label="Camera selection" />
       <h2 class="mx-2">
         Camera Position: {cameraPosition}
       </h2>
