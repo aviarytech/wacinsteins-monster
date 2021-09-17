@@ -11,7 +11,7 @@ import { Routes } from "../stores/routes";
 // stores
 import { mobileSidebarClose } from "../stores/ui";
 import Image from "./table-elements/Image.svelte";
-import Icon from "./Icon.svelte";
+import Icon from "./ui/Icon.svelte";
 // const location = useLocation();
 // let currentLocation;
 // location.subscribe((l) => {
