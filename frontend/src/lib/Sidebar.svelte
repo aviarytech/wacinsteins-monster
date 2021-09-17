@@ -11,6 +11,7 @@ import { Routes } from "../stores/routes";
 // stores
 import { mobileSidebarClose } from "../stores/ui";
 import Image from "./table-elements/Image.svelte";
+import Icon from "./Icon.svelte";
 // const location = useLocation();
 // let currentLocation;
 // location.subscribe((l) => {
@@ -29,11 +30,12 @@ let host = import.meta.env.VITE_HOST ?? "aviary.one";
         <div class="flex-grow flex flex-col">
           <button
             on:click="{() => navigate('/', { replace: true })}"
-            class="flex items-center flex-shrink-0 px-4 pb-5 rounded-md">
+            class="flex items-center flex-shrink-0 px-4 pb-5 rounded-md hover:bg-gray-50">
             <img
-              class="h-8 w-auto"
+              class="h-8 w-auto mr-3 "
               src="https://media.bitcoinfiles.org/18a10cb9df7102cbb58af3bb653e6d1c4fe4b70d1f039d9e3bb19e4e877578cc"
               alt="av1" />
+            <p class="text-gray-700 font-bold hover:text-gray-900">AV1</p>
           </button>
           <div class="inset-0 flex items-center" aria-hidden="true">
             <div class="w-full border-t border-gray-300"></div>
@@ -45,8 +47,10 @@ let host = import.meta.env.VITE_HOST ?? "aviary.one";
                   <Link
                     to="{route.routeUrl}"
                     id="{`${route.routeUrl}-btn`}"
-                    class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-xs font-medium uppercase rounded-md hover:text-gray-1000">
-                    <img src="{route.heroIcon}" class="icon md" alt="" />
+                    class="text-gray-700 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-xs font-medium  rounded-md hover:text-gray-1000">
+                    <Icon
+                      src="{route.heroIcon}"
+                      additionalClass="mr-3 flex-shrink-0 h-4 w-4 text-av1" />
                     {route.routeName}
                   </Link>
                 {/if}

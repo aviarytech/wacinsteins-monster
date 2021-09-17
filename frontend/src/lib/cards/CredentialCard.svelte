@@ -12,7 +12,7 @@ $: verified = (async () => {
 </script>
 
 <div class="bg-white shadow-md rounded-xl border-2 border-blue-200">
-  <div class="flex items-stretch">
+  <div class="flex items-stretch justify-between">
     <div
       class="p-3 flex-none border-b border-r rounded-tl-xl bg-gray-50 text-center flex items-center">
       <span class="text-gray-500"
@@ -28,7 +28,7 @@ $: verified = (async () => {
       </p>
     </div>
     <div
-      class=" rounded-t-xl border-b border-gray-200 sm:px-6 flex-grow bg-gray-50  flex items-center">
+      class=" rounded-t-xl border-b border-gray-200 sm:px-6 bg-gray-50  flex items-center">
       {#await verified}
         ...
       {:then v}
@@ -50,7 +50,7 @@ $: verified = (async () => {
                 <dt class="sm:col-span-2 text-sm font-medium text-gray-500">
                   {camel2Title(subProp[0])}
                 </dt>
-                <dd class="mt-1 text-sm text-gray-900">
+                <dd class="mt-1 text-sm text-gray-900 truncate">
                   {subProp[1]}
                 </dd>
               </div>
@@ -61,7 +61,7 @@ $: verified = (async () => {
             <dt class="text-sm font-medium text-gray-500">
               {camel2Title(prop[0])}
             </dt>
-            <dd class="mt-1 text-sm text-gray-900">
+            <dd class="mt-1 text-sm text-gray-900 truncate">
               {prop[1]}
             </dd>
           </div>
