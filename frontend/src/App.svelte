@@ -45,7 +45,7 @@ onMount(async () => {
           class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden">
           <span class="sr-only">Open sidebar</span>
           <img
-            src="../assets/svg/outlineTripleSidebarMobile.svg"
+            src="./assets/icons/show-sidebar.svg"
             class="icon md:px-1"
             alt="heroIcon" />
         </button>
