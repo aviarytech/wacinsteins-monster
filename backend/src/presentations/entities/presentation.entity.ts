@@ -125,9 +125,9 @@ export class PresentationRequest {
   @IsString()
   domain: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested()
-  definition: PresentationDefinition;
+  definition?: PresentationDefinition;
 
   @IsNotEmpty()
   @IsString()
@@ -156,6 +156,7 @@ export class PresentationRequest {
     invitationId: string,
     role: PRESENTATION_REQUEST_ROLES,
     requester: string,
+    status?: PRESENTATION_REQUEST_STATUSES,
   ) {
     this.id = id;
     this.url = url;
@@ -163,7 +164,7 @@ export class PresentationRequest {
     this.domain = domain;
     this.definition = definition;
     this.invitationId = invitationId;
-    this.status = PRESENTATION_REQUEST_STATUSES.CREATED;
+    this.status = status ?? PRESENTATION_REQUEST_STATUSES.CREATED;
     this.role = role;
     this.derivedCredentials = [];
     this.requester = requester;

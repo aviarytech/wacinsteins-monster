@@ -11,6 +11,7 @@ import inputDescriptionBuilder from "../../utils/frameBuilder";
 //api
 import { deriveCredential, getAllCredentials } from "../../api/credentials";
 
+export let credentialId: string;
 export let selectedSchemaFields: string[] = [];
 export let verifiableCredential: object;
 
@@ -19,7 +20,7 @@ const handleDeriveCredential = async () => {
     selectedSchemaFields,
     verifiableCredential["credentialSubject"]
   );
-  const derived = await deriveCredential(verifiableCredential, {
+  const derived = await deriveCredential(credentialId, verifiableCredential, {
     "@context": verifiableCredential["@context"],
     type: verifiableCredential["type"],
     credentialSubject: frame,

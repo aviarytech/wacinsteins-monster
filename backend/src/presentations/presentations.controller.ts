@@ -6,6 +6,7 @@ import {
   Param,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { PresentationsService } from './presentations.service';
 
@@ -28,7 +29,10 @@ import { DIDCommService } from 'src/didcomm/didcomm.service';
 import { SubmitCredentialForPresentationDto } from './dto/submit-credential-for-presentation.dto';
 import { CredentialsService } from 'src/credentials/credentials.service';
 import { DIDWebService } from 'src/didweb/didweb.service';
-import { PresentationMessage } from '@aviarytech/didcomm-protocols.present-proof';
+import {
+  PresentationMessage,
+  RequestPresentationMessage,
+} from '@aviarytech/didcomm-protocols.present-proof';
 import { IDIDCommAttachment } from '@aviarytech/didcomm-core';
 import { IDIFPresentationExchangeSubmissionAttachment } from '@aviarytech/didcomm-protocols.present-proof/dist/interfaces';
 import {
@@ -44,6 +48,7 @@ export class PresentationsController {
     private readonly didCommService: DIDCommService,
     private readonly credentialsService: CredentialsService,
     private readonly didweb: DIDWebService,
+    private readonly log: Logger,
   ) {}
 
   @Post('requests')
@@ -202,5 +207,70 @@ export class PresentationsController {
     const id = JSON.parse(decodedBase64Data)['id'];
     await this.didCommService.receiveMessage(JSON.parse(decodedBase64Data));
     return { invitationId: id };
+  }
+
+  @Post('acceptProposal')
+  async acceptProposal(
+    @Body() acceptProposalDto: { presentationRequestId: string },
+  ) {
+    const request = await this.presentationsService.findOneRequest(
+      acceptProposalDto.presentationRequestId,
+    );
+    if (!request) {
+      this.log.error(`Presentation Request not found`);
+      return;
+    }
+    if (request.status !== PRESENTATION_REQUEST_STATUSES.PROPOSED) {
+      this.log.error(request);
+      this.log.error(`Presentation Request or not in proposed state`);
+      return;
+    }
+    const requestMessage = new RequestPresentationMessage(
+      this.didweb.did,
+      [request.proposal.from],
+      request.invitationId,
+      [
+        {
+          id: request.id,
+          media_type: 'application/json',
+          format: 'dif/presentation-exchange/definitions@v1.0',
+          data: {
+            json: {
+              dif: {
+                options: {
+                  challenge: request.challenge,
+                  domain: request.domain,
+                },
+                presentation_definition: {
+                  id: request.definition.id,
+                  frame: {
+                    ...request.definition.frame,
+                  },
+                  input_descriptors: [...request.definition.input_descriptors],
+                },
+              },
+            },
+          },
+        },
+      ],
+    );
+    const requestSent = await this.didCommService.sendMessage(
+      request.proposal.from,
+      requestMessage,
+    );
+    if (requestSent) {
+      const result = await this.presentationsService.updatePresentationRequest(
+        request.id,
+        {
+          status: PRESENTATION_REQUEST_STATUSES.REQUESTED,
+        },
+      );
+      return result;
+    }
+    this.log.error('Presentation Request failed to send');
+    throw new HttpException(
+      'Failed to accept Presentation Request',
+      HttpStatus.BAD_REQUEST,
+    );
   }
 }

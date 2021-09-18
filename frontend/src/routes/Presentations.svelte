@@ -1,6 +1,10 @@
 <script lang="ts">
 // api imports
-import { getPresentations, acceptInvitation } from "../api/presentationAxios";
+import {
+  getPresentations,
+  acceptInvitation,
+  acceptProposalSubmit,
+} from "../api/presentationAxios";
 //component imports
 import SchemaBuilder from "../lib/slideOverItems/SchemaBuilder.svelte";
 import DataTable from "../lib/table-elements/DataTable.svelte";
@@ -34,14 +38,16 @@ $: if ($scannedQRCode) {
   qrCodeScanning = false;
 }
 onMount(async () => {
-  refreshPresentations();
+  await refreshPresentations();
 });
 
 async function refreshPresentations() {
   const res = await getPresentations();
   if (res) {
     presentations.set(res);
+    return res;
   }
+  return [];
 }
 
 const openPresentationRequest = (presentationId) => {
@@ -84,14 +90,7 @@ async function acceptInvitationApiCall(url: string) {
         button: "Great!",
       }).then(async () => {
         await refreshPresentations();
-        const presentation = $presentations.find(
-          (p) => p.invitationId === invitationId
-        );
-        slideOverContent.set({
-          component: PresentationDetailedView,
-          title: "Presentation Request",
-          presentation,
-        });
+        slideOverContent.set(null);
       });
     } else {
       swal({
@@ -142,6 +141,15 @@ function qrCodeDisplay(id) {
     presentationSubject: [],
   });
 }
+
+async function acceptProposal(id: string) {
+  const resp = await acceptProposalSubmit(id);
+  const pres = await getPresentations();
+  if (pres) {
+    presentations.set(pres);
+  }
+}
+
 function tailwingBgColorizer(value: string): string {
   let bgCol: string;
   switch (value) {
@@ -160,7 +168,7 @@ function tailwingBgColorizer(value: string): string {
       break;
 
     case "proposed":
-      bgCol = "bg-yellow-600";
+      bgCol = "bg-blue-600";
       break;
 
     case "requested":
@@ -224,11 +232,13 @@ function tailwingBgColorizer(value: string): string {
             },
             {
               component: ComponentList,
-              items: p.definition.input_descriptors[0].constraints.fields.map(
-                (f) => {
-                  return { component: Tag, text: f.path };
-                }
-              ),
+              items: p.definition
+                ? p.definition.input_descriptors[0].constraints.fields.map(
+                    (f) => {
+                      return { component: Tag, text: f.path };
+                    }
+                  )
+                : [],
             },
             {
               component: ComponentList,
@@ -236,14 +246,16 @@ function tailwingBgColorizer(value: string): string {
                 {
                   component: Button,
                   label: 'View',
+                  additionalClasses: `view-${p['id']}-btn`,
                   callback: () => {
                     openPresentationRequest(p['@id']);
                   },
                 },
-                p['role'] === 'prover' && p['status'] !== 'submitted'
+                p['role'] === 'prover' && p['status'] === 'requested'
                   ? {
                       component: Button,
                       label: 'Submit',
+                      additionalClasses: `submit-${p['id']}-btn`,
                       callback: () => {
                         openSubmitPresentation(p['id']);
                       },
@@ -286,11 +298,13 @@ function tailwingBgColorizer(value: string): string {
             },
             {
               component: ComponentList,
-              items: p.definition.input_descriptors[0].constraints.fields.map(
-                (f) => {
-                  return { component: Tag, text: f.path };
-                }
-              ),
+              items: p.definition
+                ? p.definition.input_descriptors[0].constraints.fields.map(
+                    (f) => {
+                      return { component: Tag, text: f.path };
+                    }
+                  )
+                : [],
             },
             {
               component: ComponentList,
@@ -298,13 +312,25 @@ function tailwingBgColorizer(value: string): string {
                 {
                   component: Button,
                   label: 'View',
+                  additionalClasses: `view-${p['id']}-btn`,
                   callback: () => {
                     openPresentationRequest(p['@id']);
                   },
                 },
+                p['role'] === 'verifier' && p['status'] === 'proposed'
+                  ? {
+                      component: Button,
+                      label: 'Accept',
+                      additionalClasses: `accept-${p['id']}-btn`,
+                      callback: () => {
+                        acceptProposal(p['@id']);
+                      },
+                    }
+                  : null,
                 p['role'] === 'verifier' && p['status'] === 'created'
                   ? {
                       component: Button,
+                      additionalClasses: `qr-code-${p['id']}-btn`,
                       label: 'QR code',
                       callback: () => {
                         qrCodeDisplay([

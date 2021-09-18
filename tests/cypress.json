@@ -2,5 +2,6 @@
   "componentFolder": "src",
   "testFiles": "**/*.spec.js",
   "ignoreTestFiles": ["**/examples/**/*.js"],
-  "pluginsFile": false
+  "pluginsFile": false,
+  "videoCompression": 1
 }

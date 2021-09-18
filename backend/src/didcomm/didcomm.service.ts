@@ -83,16 +83,15 @@ export class DIDCommService {
               attachment.data.json['dif']['presentation_definition'].id,
             );
             if (definition) {
-              const newRequest = await this.presentations.createRequest({
-                definition,
-                role: PRESENTATION_REQUEST_ROLES.PROVER,
-                requester: message.payload.from,
-                invitationId: message.payload.thid,
-              });
-              const updated =
+              const updatedReq =
                 await this.presentations.updatePresentationRequest(
-                  newRequest.id,
+                  message.payload.thid,
                   {
+                    id: message.payload.thid,
+                    definition,
+                    role: PRESENTATION_REQUEST_ROLES.PROVER,
+                    requester: message.payload.from,
+                    invitationId: message.payload.thid,
                     status: PRESENTATION_REQUEST_STATUSES.REQUESTED,
                   },
                 );
@@ -105,6 +104,12 @@ export class DIDCommService {
           const request = await this.presentations.findOneRequestByInvitationId(
             proposal.payload.pthid,
           );
+          if (!request) {
+            console.log(
+              `Presentation Request not found ${proposal.payload.pthid}`,
+            );
+            return;
+          }
           if (request.status !== PRESENTATION_REQUEST_STATUSES.CREATED) {
             console.log('Presentation Request already claimed');
             return;
@@ -114,58 +119,22 @@ export class DIDCommService {
               status: PRESENTATION_REQUEST_STATUSES.PROPOSED,
               proposal: { from: proposal.payload.from },
             });
-          const requestMessage = new RequestPresentationMessage(
-            this.didWeb.did,
-            [updatedPresentationRequest.proposal.from],
-            updatedPresentationRequest.invitationId,
-            [
-              {
-                id: updatedPresentationRequest.id,
-                media_type: 'application/json',
-                format: 'dif/presentation-exchange/definitions@v1.0',
-                data: {
-                  json: {
-                    dif: {
-                      options: {
-                        challenge: updatedPresentationRequest.challenge,
-                        domain: updatedPresentationRequest.domain,
-                      },
-                      presentation_definition: {
-                        id: updatedPresentationRequest.definition.id,
-                        frame: {
-                          ...updatedPresentationRequest.definition.frame,
-                        },
-                        input_descriptors: [
-                          ...updatedPresentationRequest.definition
-                            .input_descriptors,
-                        ],
-                      },
-                    },
-                  },
-                },
-              },
-            ],
-          );
-          const requestSent = await didcomm.sendMessage(
-            updatedPresentationRequest.proposal.from,
-            requestMessage,
-          );
-          if (requestSent) {
-            await this.presentations.updatePresentationRequest(
-              updatedPresentationRequest.id,
-              {
-                status: PRESENTATION_REQUEST_STATUSES.REQUESTED,
-              },
-            );
-          }
         }),
         new InvitationMessageHandler(async (i, didcomm) => {
           if (i.payload.body.goal_code === 'streamlined-vp') {
+            const presentation = await this.presentations.createRequest({
+              id: i.payload.id,
+              definition: null,
+              role: PRESENTATION_REQUEST_ROLES.PROVER,
+              requester: i.payload.from,
+              invitationId: i.payload.id,
+            });
             const proposal = new ProposePresentationMessage(
               this.didWeb.did,
               [i.payload.from],
               i.payload.id,
             );
+
             await didcomm.sendMessage(i.payload.from, proposal);
           } else {
             console.log(

@@ -20,9 +20,12 @@ export let additionalClasses = "";
 </script>
 
 <button
-  id="{`${label.toLowerCase().replace(/ /g, '-')}-btn`}"
   on:click="{callback}"
-  class="{additionalClasses ? `${additionalClasses} button` : 'button'}"
+  class="{additionalClasses
+    ? `${label
+        .toLowerCase()
+        .replace(/ /g, '-')}-btn ${additionalClasses} button`
+    : `${label.toLowerCase().replace(/ /g, '-')}-btn button`}"
   type="{type}">
   {#if !slotOverLabel}
     {label}

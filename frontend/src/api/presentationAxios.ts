@@ -47,6 +47,25 @@ export async function acceptInvitation(
   }
 }
 
+export async function acceptProposalSubmit(
+  id: string,
+  endpoint: string = `${baseUrl}/presentations/acceptProposal`
+): Promise<any> {
+  try {
+    const response = await axios.post(endpoint, { presentationRequestId: id });
+    // success
+    if (response.status == 201 || 200) {
+      // test for status you want, etc
+      return response.data;
+    }
+    // not successfull
+    return null;
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+}
+
 export async function postNewPresentationRequest(
   payload: PostPresentationPayload,
   endpoint: string = `${baseUrl}/presentations/definitions`

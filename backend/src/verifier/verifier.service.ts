@@ -36,6 +36,9 @@ export class VerifierService {
   ) {
     let suite;
     const { proof } = credential;
+    if (!proof) {
+      return false;
+    }
     switch (proof['type']) {
       case 'BbsBlsSignature2020':
         suite = new BbsBlsSignature2020();

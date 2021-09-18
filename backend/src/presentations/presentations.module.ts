@@ -13,8 +13,10 @@ import { CommandBus, EventBus } from '@nestjs/cqrs';
 import { CredentialsService } from 'src/credentials/credentials.service';
 import { DocumentLoaderService } from 'src/documentLoader/documentLoader.service';
 import { DIDKeyService } from 'src/didkey/didkey.service';
+import { DIDCommModule } from 'src/didcomm/didcomm.module';
 
 @Module({
+  imports: [DIDCommModule],
   controllers: [PresentationsController],
   providers: [
     PresentationsService,
@@ -24,7 +26,6 @@ import { DIDKeyService } from 'src/didkey/didkey.service';
     DIDWebService,
     DIDKeyService,
     KMSService,
-    DIDCommService,
     DIDResolverService,
     ContactsService,
     MessagesApiService,

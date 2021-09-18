@@ -19,11 +19,13 @@ export async function getAllCredentials(): Promise<any> {
 }
 
 export async function deriveCredential(
+  credentialId: string,
   verifiableCredential: object,
   frame: object
 ): Promise<any> {
   try {
     const response = await axios.post(`${baseUrl}/credentials/derive`, {
+      credentialId,
       verifiableCredential,
       frame,
     });

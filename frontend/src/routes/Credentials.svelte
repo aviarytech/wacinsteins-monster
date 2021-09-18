@@ -31,6 +31,7 @@ const openDeriveCredential = (credentialId: string) => {
   slideOverContent.set({
     title: `Derive Credential`,
     component: CredentialDeriver,
+    credentialId: cred["id"],
     verifiableCredential: cred["verifiableCredential"],
   });
 };

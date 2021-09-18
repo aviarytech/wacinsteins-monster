@@ -5,28 +5,21 @@ import { DBService } from 'src/db/db.service';
 import { InvitationMessage } from '@aviarytech/didcomm-protocols.out-of-band';
 import { mapValidationErrorsToMessages } from 'src/utils/errors';
 import { sha256 } from 'src/utils/sha256';
-import { CreatePresentationDefinitionDto } from './dto/create-presentation-definition.dto';
-
-import { CreatePresentationRequestDto } from './dto/create-presentation-request.dto';
 import {
   IDIFPresentationExchangeSubmission,
   SUBMISSION_FORMATS,
 } from '@aviarytech/dif-presentation-exchange';
 
 import {
-  InputConstraint,
   InputDescriptor,
-  InputField,
-  InputFilter,
   PresentationDefinition,
   PresentationRequest,
   PRESENTATION_REQUEST_ROLES,
+  PRESENTATION_REQUEST_STATUSES,
 } from './entities/presentation.entity';
 import { DIDWebService } from 'src/didweb/didweb.service';
 import { UpdatePresentationRequestDto } from './dto/update-presentation-request.dto';
 import { ConfigService } from '@nestjs/config';
-import { CredentialsService } from 'src/credentials/credentials.service';
-import { IDIFPresentationExchangeSubmissionAttachment } from '@aviarytech/didcomm-protocols.present-proof/dist/interfaces';
 import { VerifiableCredential } from 'src/credentials/interfaces';
 import { verifiable } from '@transmute/vc.js';
 import { DocumentLoaderService } from 'src/documentLoader/documentLoader.service';
@@ -76,12 +69,15 @@ export class PresentationsService {
   }
 
   async createRequest(createRequest: {
+    id?: string;
     definition: PresentationDefinition;
     role: PRESENTATION_REQUEST_ROLES;
     requester: string;
     invitationId?: string;
+    status?: PRESENTATION_REQUEST_STATUSES;
   }): Promise<PresentationRequest> {
-    let { definition, role, requester, invitationId } = createRequest;
+    let { definition, role, requester, invitationId, id, status } =
+      createRequest;
     let url;
     if (!invitationId) {
       const invitation = new InvitationMessage(
@@ -92,9 +88,9 @@ export class PresentationsService {
       url = invitation.url;
       invitationId = invitation.payload.id;
     }
-    const id = sha256(nanoid());
-    const domain = this.config.get('HOST');
+    id = id ?? invitationId;
 
+    const domain = this.config.get('HOST');
     const presReq = new PresentationRequest(
       id,
       url,
@@ -104,6 +100,7 @@ export class PresentationsService {
       invitationId,
       role,
       requester,
+      status,
     );
 
     await validateOrReject(presReq, {
