@@ -15,14 +15,14 @@ import { Link } from "svelte-navigator";
         </div>
       </div>
     </div>
-    <div class="bg-white mx-auto max-w-7xl px-4 sm:mt-16 text-center">
+    <div class="bg-white mx-auto max-w-7xl px-4 sm:mt-8 text-center">
       <div class="container mx-auto w-1/2 flex justify-center">
         <img
           src="./assets/wacinstein-who.jpeg"
           class="object-contain h-33"
           alt="wacinstein-who?" />
       </div>
-      <div class="mt-16 sm:flex sm:justify-center lg:space-between w-full">
+      <div class="mt-6 sm:flex sm:justify-center lg:space-between w-full">
         <div class="rounded-md shadow bg-av1">
           <Link
             to="wtf"
