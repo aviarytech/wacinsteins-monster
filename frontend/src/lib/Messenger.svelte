@@ -21,7 +21,7 @@ onMount(async () => {
     msgUSerBackend.set(await getCurrentConversation($selectedUser));
     //we need to get the did domain from the selectedUser and ours (don't know how)
     //console.log($selectedUser);
-    console.log($msgUSerBackend);
+    //console.log($msgUSerBackend);
   }
 
   socket.on("error", console.error);
@@ -77,7 +77,6 @@ $: msgUSerBackend;
         <svelte:component this="{ChatMessage}" message="{message.msg}" />
       {/each}
     {:else}
-      <!--BUG: message isn't displaying working in all situations  -->
       <svelte:component
         this="{ChatMessage}"
         message="{{
