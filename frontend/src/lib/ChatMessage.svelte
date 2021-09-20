@@ -30,10 +30,7 @@
 </style>
 
 <script lang="ts">
-import { sha256 } from "../utils/sha256";
-
 //component imports
-import Image from "./table-elements/Image.svelte";
 import Avatar from "./ui/Avatar.svelte";
 
 export let message;
@@ -43,14 +40,17 @@ const baseUrl =
     : `did:web:api.${window.location.host}`;
 const messageClass = message.from === baseUrl ? "sent" : "received";
 
-const ts = new Date(message.when);
+const ts = message.when ? new Date(message.when) : null;
 </script>
 
 <div class="{`message ${messageClass}`}">
   <Avatar value="{message.from}" />
   <div class="message-text ">
-    <p class="rounded-lg">{message.data}</p>
-
-    <time>{ts.toLocaleTimeString()}</time>
+    <p class="rounded-lg">
+      <slot name="data" />
+    </p>
+    {#if ts}
+      <time>{ts.toLocaleTimeString()}</time>
+    {/if}
   </div>
 </div>
