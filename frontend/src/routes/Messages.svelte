@@ -15,7 +15,7 @@ import { getContacts } from "../api/contactsAxios";
 import { postNewMsg2Conversation } from "../api/messagesLogic";
 //stores
 import { availableContacts } from "../stores/contacts";
-import { selectedUser } from "../stores/messages";
+import { selectedUser, someoneIsTyping } from "../stores/messages";
 //ecma imports
 import { onMount } from "svelte";
 import { io, Socket } from "socket.io-client";
@@ -33,6 +33,15 @@ let socket: Socket;
 let initMessenger: boolean = false;
 let newNotification: boolean = false;
 $: newNotification;
+$: if (chatMsg) {
+  someoneIsTyping.set(userDomain);
+  socket.emit("typingServer", {
+    sender: userDomain,
+    room: $selectedUser,
+  });
+} else {
+  someoneIsTyping.set(null);
+}
 onMount(async () => {
   const res = await getContacts();
   res["newNotification"] = newNotification;
@@ -52,16 +61,20 @@ onMount(async () => {
   initMessenger = true;
 
   socket.on("chatToClient", (data) => {
-    console.log(data);
+    //console.log(data);
     playSound("../assets/sounds/notification-new-msg.mp3");
     if (data) {
       let searchResIndex = $availableContacts.findIndex(
         (user) => user["did"] === data.room
       );
       $availableContacts[searchResIndex]["newNotification"] = true;
-      console.log(searchResIndex);
+      //console.log(searchResIndex);
       newNotification = true;
     }
+  });
+  socket.on("chatToClient", (data) => {
+    someoneIsTyping.set(data.client);
+    console.log(data);
   });
 });
 

@@ -1,12 +1,18 @@
 <script lang="ts">
+//components
+import ChatMessage, { message } from "./ChatMessage.svelte";
+
 //stores
-import ChatMessage from "./ChatMessage.svelte";
-import { msgUSerBackend, selectedUser } from "../stores/messages";
+import {
+  msgUSerBackend,
+  selectedUser,
+  someoneIsTyping,
+} from "../stores/messages";
 //ECAM imports
 import { onMount } from "svelte";
 //api
 import { getCurrentConversation } from "../api/messagesLogic";
-import { length } from "class-validator";
+import { user } from "../stores/user";
 //env
 const userDomain =
   import.meta.env.VITE_ENV_TYPE === "dev"
@@ -72,19 +78,31 @@ $: msgUSerBackend;
   <h1>you are connected with domain:<bold>{$selectedUser}</bold></h1>
   <div
     class="inset-0 border-2 border-gray-200 border-dashed bg-gray-100 rounded-lg overflow-y-auto overflow-x-hidden min-h-screen ">
-    {#if $msgUSerBackend.length !== 0}
+    {#if $msgUSerBackend && $msgUSerBackend.length !== 0}
       {#each $msgUSerBackend as message}
+        <ChatMessage message="{message.msg}">
+          <span slot="data">{message.msg.data} </span>
+        </ChatMessage>
+        <!--
         <svelte:component this="{ChatMessage}" message="{message.msg}" />
+        -->
       {/each}
     {:else}
-      <svelte:component
-        this="{ChatMessage}"
+      <ChatMessage message="{{ from: 'Aviary Tech', to: $user }}">
+        <span slot="data">This is the start of a new conversation</span>
+      </ChatMessage>
+    {/if}
+    {#if $someoneIsTyping}
+      <ChatMessage
         message="{{
           from: 'Aviary Tech',
           to: 'placeholder',
-          data: 'This is the start of a new conversation',
-          when: new Date(),
-        }}" />
+        }}">
+        <!-- BUG: without a date or data the svg doesn't show and idk why :/-->
+        <span slot="data" class="inline-flex">
+          {$someoneIsTyping} is typing
+          <img src="{'./assets/animations/typing.svg'}" alt="typing" />
+        </span></ChatMessage>
     {/if}
   </div>
   <div class="flex bottom-1 space-x-4 w-full"></div>
