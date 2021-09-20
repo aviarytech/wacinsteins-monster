@@ -6,6 +6,7 @@ import { msgUSerBackend, selectedUser } from "../stores/messages";
 import { onMount } from "svelte";
 //api
 import { getCurrentConversation } from "../api/messagesLogic";
+import { length } from "class-validator";
 //env
 const userDomain =
   import.meta.env.VITE_ENV_TYPE === "dev"
@@ -20,7 +21,7 @@ onMount(async () => {
     msgUSerBackend.set(await getCurrentConversation($selectedUser));
     //we need to get the did domain from the selectedUser and ours (don't know how)
     //console.log($selectedUser);
-    //console.log($msgUSerBackend);
+    console.log($msgUSerBackend);
   }
 
   socket.on("error", console.error);
@@ -71,12 +72,12 @@ $: msgUSerBackend;
   <h1>you are connected with domain:<bold>{$selectedUser}</bold></h1>
   <div
     class="inset-0 border-2 border-gray-200 border-dashed bg-gray-100 rounded-lg overflow-y-auto overflow-x-hidden min-h-screen ">
-    {#if $msgUSerBackend}
+    {#if $msgUSerBackend.length !== 0}
       {#each $msgUSerBackend as message}
         <svelte:component this="{ChatMessage}" message="{message.msg}" />
       {/each}
     {:else}
-      <!--BUG: not working in all situations  -->
+      <!--BUG: message isn't displaying working in all situations  -->
       <svelte:component
         this="{ChatMessage}"
         message="{{
