@@ -26,9 +26,17 @@ export class MsgGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     this.server.to(message.room).emit('chatToClient', message);
     //this.logger.log(`Server is emitting to ${message.room}; msg: ${message.message} originally from ${client.id}`)
   }
+
   @SubscribeMessage('typingServer')
-  notifyUserTyping(client: Socket, room: string) {
-    this.server.to(room).emit("typingClient", client)
+  notifyUserTyping(client: Socket, message: { sender: string, room: string }) {
+    //this.logger.log(`User ${message.sender} is typing in room: ${message.room}`)
+    this.server.to(message.room).emit("typingClient", message)
+  }
+
+  @SubscribeMessage('doneTypingServer')
+  stopNotifyingUserTyping(client: Socket, message: { sender: string, room: string }) {
+    //this.logger.log(`User ${message.sender} is typing in room: ${message.room}`)
+    this.server.to(message.room).emit("doneTypingClient", message)
   }
 
   @SubscribeMessage('joinRoom')

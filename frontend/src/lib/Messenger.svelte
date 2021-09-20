@@ -95,8 +95,8 @@ $: msgUSerBackend;
     {#if $someoneIsTyping}
       <ChatMessage
         message="{{
-          from: 'Aviary Tech',
-          to: 'placeholder',
+          from: $someoneIsTyping,
+          to: userDomain,
         }}">
         <!-- BUG: without a date or data the svg doesn't show and idk why :/-->
         <span slot="data" class="inline-flex">
