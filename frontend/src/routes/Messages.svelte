@@ -33,14 +33,20 @@ let socket: Socket;
 let initMessenger: boolean = false;
 let newNotification: boolean = false;
 $: newNotification;
-$: if (chatMsg) {
-  //someoneIsTyping.set(userDomain);
-  socket.emit("typingServer", {
-    sender: userDomain,
-    room: $selectedUser,
-  });
-} else {
-  //test
+$: if (initMessenger) {
+  if (chatMsg) {
+    //someoneIsTyping.set(userDomain);
+    socket.emit("typingServer", {
+      sender: userDomain,
+      room: $selectedUser,
+    });
+  } else {
+    socket.emit("doneTypingServer", {
+      sender: userDomain,
+      room: $selectedUser,
+    });
+    //test
+  }
 }
 onMount(async () => {
   const res = await getContacts();
