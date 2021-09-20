@@ -53,7 +53,7 @@
     "class-validator": "^0.13.1",
     "cross-env": "^7.0.3",
     "did-jwt": "^5.6.1",
-    "fastify": "^3.14.0",
+    "fastify": "^3.21.3",
     "fastify-swagger": "^4.8.4",
     "jsonld": "^3.1.0",
     "mongoose": "^5.13.5",
