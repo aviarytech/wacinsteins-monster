@@ -35,6 +35,7 @@ export class CredentialsController {
     @Body() body: DeriveCredentialOptions,
   ): Promise<VerifiableCredential> {
     const derived = await this.credentialsService.deriveCredential(
+      body.credentialId,
       body.verifiableCredential,
       body.frame,
     );

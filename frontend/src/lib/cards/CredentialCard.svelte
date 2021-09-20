@@ -5,6 +5,7 @@ import { verifyVC } from "../../api/verifier";
 import { camel2Title } from "../../utils/camel2Title";
 import VerificationBadge from "../VerificationBadge.svelte";
 
+export let displayVerification: boolean = true;
 export let credential: any;
 $: verified = (async () => {
   return await verifyVC(credential);
@@ -29,11 +30,13 @@ $: verified = (async () => {
     </div>
     <div
       class=" rounded-t-xl border-b border-gray-200 sm:px-6 bg-gray-50  flex items-center">
-      {#await verified}
-        ...
-      {:then v}
-        <VerificationBadge verified="{v}" />
-      {/await}
+      {#if displayVerification}
+        {#await verified}
+          ...
+        {:then v}
+          <VerificationBadge verified="{v}" />
+        {/await}
+      {/if}
     </div>
   </div>
   <div class="px-4 py-5 border-b border-gray-200 sm:px-6">

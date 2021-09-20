@@ -33,6 +33,7 @@ const globalEscOnKeyPress = (e) => {
     </div>
 
     <div
+      id="slide-over"
       transition:fly="{{ x: 200, duration: 500, easing: quintOut }}"
       class="fixed z-50 h-screen inset-y-0 right-0 pl-10 max-w-full flex">
       <div class="w-screen max-w-xl">

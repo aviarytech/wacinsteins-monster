@@ -23,6 +23,8 @@ import { DIDKeyService } from './didkey/didkey.service';
 import { VerifierService } from './verifier/verifier.service';
 import { VerifierController } from './verifier/verifier.controller';
 import { VerifierModule } from './verifier/verifier.module';
+import { DIDCommService } from './didcomm/didcomm.service';
+import { PresentationsService } from './presentations/presentations.service';
 
 @Module({
   imports: [

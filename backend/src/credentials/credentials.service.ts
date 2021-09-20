@@ -92,6 +92,7 @@ export class CredentialsService implements OnApplicationBootstrap {
   }
 
   async deriveCredential(
+    credentialId: string,
     verifiableCredential: VerifiableCredential,
     frame: object,
   ): Promise<VerifiableCredential> {
@@ -99,7 +100,7 @@ export class CredentialsService implements OnApplicationBootstrap {
       documentLoader: this.documentLoader.loader,
       suite: new BbsBlsSignatureProof2020(),
     });
-    const cred = await this.findOne(verifiableCredential.id);
+    const cred = await this.findOne(credentialId);
     await this.update({
       ...cred,
       derivedCredentials: [...cred.derivedCredentials, derived],
