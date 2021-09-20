@@ -9,7 +9,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const server = fastify({ ignoreTrailingSlash: true });
+  const server = await fastify({ ignoreTrailingSlash: true });
 
   server.addContentTypeParser(
     'application/didcomm-encrypted+json',
@@ -29,7 +29,7 @@ async function bootstrap() {
     new FastifyAdapter(server),
   );
   app.useGlobalPipes(new ValidationPipe());
-  app.enableCors()
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('WACInsteins Monster')
