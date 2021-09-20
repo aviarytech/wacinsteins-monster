@@ -16,7 +16,7 @@ jobs:
       - name: Setup npm package
         run: cd ./frontend && npm init -y && npm install && rsync -auv ./package-lock.json ../tests/
       - name: Set the proper env var with awk
-        run: cd ./tests/Cypress/integration/ && gawk -i inplace '/const dev/{gsub(/true/, "false")};{print}' ./waci-pex.spec.js
+        run: cd ./tests/cypress/integration/ && gawk -i inplace '/const dev/{gsub(/true/, "false")};{print}' ./waci-pex.spec.js
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
