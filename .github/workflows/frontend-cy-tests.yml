@@ -19,7 +19,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          working-directory: frontend
+          working-directory: tests
           headless: true
           env: VITE_API_URL=http://localhost:3000,VITE_ENV_TYPE=dev
           start: npm run dev
