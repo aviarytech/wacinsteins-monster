@@ -34,13 +34,13 @@ let initMessenger: boolean = false;
 let newNotification: boolean = false;
 $: newNotification;
 $: if (chatMsg) {
-  someoneIsTyping.set(userDomain);
+  //someoneIsTyping.set(userDomain);
   socket.emit("typingServer", {
     sender: userDomain,
     room: $selectedUser,
   });
 } else {
-  someoneIsTyping.set(null);
+  //test
 }
 onMount(async () => {
   const res = await getContacts();
@@ -72,9 +72,15 @@ onMount(async () => {
       newNotification = true;
     }
   });
-  socket.on("chatToClient", (data) => {
-    someoneIsTyping.set(data.client);
-    console.log(data);
+  //triple dot typing
+  socket.on("typingClient", (data) => {
+    someoneIsTyping.set(data.sender);
+    console.log("typing2Client", data);
+  });
+
+  socket.on("doneTypingClient", (data) => {
+    someoneIsTyping.set(null);
+    console.log("doneTyping2Client", data);
   });
 });
 
@@ -116,6 +122,10 @@ async function newMsg() {
     chatMsg = "";
     //saving the data to the mongo db
     await postNewMsg2Conversation(fullPayload);
+    socket.emit("doneTypingServer", {
+      sender: userDomain,
+      room: $selectedUser,
+    });
   }
 }
 </script>

@@ -26,7 +26,8 @@ class ValidContact {
   @IsNotEmpty()
   type: string;
 
-  @IsFQDN()
+  @IsNotEmpty()
+  @IsFQDN({ whitelist: "localhost:**" })
   url: string;
 
   error: boolean = false;
