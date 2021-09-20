@@ -1,66 +1,104 @@
+<style lang="postcss">
+a {
+  @apply underline text-blue-600;
+}
+a:hover {
+  @apply text-blue-800;
+}
+a:visited {
+  @apply text-purple-600;
+}
+</style>
+
 <div class="bg-white shadow-md rounded-sm">
-  <div
-    class="max-w-7xl mx-auto py-12 px-4 divide-y divide-gray-200 sm:px-6 lg:py-16 lg:px-8">
+  <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:py-16 lg:px-8">
     <h2 class="text-3xl font-extrabold text-gray-900">
-      Frequently asked questions
+      What is Wacinstein's Monster?
     </h2>
-    <div class="mt-8">
-      <dl class="divide-y divide-gray-200">
-        <div class="pt-6 pb-8 md:grid md:grid-cols-12 md:gap-8">
-          <dt class="text-base font-medium text-gray-900 md:col-span-5">
-            What&#039;s the best thing about Switzerland?
-          </dt>
-          <dd class="mt-2 md:mt-0 md:col-span-7">
-            <p class="text-base text-gray-500">
-              I don&#039;t know, but the flag is a big plus.
-            </p>
-          </dd>
+    <div class="mt-3">
+      <div class="text-base font-medium text-gray-900 col-span-6"></div>
+      <div class="divide-y divide-gray-200 pt-3 pb-8 grid grid-cols-12 gap-8">
+        <div class="col-span-8">
+          <div
+            class="divide-y divide-gray-200 pt-3 pb-8 grid grid-cols-12 gap-8">
+            <div class="col-span-10">
+              <p>
+                A bird themed version of a killer whale and jello salad mashup
+                protocol that demonstrates selective disclosure of Verifiable
+                Credentials.
+              </p>
+              <p class="pt-3">
+                It is an example implementation of the <a
+                  href="https://identity.foundation/waci-presentation-exchange/"
+                  >WACI Presentation Exchange</a>
+                being developed at
+                <a href="https://identity.foundation"
+                  >DIF Claims and Credentials Working Group</a
+                >.
+              </p>
+            </div>
+            <dl class="col-span-10 pt-5 grid grid-cols-12 gap-3">
+              <dd class="col-span-4">It accomplishes this using</dd>
+              <div class="col-span-8">
+                <dt>
+                  <a
+                    href="https://w3c-ccg.github.io/ldp-bbs2020/"
+                    target="_blank">W3C CCG - BBS+ LD-Signatures</a>
+                </dt>
+                <dt>
+                  <a
+                    href="https://identity.foundation/didcomm-messaging/spec"
+                    target="_blank">DIF - DIDComm Messaging</a>
+                </dt>
+                <dt>
+                  <a
+                    href="https://identity.foundation/presentation-exchange/spec/v1.0.0/"
+                    target="_blank">DIF - Presentation Exchange</a>
+                </dt>
+              </div>
+            </dl>
+            <dl class="col-span-10 pt-5 grid grid-cols-12 gap-3">
+              <dd class="col-span-4">Which build on</dd>
+              <div class="col-span-8">
+                <dt>
+                  <a href="https://www.w3.org/TR/vc-data-model/" target="_blank"
+                    >W3C - Verifiable Credentials</a>
+                </dt>
+                <dt>
+                  <a href="https://www.w3.org/TR/did-core/" target="_blank"
+                    >W3C CCG - Decentralized Identifiers</a>
+                </dt>
+                <dt>
+                  <a href="https://www.w3.org/TR/json-ld11/" target="_blank"
+                    >W3C - JSON-LD</a>
+                </dt>
+                <dt>
+                  <a href="https://w3c-ccg.github.io/ld-proofs/" target="_blank"
+                    >W3C CCG - Linked Data Proofs</a>
+                </dt>
+              </div>
+            </dl>
+            <dl class="col-span-10 pt-5 grid grid-cols-12 gap-3">
+              <dd class="col-span-4 ">And uses</dd>
+              <div class="col-span-8">
+                <dt>
+                  <a
+                    href="https://w3c-ccg.github.io/vc-http-api/"
+                    target="_blank">W3C CCG - VC HTTP API</a>
+                </dt>
+                <dt>
+                  <a
+                    href="https://w3c-ccg.github.io/did-method-web/"
+                    target="_blank">W3C CCG - did:web</a>
+                </dt>
+              </div>
+            </dl>
+          </div>
         </div>
-        <div class="pt-6 pb-8 md:grid md:grid-cols-12 md:gap-8">
-          <dt class="text-base font-medium text-gray-900 md:col-span-5">
-            How do you make holy water?
-          </dt>
-          <dd class="mt-2 md:mt-0 md:col-span-7">
-            <p class="text-base text-gray-500">You boil the hell out of it.</p>
-          </dd>
+        <div class="col-span-4 border-none">
+          <img src="../assets/wacinstein.png" alt="wacinstein" />
         </div>
-        <div class="pt-6 pb-8 md:grid md:grid-cols-12 md:gap-8">
-          <dt class="text-base font-medium text-gray-900 md:col-span-5">
-            What do you call someone with no body and no nose?
-          </dt>
-          <dd class="mt-2 md:mt-0 md:col-span-7">
-            <p class="text-base text-gray-500">Nobody knows.</p>
-          </dd>
-        </div>
-        <div class="pt-6 pb-8 md:grid md:grid-cols-12 md:gap-8">
-          <dt class="text-base font-medium text-gray-900 md:col-span-5">
-            Why do you never see elephants hiding in trees?
-          </dt>
-          <dd class="mt-2 md:mt-0 md:col-span-7">
-            <p class="text-base text-gray-500">
-              Because they're so good at it.
-            </p>
-          </dd>
-        </div>
-        <div class="pt-6 pb-8 md:grid md:grid-cols-12 md:gap-8">
-          <dt class="text-base font-medium text-gray-900 md:col-span-5">
-            Why can't you hear a pterodactyl go to the bathroom?
-          </dt>
-          <dd class="mt-2 md:mt-0 md:col-span-7">
-            <p class="text-base text-gray-500">Because the pee is silent.</p>
-          </dd>
-        </div>
-        <div class="pt-6 pb-8 md:grid md:grid-cols-12 md:gap-8">
-          <dt class="text-base font-medium text-gray-900 md:col-span-5">
-            Why did the invisible man turn down the job offer?
-          </dt>
-          <dd class="mt-2 md:mt-0 md:col-span-7">
-            <p class="text-base text-gray-500">
-              He couldn't see himself doing it.
-            </p>
-          </dd>
-        </div>
-      </dl>
+      </div>
     </div>
   </div>
 </div>
