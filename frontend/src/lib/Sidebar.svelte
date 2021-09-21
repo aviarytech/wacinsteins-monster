@@ -1,4 +1,5 @@
 <style lang="postcss">
+
 /*
 .icon {
   @apply mr-3 flex-shrink-0 h-6 w-6;
@@ -14,7 +15,7 @@
   @apply transition-opacity ease-linear duration-300 opacity-100;
 }
 .canvas-overlay-off {
-  @apply transition-opacity ease-linear duration-300 opacity-0;
+  @apply transition-opacity ease-linear duration-300 opacity-0 hidden;
 }
 .mbl-sidebar-menu-on {
   @apply transition ease-in-out duration-300 transform translate-x-0;
@@ -22,16 +23,6 @@
 .mbl-sidebar-menu-off {
   @apply transition ease-in-out duration-300 transform -translate-x-full;
 }
-/*      
-      Off-canvas menu, show/hide based on off-canvas menu state.
-
-      Entering: "transition ease-in-out duration-300 transform"
-        From: "-translate-x-full"
-        To: "translate-x-0"
-      Leaving: "transition ease-in-out duration-300 transform"
-        From: "translate-x-0"
-        To: "-translate-x-full"
-*/
 </style>
 
 <script lang="ts">
@@ -56,14 +47,15 @@ let host = import.meta.env.VITE_HOST ?? "aviary.one";
 <template>
   <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
   <div
-    class="fixed inset-0 flex z-40 md:hidden"
+    class="fixed inset-0 flex z-40 md:hidden "
     role="dialog"
     aria-modal="true"
     class:canvas-overlay-off="{$mblSidebar}"
     class:canvas-overlay-on="{!$mblSidebar}">
+    <!--
     <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true">
     </div>
-
+-->
     <div
       class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-600"
       class:mbl-sidebar-menu-off="{$mblSidebar}"
@@ -118,7 +110,10 @@ let host = import.meta.env.VITE_HOST ?? "aviary.one";
                 <Link
                   to="{route.routeUrl}"
                   id="{`${route.routeUrl}-mbl-btn`}"
-                  class="text-indigo-100 hover:bg-indigo-600 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                  class="text-indigo-100 hover:bg-indigo-600 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                  on:click="{() => {
+                    $mblSidebar = !$mblSidebar;
+                  }}">
                   <Icon
                     src="{route.heroIcon}"
                     additionalClass="mr-3 flex-shrink-0 h-4 w-4 text-av1" />

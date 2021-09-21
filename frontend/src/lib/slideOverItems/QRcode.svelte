@@ -71,16 +71,6 @@ onMount(() => {
           await slideOverContent.set(null);
         });
       }}"
-      on:fail="{() => {
-        swal({
-          title: 'Copy Below Invitation',
-          text: `${$qrCodeIdValue}`,
-          icon: 'success',
-          button: 'Done',
-        }).then(async () => {
-          await slideOverContent.set(null);
-        });
-      }}"
       let:copy>
       <Button callback="{copy}" additionalClasses="mb-3" label="Copy" />
     </CopyToClipboard>

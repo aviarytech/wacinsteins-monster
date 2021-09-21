@@ -23,9 +23,10 @@ a:visited {
             class="divide-y divide-gray-200 pt-3 pb-8 grid grid-cols-12 gap-8">
             <div class="col-span-10">
               <p>
-                A bird themed version of a killer whale and jello salad mashup
-                protocol that demonstrates selective disclosure of Verifiable
-                Credentials.
+                A bird themed version of a <a
+                  href="https://identity.foundation/arewewaciyet/"
+                  target="_blank">killer whale and jello salad</a> mashup protocol
+                that demonstrates selective disclosure of Verifiable Credentials.
               </p>
               <p class="pt-3">
                 It is an example implementation of the <a

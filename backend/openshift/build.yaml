@@ -14,10 +14,14 @@ spec:
     contextDir: backend
     git:
       uri: "https://github.com/aviarytech/wacinsteins-monster.git"
+      ref: main
   strategy:
     type: Docker
     dockerStrategy:
       dockerfilePath: .
+      env:
+      - name: "BUILD_LOGLEVEL"
+        value: "5" 
   output:
     to:
       kind: "ImageStreamTag"
