@@ -16,7 +16,7 @@ import CameraReader from "../lib/CameraReader.svelte";
 //ECMA imports
 import { onMount } from "svelte";
 import { getContext } from "svelte";
-const { open } = getContext("simple-modal"); //not really an import
+const { open, close } = getContext("simple-modal"); //not really an import
 //stores
 import {
   presentations,
@@ -31,9 +31,10 @@ let qrCodeScanning: boolean = false;
 $: requestsForMe = $presentations.filter((r) => r.role === "prover");
 $: requestsByMe = $presentations.filter((r) => r.role === "verifier");
 $: if ($scannedQRCode) {
+  close(CameraReader);
   acceptInvitationApiCall($scannedQRCode);
   scannedQRCode.set(null);
-  qrCodeScanning = false;
+  qrCodeScanning = !qrCodeScanning;
 }
 onMount(async () => {
   refreshPresentations();
@@ -195,7 +196,10 @@ function tailwingBgColorizer(value: string): string {
       <Button
         callback="{async () => {
           qrCodeScanning = !qrCodeScanning;
-          open(CameraReader);
+
+          if (qrCodeScanning) {
+            open(CameraReader);
+          }
         }}"
         label="start"
         slotOverLabel="{true}">
