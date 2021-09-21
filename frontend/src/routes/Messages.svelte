@@ -32,19 +32,22 @@ const userDomain =
 let socket: Socket;
 let initMessenger: boolean = false;
 let newNotification: boolean = false;
+let timeoutChatFlag: boolean = false;
 $: newNotification;
 $: if (initMessenger) {
-  if (chatMsg) {
+  if (chatMsg && !timeoutChatFlag) {
     //someoneIsTyping.set(userDomain);
     socket.emit("typingServer", {
       sender: userDomain,
       room: $selectedUser,
     });
+    setTimeout(() => (timeoutChatFlag = true), 5000);
   } else {
     socket.emit("doneTypingServer", {
       sender: userDomain,
       room: $selectedUser,
     });
+    timeoutChatFlag = false;
     //test
   }
 }
