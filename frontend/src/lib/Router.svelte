@@ -17,6 +17,7 @@ import Loading from "./ui/Loading.svelte";
 //ECMA imports
 import { Router, Route } from "svelte-navigator";
 import AuthGuard from "./AuthGuard.svelte";
+import Modal from "svelte-simple-modal";
 </script>
 
 <AuthGuard>
@@ -46,7 +47,9 @@ import AuthGuard from "./AuthGuard.svelte";
     </Route>
 
     <Route path="presentations">
-      <Presentations />
+      <Modal>
+        <Presentations />
+      </Modal>
     </Route>
 
     <Route path="messages">
