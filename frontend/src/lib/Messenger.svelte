@@ -101,7 +101,11 @@ $: msgUSerBackend;
         <!-- BUG: without a date or data the svg doesn't show and idk why :/-->
         <span slot="data" class="inline-flex">
           {$someoneIsTyping} is typing
-          <img src="{'./assets/animations/typing.svg'}" alt="typing" />
+          <img
+            src="{'./assets/animations/typing.svg'}"
+            alt="typing"
+            width="50"
+            height="50" />
         </span></ChatMessage>
     {/if}
   </div>
