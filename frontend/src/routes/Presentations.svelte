@@ -17,8 +17,13 @@ import QRcode from "../lib/slideOverItems/QRcode.svelte";
 import Avatar from "../lib/ui/Avatar.svelte";
 import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestSelector.svelte";
 import CameraReader from "../lib/CameraReader.svelte";
+import Image from "../lib/table-elements/Image.svelte";
 //ECMA imports
 import { onMount } from "svelte";
+import swal from "sweetalert";
+//simple-modal 2nd layer
+import { getContext } from "svelte";
+const { open, close } = getContext("simple-modal"); //not really an import
 //stores
 import {
   presentations,
@@ -26,16 +31,15 @@ import {
   scannedQRCode,
 } from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
-import swal from "sweetalert";
-import Image from "../lib/table-elements/Image.svelte";
 
 let qrCodeScanning: boolean = false;
 $: requestsForMe = $presentations.filter((r) => r.role === "prover");
 $: requestsByMe = $presentations.filter((r) => r.role === "verifier");
 $: if ($scannedQRCode) {
+  close(CameraReader);
   acceptInvitationApiCall($scannedQRCode);
   scannedQRCode.set(null);
-  qrCodeScanning = false;
+  qrCodeScanning = !qrCodeScanning;
 }
 onMount(async () => {
   await refreshPresentations();
@@ -190,9 +194,6 @@ function tailwingBgColorizer(value: string): string {
 </script>
 
 <template>
-  {#if qrCodeScanning}
-    <CameraReader />
-  {/if}
   <div class="bg-white shadow-md rounded-sm p-5">
     <div class="flex items-center justify-end py-2">
       <Tag
@@ -204,6 +205,10 @@ function tailwingBgColorizer(value: string): string {
       <Button
         callback="{async () => {
           qrCodeScanning = !qrCodeScanning;
+
+          if (qrCodeScanning) {
+            open(CameraReader);
+          }
         }}"
         label="start"
         slotOverLabel="{true}">

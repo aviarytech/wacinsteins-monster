@@ -1,4 +1,5 @@
 <style lang="postcss">
+
 /*
 .icon {
   @apply mr-3 flex-shrink-0 h-6 w-6;
@@ -22,16 +23,7 @@
 .mbl-sidebar-menu-off {
   @apply transition ease-in-out duration-300 transform -translate-x-full;
 }
-/*      
-      Off-canvas menu, show/hide based on off-canvas menu state.
 
-      Entering: "transition ease-in-out duration-300 transform"
-        From: "-translate-x-full"
-        To: "translate-x-0"
-      Leaving: "transition ease-in-out duration-300 transform"
-        From: "translate-x-0"
-        To: "-translate-x-full"
-*/
 </style>
 
 <script lang="ts">
