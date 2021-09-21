@@ -13,8 +13,11 @@ import QRcode from "../lib/slideOverItems/QRcode.svelte";
 import Avatar from "../lib/ui/Avatar.svelte";
 import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestSelector.svelte";
 import CameraReader from "../lib/CameraReader.svelte";
+import Image from "../lib/table-elements/Image.svelte";
 //ECMA imports
 import { onMount } from "svelte";
+import swal from "sweetalert";
+//simple-modal 2nd layer
 import { getContext } from "svelte";
 const { open, close } = getContext("simple-modal"); //not really an import
 //stores
@@ -24,8 +27,6 @@ import {
   scannedQRCode,
 } from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
-import swal from "sweetalert";
-import Image from "../lib/table-elements/Image.svelte";
 
 let qrCodeScanning: boolean = false;
 $: requestsForMe = $presentations.filter((r) => r.role === "prover");
