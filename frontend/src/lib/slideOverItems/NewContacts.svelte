@@ -27,7 +27,7 @@ class ValidContact {
   type: string;
 
   @IsNotEmpty()
-  @IsFQDN({ whitelist: "localhost:**" })
+  @IsFQDN() //the solution is to use a custom validator but haven't had much success
   url: string;
 
   error: boolean = false;
