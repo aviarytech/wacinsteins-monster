@@ -48,21 +48,15 @@ function generateXPriv(): void {
   let small_bytes: any = random(new Uint8Array(32));
   let xpriv_wasm = ExtendedPrivateKey.fromSeed(small_bytes);
   qrCodeIdValue.set("hallo");
-
-  //console.log(xpriv_wasm, small_bytes);
+  console.log(xpriv_wasm, small_bytes);
 }
-let rightPreviewWindowDisplayed = false;
 function importXpubKeys(): void {
   generateXPriv();
   slideOverContent.set({
     title: ``,
     component: QRcode,
-    presentationSubject: [],
+    value: "hallo",
   });
-  if (rightPreviewWindowDisplayed) {
-    slideOverContent.set(null);
-  }
-  rightPreviewWindowDisplayed = !rightPreviewWindowDisplayed;
 }
 </script>
 

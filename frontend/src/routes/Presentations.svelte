@@ -25,11 +25,7 @@ import swal from "sweetalert";
 import { getContext } from "svelte";
 const { open, close } = getContext("simple-modal"); //not really an import
 //stores
-import {
-  presentations,
-  qrCodeIdValue,
-  scannedQRCode,
-} from "../stores/presentation";
+import { presentations, scannedQRCode } from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
 
 $: requestsForMe = $presentations.filter((r) => r.role === "prover");
@@ -136,14 +132,14 @@ function openSubmitPresentation(id: string) {
 }
 
 function qrCodeDisplay(id) {
-  qrCodeIdValue.set(id[0]);
   slideOverContent.set({
     title: ``,
     component: QRcode,
-    presentationSubject: [],
+    value: id[0],
   });
 }
 
+//INFO: needed?
 async function acceptProposal(id: string) {
   const resp = await acceptProposalSubmit(id);
   const pres = await getPresentations();
