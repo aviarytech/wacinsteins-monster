@@ -1,10 +1,11 @@
 <style>
-template {
+.camera-reader {
   font-family: "Ropa Sans", sans-serif;
   color: #333;
   max-width: 640px;
   margin: 0 auto;
   position: relative;
+  overflow: hidden;
 }
 
 #loadingMessage {
@@ -38,7 +39,7 @@ template {
 
 <script lang="ts">
 //ecma scripts
-import { onMount } from "svelte";
+import { onDestroy, onMount } from "svelte";
 import jsQR from "jsqr";
 //stores
 import { scannedQRCode } from "../stores/presentation";
@@ -46,8 +47,8 @@ import { scannedQRCode } from "../stores/presentation";
 import Button from "./ui/Button.svelte";
 
 let cameraPosition: string = "environment";
-let componentReference;
 let canvas;
+let videoStream;
 let video;
 let canvasElement;
 let loadingMessage; //document.getElementById("loadingMessage");
@@ -60,10 +61,18 @@ onMount(() => {
   video = document.createElement("video");
 });
 
+onDestroy(() => {
+  video.remove();
+  videoStream.getTracks().forEach((track) => {
+    track.stop();
+  });
+});
+
 // Use facingMode: environment to attemt to get the front camera on phones
 navigator.mediaDevices
   .getUserMedia({ video: { facingMode: cameraPosition } })
   .then(function (stream) {
+    videoStream = stream;
     video.srcObject = stream;
     video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
     video.play();
@@ -132,13 +141,12 @@ function tick() {
 }
 </script>
 
-<template bind:this="{componentReference}">
-  <div class="">
+<template>
+  <div class="camera-reader">
     <div id="loadingMessage" bind:this="{loadingMessage}">
-      🎥 Unable to access video stream (please make sure you have a webcam
-      enabled)
+      ⌛ Loading video...
     </div>
-    <div class="flex content-center py-2">
+    <!-- <div class="flex content-center py-2">
       <Button
         callback="{() => {
           if (cameraPosition === 'user') {
@@ -151,11 +159,11 @@ function tick() {
       <h2 class="mx-2">
         Camera Position: {cameraPosition}
       </h2>
-    </div>
-    <canvas id="canvas" bind:this="{canvasElement}" hidden></canvas>
-    <div id="output" hidden bind:this="{outputContainer}">
+    </div> -->
+    <canvas id="canvas" bind:this="{canvasElement}"></canvas>
+    <div id="output" bind:this="{outputContainer}">
       <div id="outputMessage" bind:this="{outputMessage}">
-        No QR code detected.
+        Scan an invitation QR code
       </div>
       <div hidden>
         <b>Data:</b> <span id="outputData" bind:this="{outputData}"></span>

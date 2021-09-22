@@ -32,14 +32,12 @@ import {
 } from "../stores/presentation";
 import { slideOverContent } from "../stores/ui";
 
-let qrCodeScanning: boolean = false;
 $: requestsForMe = $presentations.filter((r) => r.role === "prover");
 $: requestsByMe = $presentations.filter((r) => r.role === "verifier");
 $: if ($scannedQRCode) {
   close(CameraReader);
   acceptInvitationApiCall($scannedQRCode);
   scannedQRCode.set(null);
-  qrCodeScanning = !qrCodeScanning;
 }
 onMount(async () => {
   await refreshPresentations();
@@ -204,11 +202,7 @@ function tailwingBgColorizer(value: string): string {
       <Button label="Accept Invitation" callback="{async () => submitUrl()}" />
       <Button
         callback="{async () => {
-          qrCodeScanning = !qrCodeScanning;
-
-          if (qrCodeScanning) {
-            open(CameraReader);
-          }
+          open(CameraReader);
         }}"
         label="start"
         slotOverLabel="{true}">
