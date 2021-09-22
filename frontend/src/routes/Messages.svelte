@@ -94,10 +94,6 @@ async function newMsg() {
       data: chatMsg,
       when: new Date(),
     };
-
-    //saving the data to the mongo db
-    await postNewMsg2Conversation(fullPayload);
-
     //websocket new entry
     socket.emit("chatToServer", {
       sender: userDomain,
@@ -105,6 +101,8 @@ async function newMsg() {
       message: chatMsg,
     });
     chatMsg = "";
+    //saving the data to the mongo db
+    await postNewMsg2Conversation(fullPayload);
   }
 }
 </script>
