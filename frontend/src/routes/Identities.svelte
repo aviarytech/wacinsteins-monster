@@ -18,7 +18,6 @@ import init, {
 import { identities } from "../stores/identities";
 import { slideOverContent } from "../stores/ui";
 import { user } from "../stores/user";
-import { qrCodeIdValue } from "../stores/presentation";
 
 //utils
 import { sha256 } from "../utils/sha256";
@@ -47,7 +46,6 @@ onMount(async () => {
 function generateXPriv(): void {
   let small_bytes: any = random(new Uint8Array(32));
   let xpriv_wasm = ExtendedPrivateKey.fromSeed(small_bytes);
-  qrCodeIdValue.set("hallo");
   console.log(xpriv_wasm, small_bytes);
 }
 function importXpubKeys(): void {
@@ -55,7 +53,7 @@ function importXpubKeys(): void {
   slideOverContent.set({
     title: ``,
     component: QRcode,
-    value: "hallo",
+    value: xpriv_wasm,
   });
 }
 </script>
