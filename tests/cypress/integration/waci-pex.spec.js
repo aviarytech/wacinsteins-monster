@@ -36,7 +36,7 @@ describe("WACI Presentation Exchange", () => {
     cy.request("POST", `${agent2Api}/admin/drop-db`);
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
     fixtures = require("../fixtures/waci-pex");
     cy.log(fixtures);
   });
@@ -91,7 +91,7 @@ describe("WACI Presentation Exchange", () => {
     cy.wait(5000);
   });
 
-  it("Step 2 - Send Message Proposing Presentation", function () {
+  it("Step 2 - Send Message Proposing Presentation", function() {
     // setup
     let url;
     cy.request(
