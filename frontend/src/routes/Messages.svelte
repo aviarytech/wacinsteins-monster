@@ -13,20 +13,22 @@ import Avatar from "../lib/ui/Avatar.svelte";
 //api
 import { getContacts } from "../api/contactsAxios";
 import { postNewMsg2Conversation } from "../api/messagesLogic";
+import { getWellKnown } from "../api/wellKnown";
 //stores
 import { availableContacts } from "../stores/contacts";
 import { selectedUser, someoneIsTyping } from "../stores/messages";
 //ecma imports
 import { onMount } from "svelte";
 import { io, Socket } from "socket.io-client";
+//utils
+import { sha256 } from "../utils/sha256";
 //env
 const backendUrl = import.meta.env.VITE_API_URL
   ? import.meta.env.VITE_API_URL
   : `https://api.${window.location.hostname}`;
-const userDomain =
-  import.meta.env.VITE_ENV_TYPE === "dev"
-    ? `did:web:localhost:3100`
-    : `did:web:api.${window.location.host}`;
+let userDomain: string; // = roomBuilder($selectedUser)[0];
+console.log(userDomain);
+
 //TODO: move all of the socket logic in a separate ts or store file.
 
 let socket: Socket;
@@ -52,6 +54,7 @@ $: if (initMessenger) {
   }
 }
 onMount(async () => {
+  roomBuilder($selectedUser);
   const res = await getContacts();
   res["newNotification"] = newNotification;
   console.log(res);
@@ -93,6 +96,13 @@ onMount(async () => {
   });
 });
 
+async function roomBuilder(domainUser: string): Promise<string[]> {
+  let wellKnownRes = await getWellKnown();
+  userDomain = wellKnownRes.id;
+  let room: string = sha256([userDomain, domainUser].sort().join(""));
+  console.log(room);
+  return [userDomain, room];
+}
 //notification sound
 function playSound(link: string) {
   const audio = new Audio(link);
