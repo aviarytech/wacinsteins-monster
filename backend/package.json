@@ -41,6 +41,7 @@
     "@nestjs/swagger": "^5.0.9",
     "@nestjs/websockets": "^8.0.6",
     "@stablelib/sha256": "^1.0.1",
+    "@transmute/bbs-bls12381-signature-2020": "^0.7.0-unstable.8",
     "@transmute/credentials-context": "^0.7.0-unstable.7",
     "@transmute/did-context": "^0.7.0-unstable.7",
     "@transmute/did-key.js": "^0.3.0-unstable.4",
