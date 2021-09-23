@@ -7,7 +7,7 @@ import Button from "../ui/Button.svelte";
 import CredentialCard from "../cards/CredentialCard.svelte";
 import SubmitPresentationRequestSelector from "../SubmitPresentationRequestSelector.svelte";
 //stores
-import { qrCodeIdValue, presentations } from "../../stores/presentation";
+import { presentations } from "../../stores/presentation";
 import { slideOverContent } from "../../stores/ui";
 //ECMA imports
 import { onMount } from "svelte";
@@ -65,11 +65,10 @@ async function acceptProposal() {
             {#if presentation.status === "created" && presentation.role === "verifier"}
               <button
                 on:click="{() => {
-                  qrCodeIdValue.set(presentation.url);
                   slideOverContent.set({
                     title: ``,
                     component: QRcode,
-                    presentationSubject: [],
+                    value: presentation.url,
                   });
                 }}"
                 class:border-pink-500="{visibleSubjectIndex === 1}"

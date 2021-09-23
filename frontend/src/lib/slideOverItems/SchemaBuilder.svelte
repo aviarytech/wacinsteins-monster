@@ -8,7 +8,7 @@ import Button from "../ui/Button.svelte";
 //stores
 import { credentials } from "../../stores/credentials";
 import { slideOverContent, slidePreviewOverContent } from "../../stores/ui";
-import { presentations, qrCodeIdValue } from "../../stores/presentation";
+import { presentations } from "../../stores/presentation";
 //ecma imports
 import QRcode from "./QRcode.svelte";
 import { onMount } from "svelte";
@@ -74,11 +74,11 @@ async function submitPresentation() {
         paths: selectedSchemaFields,
         frame: inputDescriptor,
       });
-      qrCodeIdValue.set(newPres.url);
       refreshPresentations();
       slideOverContent.set({
         title: ``,
         component: QRcode,
+        value: newPres.url,
       });
     }
   }

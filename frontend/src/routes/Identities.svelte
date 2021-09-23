@@ -12,6 +12,7 @@ import { onMount } from "svelte";
 import { identities } from "../stores/identities";
 import { slideOverContent } from "../stores/ui";
 import { user } from "../stores/user";
+
 //utils
 import { sha256 } from "../utils/sha256";
 //api
