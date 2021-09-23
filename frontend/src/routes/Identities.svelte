@@ -13,13 +13,14 @@ import { onMount } from "svelte";
 import { random } from "jose/util/random";
 import init, {
   ExtendedPrivateKey,
-  PrivateKey,
   ExtendedPublicKey,
 } from "../../node_modules/bsv-wasm-web/bsv_wasm.js"; //"bsv-wasm-web";
 //stores
 import { identities } from "../stores/identities";
 import { slideOverContent } from "../stores/ui";
 import { user } from "../stores/user";
+//utils
+import { tailwingBgColorizer } from "../utils/tailwind";
 
 //utils
 import { sha256 } from "../utils/sha256";
@@ -47,10 +48,10 @@ onMount(async () => {
 
 function generateXPriv() {
   let small_bytes: any = random(new Uint8Array(32));
-  let xpriv_wasm = ExtendedPrivateKey.fromSeed(small_bytes);
-  let pub_key = ExtendedPublicKey.fromXPriv(xpriv_wasm);
-  console.log(xpriv_wasm, small_bytes, pub_key.toString());
-  return pub_key.toString();
+  let xpriv_key = ExtendedPrivateKey.fromSeed(small_bytes);
+  let xpub_key = ExtendedPublicKey.fromXPriv(xpriv_key);
+  console.log(xpriv_key, small_bytes, xpub_key.toString());
+  return xpub_key.toString();
 }
 function importXpubKeys(): void {
   slideOverContent.set({
@@ -66,47 +67,62 @@ function importXpubKeys(): void {
   <Button
     label="xPub"
     slotOverLabel="{true}"
-    callback="{async () => importXpubKeys()}">
+    callback="{async () => importXpubKeys()}"
+    additionalClasses="mb-4">
     <Tag text="XPub" /><Image
       src="./assets/icons/key.svg"
       alt="XPub"
       width="{16}"
       height="{16}" />
   </Button>
-  <DataTable
-    xOverflowClass="bg-red"
-    headers="{['', 'Role', 'Identifier', '']}"
-    data="{$identities.map((i) => {
-      return [
-        {
-          component: Avatar,
-          value: i.id,
-          dataTableSpecialClass: 'pl-6 py-4 max-w-xs',
-        },
-        { component: Text, text: i.role },
-        { component: Text, text: i.id },
-        {
-          component: ComponentList,
-          items: [
-            {
-              component: Button,
-              callback: () => {
-                openIdentity(i.id);
+  <div class="bg-white shadow-md rounded-sm p-5">
+    <Tag
+      text="You"
+      fontColor="text-white"
+      bgCol="{tailwingBgColorizer('submitted')}" />
+    <span class="pl-2 flex-grow">Your Profile and work organization</span>
+    <DataTable
+      xOverflowClass="bg-red"
+      headers="{['', 'Role', 'Identifier', '']}"
+      data="{$identities.map((i) => {
+        return [
+          {
+            component: Avatar,
+            value: i.id,
+            dataTableSpecialClass: 'pl-6 py-4 max-w-xs',
+          },
+          { component: Text, text: i.role },
+          { component: Text, text: i.id },
+          {
+            component: ComponentList,
+            items: [
+              {
+                component: Button,
+                callback: () => {
+                  openIdentity(i.id);
+                },
+                label: 'View',
               },
-              label: 'View',
-            },
-            // {
-            //   component: Button,
-            //   callback: () => {},
-            //   label: 'Rotate',
-            // },
-            // {
-            //   component: Button,
-            //   callback: () => {},
-            //   label: 'Delete',
-            // },
-          ],
-        },
-      ];
-    })}" />
+              // {
+              //   component: Button,
+              //   callback: () => {},
+              //   label: 'Rotate',
+              // },
+              // {
+              //   component: Button,
+              //   callback: () => {},
+              //   label: 'Delete',
+              // },
+            ],
+          },
+        ];
+      })}" />
+  </div>
+  <div class="bg-white shadow-md mt-10 rounded-sm p-5">
+    <Tag
+      text="Keys"
+      fontColor="text-white"
+      bgCol="{tailwingBgColorizer('submitted')}" />
+    <span class="pl-2 flex-grow">Your Extended keys</span>
+  </div>
 {/if}
