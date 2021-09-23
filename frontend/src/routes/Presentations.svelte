@@ -19,10 +19,10 @@ import SubmitPresentationRequestSelector from "../lib/SubmitPresentationRequestS
 import CameraReader from "../lib/CameraReader.svelte";
 import Image from "../lib/table-elements/Image.svelte";
 //ECMA imports
-import { onMount } from "svelte";
+import { onMount, getContext } from "svelte";
 import swal from "sweetalert";
+import { debounce } from "lodash";
 //simple-modal 2nd layer
-import { getContext } from "svelte";
 const { open, close } = getContext("simple-modal"); //not really an import
 //stores
 import { presentations, scannedQRCode } from "../stores/presentation";
@@ -31,10 +31,14 @@ import { slideOverContent } from "../stores/ui";
 $: requestsForMe = $presentations.filter((r) => r.role === "prover");
 $: requestsByMe = $presentations.filter((r) => r.role === "verifier");
 $: if ($scannedQRCode) {
-  close(CameraReader);
-  acceptInvitationApiCall($scannedQRCode);
-  scannedQRCode.set(null);
+  const fn = debounce(async () => {
+    close(CameraReader);
+    await acceptInvitationApiCall($scannedQRCode);
+    scannedQRCode.set(null);
+  }, 750);
+  fn();
 }
+
 onMount(async () => {
   await refreshPresentations();
 });
