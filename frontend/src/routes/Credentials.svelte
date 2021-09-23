@@ -13,9 +13,27 @@ import CredentialCard from "../lib/cards/CredentialCard.svelte";
 import { credentials } from "../stores/credentials";
 import { slideOverContent } from "../stores/ui";
 //ecma imports
-import { onMount } from "svelte";
+import { getContext, onMount } from "svelte";
+import { parseShc } from "../utils/shc/parsers";
 //api
 import { getAllCredentials } from "../api/credentials";
+import CameraReader from "../lib/CameraReader.svelte";
+import { scannedQRCode } from "../stores/presentation";
+import { debounce } from "lodash";
+const { open, close } = getContext("simple-modal"); //not really an import
+
+$: if ($scannedQRCode) {
+  const fn = debounce(async () => {
+    close(CameraReader);
+    const credential = await parseShc($scannedQRCode);
+    slideOverContent.set({
+      component: CredentialCard,
+      credential: credential.payload["vc"],
+    });
+    scannedQRCode.set(null);
+  }, 750);
+  fn();
+}
 
 const openCredential = (credentialId: string) => {
   const cred = $credentials.find((c) => c["id"] === credentialId);
@@ -48,7 +66,14 @@ onMount(async () => {
   <div class="bg-white shadow-md rounded-sm p-5">
     <div class="flex items-center justify-start py-2">
       <Tag text="Holder" fontColor="text-white" bgCol="bg-green-400" />
-      <span class="pl-2 pr-6">Your Credentials</span>
+      <span class="pl-2 pr-6 flex-grow-1">Your Credentials</span>
+      <div class="button-row">
+        <Button
+          slotOverLabel="{true}"
+          callback="{async () => {
+            open(CameraReader);
+          }}">Import</Button>
+      </div>
     </div>
     {#if $credentials && $credentials.length > 0}
       <DataTable

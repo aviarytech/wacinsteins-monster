@@ -1,8 +1,8 @@
 <script lang="ts">
 import Avatar from "../ui/Avatar.svelte";
+import CredentialSubjectTree from "./CredentialSubjectTree.svelte";
 import { simple as format } from "timeago-simple";
 import { verifyVC } from "../../api/verifier";
-import { camel2Title } from "../../utils/camel2Title";
 import VerificationBadge from "../VerificationBadge.svelte";
 
 export let displayVerification: boolean = true;
@@ -41,35 +41,7 @@ $: verified = (async () => {
   </div>
   <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
     <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-      {#each Object.entries(credential.credentialSubject) as prop}
-        {#if typeof prop[1] === "object"}
-          <div
-            class="border-t-2  sm:col-span-2 pt-3 grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-            <div class="sm:col-span-2 text-md font-semibold text-gray-500">
-              {camel2Title(prop[0])}
-            </div>
-            {#each Object.entries(prop[1]) as subProp}
-              <div class="sm:col-span-1">
-                <dt class="sm:col-span-2 text-sm font-medium text-gray-500">
-                  {camel2Title(subProp[0])}
-                </dt>
-                <dd class="mt-1 text-sm text-gray-900 truncate">
-                  {subProp[1]}
-                </dd>
-              </div>
-            {/each}
-          </div>
-        {:else}
-          <div class="sm:col-span-1">
-            <dt class="text-sm font-medium text-gray-500">
-              {camel2Title(prop[0])}
-            </dt>
-            <dd class="mt-1 text-sm text-gray-900 truncate">
-              {prop[1]}
-            </dd>
-          </div>
-        {/if}
-      {/each}
+      <CredentialSubjectTree property="{credential.credentialSubject}" />
     </dl>
   </div>
   <div
