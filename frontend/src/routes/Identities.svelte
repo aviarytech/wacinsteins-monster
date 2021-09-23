@@ -22,13 +22,56 @@ import { debounce } from "lodash";
 import { identities, extendedPubKeys } from "../stores/identities";
 import { slideOverContent } from "../stores/ui";
 import { user } from "../stores/user";
+import { scannedQRCode } from "../stores/presentation";
 //utils
 import { tailwingBgColorizer } from "../utils/tailwind";
 import { sha256 } from "../utils/sha256";
 //api
 import { getServerIdentity } from "../api/identities";
 
-//const { open, close } = getContext("simple-modal"); //not really an import
+//reactivity
+$: if ($scannedQRCode) {
+  const fn = debounce(async () => {
+    close(CameraReader);
+    unknownQRCodeValidation($scannedQRCode);
+  }, 750);
+  fn();
+}
+
+function unknownQRCodeValidation(qrCode: string) {
+  let xpriv_key: string;
+  let xpub_key: string;
+  scannedQRCode.set(null);
+  console.log(qrCode);
+  if (qrCode.substring(0, 4) === "xprv") {
+    xpriv_key = ExtendedPrivateKey.fromString(qrCode).toString();
+    xpub_key = ExtendedPublicKey.fromXPriv(
+      ExtendedPrivateKey.fromString(qrCode)
+    ).toString();
+  } else if (qrCode.substring(0, 4) === "xpub") {
+    xpub_key = ExtendedPublicKey.fromString(qrCode).toString();
+  } else {
+    //repalce with swal
+    throw "unknown qrCode value";
+  }
+  if (!xpriv_key) {
+    xpriv_key = "";
+  }
+  let lenKeyChain: number = $extendedPubKeys ? $extendedPubKeys.length : 0;
+  //WARN: repeated to refactor
+  let keyChain = [
+    ...$extendedPubKeys,
+    {
+      id: lenKeyChain,
+      privKey: xpriv_key.toString(),
+      pubKey: xpub_key.toString(),
+    },
+  ];
+  extendedPubKeys.set(keyChain);
+  console.log(xpriv_key, xpub_key);
+}
+
+const { open, close } = getContext("simple-modal"); //not really an import
 const openIdentity = (value: string) => {
   slideOverContent.set({
     component: Avatar,
@@ -54,6 +97,7 @@ function generateXPriv() {
   let small_bytes: any = random(new Uint8Array(32));
   let xpriv_key = ExtendedPrivateKey.fromSeed(small_bytes);
   let xpub_key = ExtendedPublicKey.fromXPriv(xpriv_key);
+  //WARN: need a better id method that whatever I created
   let lenKeyChain: number = $extendedPubKeys ? $extendedPubKeys.length : 0;
   let keyChain = [
     ...$extendedPubKeys,
@@ -74,10 +118,7 @@ function createXKeyPair(): void {
     value: generateXPriv(),
   });
 }
-function importXKeys() {
-  console.log("here");
-  open(CameraReader);
-}
+
 function deleteKey(id: number) {
   //I am sure there is a more svelte way of doing this :(
   let res = $extendedPubKeys.filter((item) => item.id !== id);
@@ -146,7 +187,7 @@ function deleteKey(id: number) {
       <Button
         label="Scan XQRcode"
         slotOverLabel="{true}"
-        callback="{async () => importXKeys()}"
+        callback="{async () => open(CameraReader)}"
         additionalClasses="mb-4">
         <Tag text="Scan XQRcode" /><Image
           src="./assets/icons/camera.svg"
