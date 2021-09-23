@@ -13,7 +13,6 @@
 
 <script lang="ts">
 //stores
-import { qrCodeIdValue } from "../../stores/presentation";
 import { slideOverContent } from "../../stores/ui";
 //component
 import Button from "../ui/Button.svelte";
@@ -22,7 +21,6 @@ import QRious from "qrious";
 import { onMount } from "svelte";
 import CopyToClipboard from "svelte-copy-to-clipboard";
 import swal from "sweetalert";
-
 //default init
 const QRcode = new QRious();
 //qr default parameters
@@ -45,10 +43,10 @@ function generateQrCode() {
     level: errorCorrection,
     padding,
     size: size,
-    value: $qrCodeIdValue,
+    value: value,
   });
 
-  image = QRcode.toDataURL($qrCodeIdValue);
+  image = QRcode.toDataURL(value);
 }
 
 $: {
@@ -68,11 +66,11 @@ onMount(() => {
 <template>
   <div class="grid justify-items-center">
     <CopyToClipboard
-      text="{$qrCodeIdValue}"
+      text="{value}"
       on:copy="{() => {
         swal({
           title: 'Copied!',
-          text: `${$qrCodeIdValue}`,
+          text: `${value}`,
           icon: 'success',
           button: 'Done',
         }).then(async () => {
