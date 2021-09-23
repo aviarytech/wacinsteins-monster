@@ -13,6 +13,8 @@ import { onMount } from "svelte";
 import { random } from "jose/util/random";
 import init, {
   ExtendedPrivateKey,
+  PrivateKey,
+  ExtendedPublicKey,
 } from "../../node_modules/bsv-wasm-web/bsv_wasm.js"; //"bsv-wasm-web";
 //stores
 import { identities } from "../stores/identities";
@@ -43,17 +45,18 @@ onMount(async () => {
   identities.set(ids);
 });
 
-function generateXPriv(): void {
+function generateXPriv() {
   let small_bytes: any = random(new Uint8Array(32));
   let xpriv_wasm = ExtendedPrivateKey.fromSeed(small_bytes);
-  console.log(xpriv_wasm, small_bytes);
+  let pub_key = ExtendedPublicKey.fromXPriv(xpriv_wasm);
+  console.log(xpriv_wasm, small_bytes, pub_key.toString());
+  return pub_key.toString();
 }
 function importXpubKeys(): void {
-  generateXPriv();
   slideOverContent.set({
     title: ``,
     component: QRcode,
-    value: xpriv_wasm,
+    value: generateXPriv(),
   });
 }
 </script>
