@@ -21,6 +21,7 @@ import QRious from "qrious";
 import { onMount } from "svelte";
 import CopyToClipboard from "svelte-copy-to-clipboard";
 import swal from "sweetalert";
+
 //default init
 const QRcode = new QRious();
 //qr default parameters
