@@ -1,3 +1,4 @@
+[![Lint Code Base](https://github.com/aviarytech/wacinsteins-monster/actions/workflows/super-linter.yml/badge.svg)](https://github.com/aviarytech/wacinsteins-monster/actions/workflows/super-linter.yml)
 # Wacinstein's Monster
 
 This project contains an end to end waci-pex implementation
