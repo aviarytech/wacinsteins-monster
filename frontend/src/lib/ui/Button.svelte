@@ -12,7 +12,7 @@
 </style>
 
 <script lang="ts">
-export let label: string;
+export let label: string = "button";
 export let slotOverLabel: boolean = false;
 export let callback: () => Promise<void>;
 export let type = "button";
