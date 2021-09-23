@@ -30,12 +30,13 @@ import { sha256 } from "../utils/sha256";
 import { getServerIdentity } from "../api/identities";
 
 //reactivity
-$: if ($scannedQRCode) {
+let debounceFlag = false;
+$: if ($scannedQRCode && !debounceFlag) {
   const fn = debounce(async () => {
-    close(CameraReader);
     unknownQRCodeValidation($scannedQRCode);
-  }, 750);
+  }, 150);
   fn();
+  close(CameraReader);
 }
 
 function unknownQRCodeValidation(qrCode: string) {
@@ -59,16 +60,16 @@ function unknownQRCodeValidation(qrCode: string) {
   }
   let lenKeyChain: number = $extendedPubKeys ? $extendedPubKeys.length : 0;
   //WARN: repeated to refactor
-  let keyChain = [
+  //console.log(xpriv_key, xpub_key);
+  extendedPubKeys.set([
     ...$extendedPubKeys,
     {
       id: lenKeyChain,
-      privKey: xpriv_key.toString(),
-      pubKey: xpub_key.toString(),
+      privKey: xpriv_key,
+      pubKey: xpub_key,
     },
-  ];
-  extendedPubKeys.set(keyChain);
-  console.log(xpriv_key, xpub_key);
+  ]);
+  debounceFlag = true;
 }
 
 const { open, close } = getContext("simple-modal"); //not really an import
@@ -187,7 +188,10 @@ function deleteKey(id: number) {
       <Button
         label="Scan XQRcode"
         slotOverLabel="{true}"
-        callback="{async () => open(CameraReader)}"
+        callback="{async () => {
+          debounceFlag = false;
+          open(CameraReader);
+        }}"
         additionalClasses="mb-4">
         <Tag text="Scan XQRcode" /><Image
           src="./assets/icons/camera.svg"
