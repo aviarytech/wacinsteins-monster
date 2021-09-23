@@ -16,7 +16,9 @@ import Router from "./lib/Router.svelte";
 import { getAllCredentials } from "./api/credentials";
 import { getWellKnown } from "./api/wellKnown";
 //stores
-import { mobileSidebarClose, slideOverContent, mblSidebar } from "./stores/ui";
+import Modal from "svelte-simple-modal";
+
+import { slideOverContent, mblSidebar } from "./stores/ui";
 import { user } from "./stores/user";
 import { credentials } from "./stores/credentials";
 import { wellKnown } from "./stores/well-known";
@@ -38,29 +40,30 @@ onMount(async () => {
 </script>
 
 {#if $user}
-  <div class="h-screen flex overflow-hidden bg-gray-100">
-    <Sidebar />
-    <div class="flex flex-col w-0 flex-1 overflow-hidden">
-      <header class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
-        <button
-          class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
-          on:click="{() => {
-            $mblSidebar = !$mblSidebar;
-          }}">
-          <span class="sr-only">Open sidebar</span>
-          <img
-            src="./assets/icons/show-sidebar.svg"
-            class="icon md:px-1"
-            alt="heroIcon" />
-        </button>
+  <Modal>
+    <div class="h-screen flex overflow-hidden bg-gray-100">
+      <Sidebar />
+      <div class="flex flex-col w-0 flex-1 overflow-hidden">
+        <header class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
+          <button
+            class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+            on:click="{() => {
+              $mblSidebar = !$mblSidebar;
+            }}">
+            <span class="sr-only">Open sidebar</span>
+            <img
+              src="./assets/icons/show-sidebar.svg"
+              class="icon md:px-1"
+              alt="heroIcon" />
+          </button>
 
-        <div class="flex-1 px-4 flex justify-between">
-          <div class="flex-1 flex">
-            <SearchBar />
-          </div>
+          <div class="flex-1 px-4 flex justify-between">
+            <div class="flex-1 flex">
+              <SearchBar />
+            </div>
 
-          <div class="ml-4 flex items-center md:ml-6">
-            <!-- <button
+            <div class="ml-4 flex items-center md:ml-6">
+              <!-- <button
               class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" >
               <span class="sr-only">View notifications</span>
               <img
@@ -69,24 +72,25 @@ onMount(async () => {
                 class="icon"
               />
             </button> -->
-            <Profile />
+              <Profile />
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <main class="flex-1 relative overflow-y-auto focus:outline-none">
-        <div class="mx-auto px-2 sm:px-4 md:px-4">
-          <div class="py-4">
-            <Router />
+        <main class="flex-1 relative overflow-y-auto focus:outline-none">
+          <div class="mx-auto px-2 sm:px-4 md:px-4">
+            <div class="py-4">
+              <Router />
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
+
+      {#if $slideOverContent}
+        <SlideOver />
+      {/if}
     </div>
-
-    {#if $slideOverContent}
-      <SlideOver />
-    {/if}
-  </div>
+  </Modal>
 {:else}
   <Router />
 {/if}
