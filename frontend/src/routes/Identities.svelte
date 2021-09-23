@@ -53,7 +53,13 @@ function unknownQRCodeValidation(qrCode: string) {
     xpub_key = ExtendedPublicKey.fromString(qrCode).toString();
   } else {
     //repalce with swal
-    throw "unknown qrCode value";
+    swal({
+      title: "Error",
+      text: "The QRcode scanned is invalid. Ensure you have a valid Xpriv or Xpub key QRcode.",
+      button: { text: "close" },
+      icon: "error",
+    });
+    return;
   }
   if (!xpriv_key) {
     xpriv_key = "";
