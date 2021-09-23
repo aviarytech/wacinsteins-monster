@@ -64,7 +64,7 @@ function unknownQRCodeValidation(qrCode: string) {
   extendedPubKeys.set([
     ...$extendedPubKeys,
     {
-      id: lenKeyChain,
+      id: sha256(`${lenKeyChain}-${new Date()}`),
       privKey: xpriv_key,
       pubKey: xpub_key,
     },
@@ -99,11 +99,11 @@ function generateXPriv() {
   let xpriv_key = ExtendedPrivateKey.fromSeed(small_bytes);
   let xpub_key = ExtendedPublicKey.fromXPriv(xpriv_key);
   //WARN: need a better id method that whatever I created
-  let lenKeyChain: number = $extendedPubKeys ? $extendedPubKeys.length : 0;
+  let lenKeyChain = $extendedPubKeys ? $extendedPubKeys.length : 0;
   let keyChain = [
     ...$extendedPubKeys,
     {
-      id: lenKeyChain,
+      id: sha256(`${lenKeyChain}-${new Date()}`),
       privKey: xpriv_key.toString(),
       pubKey: xpub_key.toString(),
     },
