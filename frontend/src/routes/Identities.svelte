@@ -219,17 +219,19 @@ function deleteKey(id: number) {
             {
               component: ComponentList,
               items: [
-                {
-                  component: Button,
-                  label: 'XPriv',
-                  callback: () => {
-                    slideOverContent.set({
-                      title: `Extended Private Key`,
-                      component: QRcode,
-                      value: i.privKey,
-                    });
-                  },
-                },
+                i.privKey !== ''
+                  ? {
+                      component: Button,
+                      label: 'XPriv',
+                      callback: () => {
+                        slideOverContent.set({
+                          title: `Extended Private Key`,
+                          component: QRcode,
+                          value: i.privKey,
+                        });
+                      },
+                    }
+                  : null,
                 {
                   component: Button,
                   label: 'XPub',
@@ -246,7 +248,7 @@ function deleteKey(id: number) {
                   callback: () => deleteKey(i['id']),
                   label: 'Delete',
                 },
-              ],
+              ].filter((i) => i),
             },
           ];
         })}" />
