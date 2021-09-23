@@ -57,6 +57,7 @@ function importXpubKeys(): void {
     title: ``,
     component: QRcode,
     value: generateXPriv(),
+    value: "hallo",
   });
 }
 </script>
