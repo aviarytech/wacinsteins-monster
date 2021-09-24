@@ -136,6 +136,22 @@ function deleteKey(id: number) {
 <!-- <pre>{JSON.stringify($identities, null, 2)}</pre> -->
 {#if $identities}
   <div class="bg-white shadow-md rounded-sm p-5">
+    <Button
+      label="Scan XQRcode"
+      slotOverLabel="{true}"
+      callback="{async () => {
+        swal('add some text and an input');
+      }}"
+      additionalClasses="mb-4">
+      <Tag
+        text="Scan XQRcode"
+        bgCol="{tailwingBgColorizer('submitted')}"
+        fontColor="text-white" /><Image
+        src="./assets/icons/hot.svg"
+        alt="Key"
+        width="{16}"
+        height="{16}" />
+    </Button>
     <Tag
       text="You"
       fontColor="text-white"
