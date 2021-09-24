@@ -104,18 +104,28 @@ function generateXPriv() {
   let small_bytes: any = random(new Uint8Array(32));
   let xpriv_key = ExtendedPrivateKey.fromSeed(small_bytes);
   let xpub_key = ExtendedPublicKey.fromXPriv(xpriv_key);
+  let keyName: string;
   //WARN: need a better id method that whatever I created
-  let lenKeyChain = $extendedPubKeys ? $extendedPubKeys.length : 0;
-  let keyChain = [
-    ...$extendedPubKeys,
-    {
-      id: sha256(`${lenKeyChain}-${new Date()}`),
-      privKey: xpriv_key.toString(),
-      pubKey: xpub_key.toString(),
-    },
-  ];
-  extendedPubKeys.set(keyChain);
-  console.log(xpriv_key, small_bytes, xpub_key.toString(), $extendedPubKeys);
+  swal("Write something here:", {
+    content: "input",
+  }).then((value) => {
+    if (value) {
+      keyName = value;
+    } else {
+      keyName = "";
+    }
+    let lenKeyChain = $extendedPubKeys ? $extendedPubKeys.length : 0;
+    let keyChain = [
+      ...$extendedPubKeys,
+      {
+        id: sha256(`${lenKeyChain}-${new Date()}`),
+        name: keyName,
+        privKey: xpriv_key.toString(),
+        pubKey: xpub_key.toString(),
+      },
+    ];
+    extendedPubKeys.set(keyChain);
+  });
   return xpub_key.toString();
 }
 function createXKeyPair(): void {
@@ -232,10 +242,11 @@ function deleteKey(id: number) {
     {#if $extendedPubKeys}
       <DataTable
         xOverflowClass="bg-red"
-        headers="{['ID', 'XPriv', 'XPub', 'actions']}"
+        headers="{['ID', 'Key Name', 'XPriv', 'XPub', 'actions']}"
         data="{$extendedPubKeys.map((i) => {
           return [
             { component: Text, text: i.id },
+            { component: Text, text: i.name },
             { component: Text, text: i.privKey },
             { component: Text, text: i.pubKey },
             {
