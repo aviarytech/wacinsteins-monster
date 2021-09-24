@@ -36,14 +36,15 @@ $: if ($scannedQRCode && !debounceFlag) {
     unknownQRCodeValidation($scannedQRCode);
   }, 150);
   fn();
-  close(CameraReader);
 }
 
 function unknownQRCodeValidation(qrCode: string) {
   let xpriv_key: string;
   let xpub_key: string;
+  let keyName: string;
+
   scannedQRCode.set(null);
-  console.log(qrCode);
+  //console.log(qrCode);
   if (qrCode.substring(0, 4) === "xprv") {
     xpriv_key = ExtendedPrivateKey.fromString(qrCode).toString();
     xpub_key = ExtendedPublicKey.fromXPriv(
@@ -64,17 +65,28 @@ function unknownQRCodeValidation(qrCode: string) {
   if (!xpriv_key) {
     xpriv_key = "";
   }
-  let lenKeyChain: number = $extendedPubKeys ? $extendedPubKeys.length : 0;
-  //WARN: repeated to refactor
-  //console.log(xpriv_key, xpub_key);
-  extendedPubKeys.set([
-    ...$extendedPubKeys,
-    {
-      id: sha256(`${lenKeyChain}-${new Date()}`),
-      privKey: xpriv_key,
-      pubKey: xpub_key,
-    },
-  ]);
+  close(CameraReader);
+  swal("Write something here:", {
+    content: "input",
+  }).then((value) => {
+    if (value) {
+      keyName = value;
+    } else {
+      keyName = "";
+    }
+    let lenKeyChain = $extendedPubKeys ? $extendedPubKeys.length : 0;
+    let keyChain = [
+      ...$extendedPubKeys,
+      {
+        id: sha256(`${lenKeyChain}-${new Date()}`),
+        name: keyName,
+        privKey: xpriv_key.toString(),
+        pubKey: xpub_key.toString(),
+      },
+    ];
+    extendedPubKeys.set(keyChain);
+  });
+
   debounceFlag = true;
 }
 
