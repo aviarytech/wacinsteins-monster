@@ -3,7 +3,7 @@ export let src: string;
 export let alt: string;
 export let width: number;
 export let height: number;
-export let classes: string;
+export let classes: string = undefined;
 </script>
 
 <img
@@ -11,4 +11,4 @@ export let classes: string;
   alt="{alt}"
   width="{width}"
   height="{height}"
-  class={classes} />
+  class="{classes}" />
