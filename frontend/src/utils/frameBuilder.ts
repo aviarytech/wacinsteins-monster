@@ -5,16 +5,17 @@ export default function inputDescriptionBuilder(
   let inputDescriptor: object = {};
   for (let value of selectedSchemaFields) {
     //NOTE: for the next refactor...use str.split and NOT REGEXS YOU WILL NEVER GET THAT TIME BACK
-    const reIndex: RegExp = /(?<=\.)(\w*?)(?=\.)/gi;
-    const rePayload: RegExp = /(?!\w*\.)(?<=\.)(.*)/gi;
+    //const reIndex: RegExp = /(?<=\.)(\w*?)(?=\.)/gi;
+    //const rePayload: RegExp = /(?!\w*\.)(?<=\.)(.*)/gi;
     value = value.replace("$.credentialSubject", "");
     let regexIndexPayload: string | object;
     let regexIndexValue: string;
-
-    if (/(?<=\.)(\w*?)(?=\.)/gi.test(value)) {
+    //console.log(value)
+    if (value.split(".").length === 3) { //(/(?<=\.)(\w*?)(?=\.)/gi.test(value)) {
+      //console.log('detailed field')
       //$.xxx.key.value format
-      regexIndexValue = reIndex.exec(value)[0];
-      regexIndexPayload = rePayload.exec(value)[0];
+      regexIndexValue = value.split(".")[1] //reIndex.exec(value)[0];
+      regexIndexPayload = value.split(".")[2] //rePayload.exec(value)[0];
 
       //building the json object
       if (regexIndexValue in inputDescriptor) {
@@ -34,6 +35,7 @@ export default function inputDescriptionBuilder(
         inputDescriptor["@explicit"] = true;
       }
     } else {
+      //console.log('header field')
       //$.xxx.key format
       regexIndexValue = value.slice(1);
       inputDescriptor[`${regexIndexValue}`] = {};
