@@ -7,7 +7,7 @@ import CredentialSubjectFieldSelector from "../CredentialSubjectFieldSelector.sv
 import Button from "../ui/Button.svelte";
 //stores
 import { credentials } from "../../stores/credentials";
-import { slideOverContent, slidePreviewOverContent } from "../../stores/ui";
+import { slideOverContent } from "../../stores/ui";
 import { presentations } from "../../stores/presentation";
 //ecma imports
 import QRcode from "./QRcode.svelte";
