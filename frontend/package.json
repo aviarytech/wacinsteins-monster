@@ -49,12 +49,14 @@
     "vite": "^2.4.4"
   },
   "dependencies": {
+    "@aviarytech/crypto-core": "^0.0.43",
     "@stablelib/sha256": "^1.0.1",
     "@tailwindcss/forms": "^0.3.3",
     "@transmute/credentials-context": "^0.7.0-unstable.7",
     "@transmute/did-context": "^0.7.0-unstable.7",
     "@transmute/security-context": "^0.7.0-unstable.7",
     "axios": "^0.21.3",
+    "b58": "^4.0.3",
     "bsv-wasm-web": "^1.2.0-beta.4",
     "buffer": "^5.7.1",
     "class-validator": "^0.13.1",

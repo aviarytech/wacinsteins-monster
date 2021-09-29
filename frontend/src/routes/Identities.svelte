@@ -10,12 +10,14 @@ import Tag from "../lib/ui/Tag.svelte";
 import QRcode from "../lib/slideOverItems/QRcode.svelte";
 import CameraReader from "../lib/CameraReader.svelte";
 //ecma imports
-import { onMount, getContext } from "svelte";
+import { onMount, getContext, onDestroy } from "svelte";
 import { random } from "jose/util/random";
 import init, {
   ExtendedPrivateKey,
   ExtendedPublicKey,
 } from "../../node_modules/bsv-wasm-web/bsv_wasm.js"; //"bsv-wasm-web";
+import { importJWK } from "jose/key/import";
+
 import swal from "sweetalert";
 import { debounce } from "lodash";
 //stores
@@ -26,33 +28,38 @@ import { scannedQRCode } from "../stores/presentation";
 //utils
 import { tailwingBgColorizer } from "../utils/tailwind";
 import { sha256 } from "../utils/sha256";
+// import * as b58 from "b58";
 //api
 import { getServerIdentity } from "../api/identities";
+import { getMultibaseFingerprintFromPublicKeyBytes } from "../utils/secp259k1";
+const { open } = getContext("simple-modal"); //not really an import
 
-//reactivity
-let debounceFlag = false;
-$: if ($scannedQRCode && !debounceFlag) {
-  const fn = debounce(async () => {
-    unknownQRCodeValidation($scannedQRCode);
-  }, 150);
-  fn();
-  close(CameraReader);
+function startScanningQR() {
+  open(
+    CameraReader,
+    {},
+    {},
+    {
+      onClosed: () => {
+        const val = $scannedQRCode;
+        scannedQRCode.set(null);
+        unknownQRCodeValidation(val);
+      },
+    }
+  );
 }
 
 function unknownQRCodeValidation(qrCode: string) {
-  let xpriv_key: string;
-  let xpub_key: string;
-  scannedQRCode.set(null);
-  console.log(qrCode);
+  let xpriv_key: ExtendedPrivateKey;
+  let xpub_key: ExtendedPublicKey;
+
+  //console.log(qrCode);
   if (qrCode.substring(0, 4) === "xprv") {
-    xpriv_key = ExtendedPrivateKey.fromString(qrCode).toString();
-    xpub_key = ExtendedPublicKey.fromXPriv(
-      ExtendedPrivateKey.fromString(qrCode)
-    ).toString();
+    xpriv_key = ExtendedPrivateKey.fromString(qrCode);
+    xpub_key = ExtendedPublicKey.fromXPriv(xpriv_key);
   } else if (qrCode.substring(0, 4) === "xpub") {
-    xpub_key = ExtendedPublicKey.fromString(qrCode).toString();
+    xpub_key = ExtendedPublicKey.fromString(qrCode);
   } else {
-    //repalce with swal
     swal({
       title: "Error",
       text: "The QRcode scanned is invalid. Ensure you have a valid Xpriv or Xpub key QRcode.",
@@ -61,24 +68,35 @@ function unknownQRCodeValidation(qrCode: string) {
     });
     return;
   }
-  if (!xpriv_key) {
-    xpriv_key = "";
-  }
-  let lenKeyChain: number = $extendedPubKeys ? $extendedPubKeys.length : 0;
-  //WARN: repeated to refactor
-  //console.log(xpriv_key, xpub_key);
-  extendedPubKeys.set([
+  let lenKeyChain = $extendedPubKeys ? $extendedPubKeys.length : 0;
+  let keyChain = [
     ...$extendedPubKeys,
     {
       id: sha256(`${lenKeyChain}-${new Date()}`),
-      privKey: xpriv_key,
-      pubKey: xpub_key,
+      privKey: xpriv_key ? xpriv_key.toString() : "",
+      pubKey: xpub_key.toString(),
     },
-  ]);
-  debounceFlag = true;
+  ];
+  extendedPubKeys.set(keyChain);
+
+  deriveKeys(xpub_key);
 }
 
-const { open, close } = getContext("simple-modal"); //not really an import
+function deriveKeys(xpub: ExtendedPublicKey) {
+  let path = "m/0/0/0/";
+  for (let i = 0; i < 10; i++) {
+    identities.set([
+      ...$identities,
+      {
+        role: i,
+        id: `did:key:${getMultibaseFingerprintFromPublicKeyBytes(
+          xpub.derive(`${path}${i}`).getPublicKey().toBytes()
+        )}`,
+      },
+    ]);
+  }
+}
+
 const openIdentity = (value: string) => {
   slideOverContent.set({
     component: Avatar,
@@ -194,10 +212,7 @@ function deleteKey(id: number) {
       <Button
         label="Scan XQRcode"
         slotOverLabel="{true}"
-        callback="{async () => {
-          debounceFlag = false;
-          open(CameraReader);
-        }}"
+        callback="{startScanningQR}"
         additionalClasses="mb-4">
         <Tag text="Scan XQRcode" /><Image
           src="./assets/icons/camera.svg"

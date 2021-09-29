@@ -39,12 +39,13 @@
 
 <script lang="ts">
 //ecma scripts
-import { onDestroy, onMount } from "svelte";
+import { getContext, onDestroy, onMount } from "svelte";
 import jsQR from "jsqr";
 //stores
 import { scannedQRCode } from "../stores/presentation";
 //component
 import Button from "./ui/Button.svelte";
+const { close } = getContext("simple-modal");
 
 let cameraPosition: string = "environment";
 let canvas;
@@ -107,8 +108,8 @@ function tick() {
       inversionAttempts: "dontInvert",
     });
     if (code) {
-      console.log(code.data);
       scannedQRCode.set(code.data);
+      close();
       //drawLine(
       //  code.location.topLeftCorner,
       //  code.location.topRightCorner,
