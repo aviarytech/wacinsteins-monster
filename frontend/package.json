@@ -15,7 +15,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.14.8",
     "@cypress/code-coverage": "^3.9.10",
-    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.22",
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.26",
     "@testing-library/cypress": "^8.0.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/svelte": "^3.0.3",
