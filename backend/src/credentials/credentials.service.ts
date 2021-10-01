@@ -35,35 +35,17 @@ export class CredentialsService implements OnApplicationBootstrap {
       await this.create(id2, case16);
       console.log(`created ${id2} credential`);
     }
-    const case17 = require('../../__fixtures__/case-17.json');
-    const id3 = sha256('case-17.json');
-    if (!(await this.db.getById(id3))) {
-      await this.create(id3, case17);
-      console.log(`created ${id3} credential`);
-    }
     const case18 = require('../../__fixtures__/case-18.json');
     const id4 = sha256('case-18.json');
     if (!(await this.db.getById(id4))) {
       await this.create(id4, case18);
       console.log(`created ${id4} credential`);
     }
-    const case19 = require('../../__fixtures__/case-19.json');
-    const id5 = sha256('case-19.json');
-    if (!(await this.db.getById(id5))) {
-      await this.create(id5, case19);
-      console.log(`created ${id5} credential`);
-    }
     const case20 = require('../../__fixtures__/case-20.json');
     const id6 = sha256('case-20.json');
     if (!(await this.db.getById(id6))) {
       await this.create(id6, case20);
       console.log(`created ${id6} credential`);
-    }
-    const case21 = require('../../__fixtures__/case-21.json');
-    const id7 = sha256('case-21.json');
-    if (!(await this.db.getById(id7))) {
-      await this.create(id7, case21);
-      console.log(`created ${id7} credential`);
     }
   }
 

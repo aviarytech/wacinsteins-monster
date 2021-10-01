@@ -16,14 +16,14 @@ export const Routes: routeHooks[] = [
     routeUrl: "presentations",
     heroIcon: "./assets/icons/inbox-full.svg",
   },
-  {
-    routeName: "Messages",
-    routeUrl: "messages",
-    heroIcon: "./assets/icons/chat-bubble-dots.svg",
-  },
-  {
-    routeName: "Contacts", // be cool if we could use a cog
-    routeUrl: "contacts",
-    heroIcon: "./assets/icons/user-group.svg",
-  },
+  // {
+  //   routeName: "Messages",
+  //   routeUrl: "messages",
+  //   heroIcon: "./assets/icons/chat-bubble-dots.svg",
+  // },
+  // {
+  //   routeName: "Contacts", // be cool if we could use a cog
+  //   routeUrl: "contacts",
+  //   heroIcon: "./assets/icons/user-group.svg",
+  // },
 ];

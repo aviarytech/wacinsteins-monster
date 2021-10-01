@@ -2,7 +2,7 @@
 </style>
 
 <script lant="ts">
-import Icon from "./ui/Icon.svelte";
+import Tag from "./ui/Tag.svelte";
 import Roles from "./ui/Roles.svelte";
 </script>
 

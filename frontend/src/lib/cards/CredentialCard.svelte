@@ -17,7 +17,11 @@ $: verified = (async () => {
     <div
       class="p-3 flex-none border-b border-r rounded-tl-xl bg-gray-50 text-center flex items-center">
       <span class="text-gray-500"
-        >Issuer <Avatar value="{credential.issuer}" right="{true}" /></span>
+        >Issuer <Avatar
+          value="{typeof credential.issuer === 'string'
+            ? credential.issuer
+            : credential.issuer.id}"
+          right="{true}" /></span>
     </div>
     <div
       class="px-4 py-5 rounded-t-xl border-b border-gray-200 sm:px-6 flex-grow bg-gray-50">
@@ -46,13 +50,17 @@ $: verified = (async () => {
   </div>
   <div
     class="bg-gray-50 text-gray-500 flex rounded-b-xl items-center justify-between p-3">
-    <div>
-      <span class="font-bold">Issued</span>
-      {format(credential.issuanceDate)}
-    </div>
-    <div>
-      <span class="font-bold">Expires</span>
-      {format(credential.expirationDate)}
-    </div>
+    {#if credential.issuanceDate}
+      <div>
+        <span class="font-bold">Issued</span>
+        {format(credential.issuanceDate)}
+      </div>
+    {/if}
+    {#if credential.expirationData}
+      <div>
+        <span class="font-bold">Expires</span>
+        {format(credential.expirationDate)}
+      </div>
+    {/if}
   </div>
 </div>

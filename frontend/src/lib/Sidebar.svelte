@@ -1,5 +1,4 @@
 <style lang="postcss">
-
 /*
 .icon {
   @apply mr-3 flex-shrink-0 h-6 w-6;
@@ -33,6 +32,7 @@ import { Routes } from "../stores/routes";
 import { mblSidebar } from "../stores/ui";
 //import Image from "./table-elements/Image.svelte";
 import Icon from "./ui/Icon.svelte";
+import Tag from "./ui/Tag.svelte";
 //using esc to exit the slideover window
 const globalEscOnKeyPress = (e) => {
   if (e.keyCode === 27) {
@@ -98,6 +98,9 @@ let host = import.meta.env.VITE_HOST ?? "aviary.one";
               class="text-white group flex items-center px-2 py-2 text-base font-medium rounded-md">
               AV1
             </p>
+            <div class="transition-opacity animate-pulse">
+              <Tag text="Demo" fontColor="text-white" bgCol="bg-av1" />
+            </div>
           </div>
         </Link>
       </Router>
@@ -135,16 +138,19 @@ let host = import.meta.env.VITE_HOST ?? "aviary.one";
     <div class="flex flex-col">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div
-        class="flex flex-col flex-grow border-r border-gray-200 pt-3 pb-4 bg-white overflow-y-auto">
+        class="flex flex-col flex-grow border-r border-gray-200 pb-4 bg-white overflow-y-auto">
         <div class="flex-grow flex flex-col">
           <button
             on:click="{() => navigate('/', { replace: true })}"
-            class="flex items-center flex-shrink-0 px-4 pb-5 rounded-md hover:bg-gray-50">
+            class="flex items-center flex-shrink-0 px-4 py-4 rounded-md hover:bg-gray-50">
             <img
               class="h-8 w-auto mr-3 "
               src="https://media.bitcoinfiles.org/18a10cb9df7102cbb58af3bb653e6d1c4fe4b70d1f039d9e3bb19e4e877578cc"
               alt="av1" />
             <p class="text-gray-700 font-bold hover:text-gray-900">AV1</p>
+            <div class="ml-4 animate-pulse">
+              <Tag text="Demo" fontColor="text-white" bgCol="bg-av1" />
+            </div>
           </button>
           <div class="inset-0 flex items-center" aria-hidden="true">
             <div class="w-full border-t border-gray-300"></div>
