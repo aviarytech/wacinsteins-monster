@@ -231,10 +231,9 @@ function deleteKey(id: number) {
     {#if $extendedPubKeys}
       <DataTable
         xOverflowClass="bg-red"
-        headers="{['ID', 'XPriv', 'XPub', 'actions']}"
+        headers="{['XPriv', 'XPub', 'actions']}"
         data="{$extendedPubKeys.map((i) => {
           return [
-            { component: Text, text: i.id },
             { component: Text, text: i.privKey },
             { component: Text, text: i.pubKey },
             {
