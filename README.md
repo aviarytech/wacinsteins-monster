@@ -1,27 +1,24 @@
 [![Lint Code Base](https://github.com/aviarytech/wacinsteins-monster/actions/workflows/super-linter.yml/badge.svg)](https://github.com/aviarytech/wacinsteins-monster/actions/workflows/super-linter.yml)
-# Wacinstein's Monster
+# Alpha Wacinstein's Monster
 
 This project contains an end to end waci-pex implementation
 
-This project uses the nestjs library as a web server and stores everything in memory (including private keys).. It is meant for development purposes only. Any other use is strictly prohibited.
+This project uses the nestjs library as a web server and stores everything in a mongodb (including private keys).. It is meant for development purposes only. Any other use is strictly prohibited.
 
-TODO:
-
-- Use the link flow
-- Implement DIDComm v2
+Included:
+- DIDComm v2
   - https://didcomm.org/present-proof/3.0/propose-presentation
   - https://didcomm.org/present-proof/3.0/request-presentation
     - Including JSON-LD Frame
   - https://didcomm.org/present-proof/3.0/presentation
     - BBS+ VC
-- Implement DIF Presentation Exchange
+  - https://didcomm.org/basicmessage/2.0/message
+  - https://didcomm.org/out-of-band/2.0
+  - https://didcomm.org/trust-ping/2.0
+
+- DIF Presentation Exchange
   - Presentation Definition
   - Presentation Submission
-
-DONE:
-
-- Use did:web to create a did with a service block that will work for DIDComm
--
 
 UML
 @startuml
